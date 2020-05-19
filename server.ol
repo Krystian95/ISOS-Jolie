@@ -22,11 +22,9 @@ init {
         .host = "127.0.0.1";
         .driver = "mysql";
         .port = 3306;
-        //.port = 8889; //Impostazioni per MAMP (MAC)
         .database = "acme?serverTimezone=Europe/Rome";
         .username = "root";
         .password = "rootroot"
-        //.password = "root" //Impostazioni per MAMP (MAC)
     };
 
 
@@ -41,18 +39,35 @@ main
 {
 	[
 		requestListino( void )( listino ) {
-			query = "SELECT idAccessorio, nome FROM accessorio";
-        	query@Database( query )( result );
 
-	        i = 0;
+			// Cicli
+			query = "SELECT idCiclo, modello, colorazione FROM ciclo";
+        	query@Database( query )( resultCicli );
 
-	        while (i < #result.row) {
-	            listino.lista[i].idAccessorio = result.row[i].idAccessorio[0];
-	            listino.lista[i].nome = result.row[i].nome[0];
-	            i++
+	        for ( i = 0, i < #resultCicli.row, i++ ) {
+	            listino.cicli[i].idCiclo = resultCicli.row[i].idCiclo;
+	            listino.cicli[i].modello = resultCicli.row[i].modello;
+	            listino.cicli[i].colorazione = resultCicli.row[i].colorazione
 	        }
 
-	        println@Console(listino)()
+			// Accessori
+			query = "SELECT idAccessorio, nome FROM accessorio";
+        	query@Database( query )( resultAccessori );
+
+	        for ( i = 0, i < #resultAccessori.row, i++ ) {
+	            listino.accessori[i].idAccessorio = resultAccessori.row[i].idAccessorio;
+	            listino.accessori[i].nome = resultAccessori.row[i].nome
+	        }
+
+			// Customizzazioni
+			query = "SELECT idCustomizzazione, tipologia, descrizione FROM customizzazione";
+        	query@Database( query )( resultCustomizzazioni );
+
+	        for ( i = 0, i < #resultCustomizzazioni.row, i++ ) {
+	            listino.customizzazioni[i].idCustomizzazione = resultCustomizzazioni.row[i].idCustomizzazione;
+	            listino.customizzazioni[i].tipologia = resultCustomizzazioni.row[i].tipologia;
+	            listino.customizzazioni[i].descrizione = resultCustomizzazioni.row[i].descrizione
+	        }
 	    }
 	] {
 		println@Console("Listino richiesto")()
