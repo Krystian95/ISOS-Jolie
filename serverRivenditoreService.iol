@@ -1,4 +1,6 @@
 
+
+// Listino
 type Listino: void {
   .cicli*: Ciclo
   .accessori*: Accessorio
@@ -20,6 +22,27 @@ type Customizzazione: void{
   .idCustomizzazione: int
   .tipologia: string
   .descrizione: string
+}
+
+// Ordine
+type Ordine: void{
+  .cicli*: CicloOrdine
+  .accessori*: AccessorioOrdine
+}
+
+type CicloOrdine: void{
+  .idCiclo: int
+  .qta: int
+  .customizzazioni*: CustomizzazioneOrdine
+}
+
+type AccessorioOrdine: void{
+  .idAccessorio: int
+  .qta: int
+}
+
+type CustomizzazioneOrdine: void{
+  .idCustomizzazione: int
 }
 
 interface ServerRivenditoreInterface {
