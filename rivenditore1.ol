@@ -35,6 +35,7 @@ main
 		println@Console( "Quanti cicli " + cicloTiny + " vuoi acquistare?" )();
 		in(qta);
 		ordine.cicli[i].idCiclo = idCicliOrdine.result[i];
+		ordine.cicli[i].cicloNomeTiny = cicloTiny;
 		ordine.cicli[i].qta = qta;
 		println@Console( "Aggiunte al carrello " + qta + " quantita' del ciclo " + cicloTiny )();
 
@@ -55,6 +56,7 @@ main
 		for ( j = 0, j < #idCustomizzazioniOrdine.result, j++ ) {
 			customizzazioneTiny = "\"" + listino.customizzazioni[int(idCustomizzazioniOrdine.result[j])-1].descrizione + " (" + listino.customizzazioni[int(idCustomizzazioniOrdine.result[j])-1].tipologia + ")\"" ;
 			ordine.cicli[i].customizzazioni[j] = idCustomizzazioniOrdine.result[j];
+			ordine.cicli[i].customizzazioni[j].customizzazioneNomeTiny = customizzazioneTiny;
 			println@Console( "Aggiunta al carrello la customizzazione " + customizzazioneTiny + " per il ciclo " + cicloTiny )()
 		}
 
@@ -80,9 +82,31 @@ main
 		println@Console( "Quanti accessori " + accesorioTiny + " vuoi acquistare?" )();
 		in(qta);
 		ordine.accessori[i].idAccessorio = idAccessoriOrdine.result[i];
+		ordine.accessori[i].accessorioNomeTiny = accesorioTiny;
 		ordine.accessori[i].qta = qta;
 		println@Console( "Aggiunte al carrello " + qta + " quantita' dell'accessorio " + accesorioTiny )()
 	}
 
 	// RIEPILOGO ORDINE
+
+	println@Console( "\n\nRiepilogo ORDINE" )();
+
+	println@Console( "\nCICLI:" )();
+	for ( i = 0, i < #ordine.cicli, i++ ) {
+		println@Console( ordine.cicli[i].cicloNomeTiny + " (" + ordine.cicli[i].qta + " unita')" )();
+
+		println@Console( "\tCUSTOMIZZAZIONI:" )();
+		for ( k = 0, k < #ordine.cicli[i].customizzazioni, k++ ) {
+			println@Console( "\t" + ordine.cicli[i].customizzazioni[k].customizzazioneNomeTiny )()
+		}
+	}
+
+	println@Console( "ACCESSORI:" )();
+	for ( i = 0, i < #ordine.accessori, i++ ) {
+		println@Console( ordine.accessori[i].accessorioNomeTiny + " (" + ordine.accessori[i].qta + " unita')" )()
+	}
+
+
+
+
 }

@@ -33,16 +33,19 @@ type Ordine: void{
 type CicloOrdine: void{
   .idCiclo: int
   .qta: int
+  .cicloNomeTiny: string
   .customizzazioni*: CustomizzazioneOrdine
-}
-
-type AccessorioOrdine: void{
-  .idAccessorio: int
-  .qta: int
 }
 
 type CustomizzazioneOrdine: void{
   .idCustomizzazione: int
+  .customizzazioneNomeTiny: string
+}
+
+type AccessorioOrdine: void{
+  .idAccessorio: int
+  .accessorioNomeTiny: string
+  .qta: int
 }
 
 interface ServerRivenditoreInterface {
