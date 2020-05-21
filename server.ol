@@ -91,39 +91,37 @@ main
 
 			// Inserimento ordine nel db
 			scope ( insertOrdine ) {
-	        	install ( SQLException => println@Console("[!] ERRORE nell'inserimento ordine nel db")() );
+	        	install ( SQLException => println@Console("\n[!] ERRORE nell'inserimento ordine nel db\n")() );
 				query = "INSERT INTO ordine (idRivenditore) VALUES (" + ordine.idRivenditore + ")";
 				update@Database( query )( responseNewOrdine );
 
 				query = "SELECT idOrdine FROM ordine WHERE idOrdine = (SELECT MAX(idOrdine) FROM ordine)";
 				query@Database( query )( responseNewOrdine );
-				idOrdine = int(responseNewOrdine.row[0].idOrdine);
+				idOrdine = responseNewOrdine.row[0].idOrdine;
 				println@Console("Ordine #" + idOrdine + " inserito")()
 			};
 
 			// Inserimento Accessori nel db
 			scope ( insertAccessorioOrdine ) {
-	        	install ( SQLException => println@Console("[!] ERRORE nell'inserimento accessorio ordine nel db")() );
-				query = "INSERT INTO ordine_has_accessorio (idOrdine, idAccessorio, quantitaAccessorio)";
+	        	install ( SQLException => println@Console("\n[!] ERRORE nell'inserimento accessorio ordine nel db\n")() );
+				query = "INSERT INTO ordine_has_accessorio (idOrdine, idAccessorio, quantitaAccessorio) VALUES ";
 
 				for ( i = 0, i < #ordine.accessori, i++ ) {
-					idAccessorio = ordine.accessori[i].idAccessorio
-					quantitaAccessorio = ordine.accessori[i].qta
-					query += "VALUES (" + idOrdine + ", " + idAccessorio + ", " + quantitaAccessorio + "),"
+					idAccessorio = int(ordine.accessori[i].idAccessorio);
+					quantitaAccessorio = int(ordine.accessori[i].qta);
+					query += "(" + idOrdine + ", " + idAccessorio + ", " + quantitaAccessorio + "),"
 				}
 
 				query_raw = query;
-				query_raw.begin = 1;
+				query_raw.begin = 0;
 				length@StringUtils( query )( queryLength );
 				query_raw.end = queryLength - 1;
-				println@Console("query end: " + #query)();
-				println@Console("string end: " + query_raw.end)();
 				substring@StringUtils( query_raw )( substringResponse );
 				query = substringResponse;
 
 	            update@Database( query )( responseNewOrdineAccessorio );
 	            println@Console("Accessori Ordine inseriti")()
-        	}
+        	};
 
 			// Message
 			message.messageName = "Ordine";
