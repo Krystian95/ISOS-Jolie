@@ -2,50 +2,51 @@
 
 // Listino
 type Listino: void {
-  .cicli*: Ciclo
-  .accessori*: Accessorio
-  .customizzazioni*: Customizzazione
+  .cicli*: CicloListino
+  .accessori*: AccessorioListino
+  .customizzazioni*: CustomizzazioneListino
 }
 
-type Ciclo: void{
-  .idCiclo: string
+type CicloListino: void{
+  .idCiclo: int
   .modello: string
   .colorazione: string
 }
 
-type Accessorio: void{
-  .idAccessorio: string
+type AccessorioListino: void{
+  .idAccessorio: int
   .nome: string
 }
 
-type Customizzazione: void{
-  .idCustomizzazione: string
+type CustomizzazioneListino: void{
+  .idCustomizzazione: int
   .tipologia: string
   .descrizione: string
 }
 
 // Ordine
 type Ordine: void{
+  .idRivenditore: int
   .cicli*: CicloOrdine
   .accessori*: AccessorioOrdine
 }
 
 type CicloOrdine: void{
-  .idCiclo: string
-  .qta: string
+  .idCiclo: int
+  .qta: int
   .cicloNomeTiny: string
   .customizzazioni*: CustomizzazioneOrdine
 }
 
 type CustomizzazioneOrdine: void{
-  .idCustomizzazione: string
+  .idCustomizzazione: int
   .customizzazioneNomeTiny: string
 }
 
 type AccessorioOrdine: void{
-  .idAccessorio: string
+  .idAccessorio: int
   .accessorioNomeTiny: string
-  .qta: string
+  .qta: int
 }
 
 interface RivenditoreServerInterface {

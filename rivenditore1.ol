@@ -20,11 +20,17 @@ inputPort RivenditoreServerService {
 	Interfaces: RivenditoreServerInterface
 }
 
+init{
+	global.idRivenditore = 1
+}
+
 main
 {
 	registerForInput@Console()();
 
 	requestListino@RivenditoreServerOutput()( listino );
+
+	ordine.idRivenditore = global.idRivenditore
 
 	// CICLI
 
@@ -45,9 +51,9 @@ main
 		cicloTiny = "\"" + listino.cicli[int(idCicliOrdine.result[i])-1].modello + " (" + listino.cicli[int(idCicliOrdine.result[i])-1].colorazione + ")\"";
 		println@Console( "Quanti cicli " + cicloTiny + " vuoi acquistare?" )();
 		in(qta);
-		ordine.cicli[i].idCiclo = idCicliOrdine.result[i];
+		ordine.cicli[i].idCiclo = int(idCicliOrdine.result[i]);
 		ordine.cicli[i].cicloNomeTiny = cicloTiny;
-		ordine.cicli[i].qta = qta;
+		ordine.cicli[i].qta = int(qta);
 		println@Console( "Aggiunte al carrello " + qta + " quantita' del ciclo " + cicloTiny )();
 
 		// CUSTOMIZZAZIONI
@@ -66,7 +72,7 @@ main
 
 		for ( j = 0, j < #idCustomizzazioniOrdine.result, j++ ) {
 			customizzazioneTiny = "\"" + listino.customizzazioni[int(idCustomizzazioniOrdine.result[j])-1].descrizione + " (" + listino.customizzazioni[int(idCustomizzazioniOrdine.result[j])-1].tipologia + ")\"" ;
-			ordine.cicli[i].customizzazioni[j].idCustomizzazione = idCustomizzazioniOrdine.result[j];
+			ordine.cicli[i].customizzazioni[j].idCustomizzazione = int(idCustomizzazioniOrdine.result[j]);
 			ordine.cicli[i].customizzazioni[j].customizzazioneNomeTiny = customizzazioneTiny;
 			println@Console( "Aggiunta al carrello la customizzazione " + customizzazioneTiny + " per il ciclo " + cicloTiny )()
 		}
@@ -92,9 +98,9 @@ main
 		accesorioTiny = "\"" + listino.accessori[int(idAccessoriOrdine.result[i])-1].nome + "\"";
 		println@Console( "Quanti accessori " + accesorioTiny + " vuoi acquistare?" )();
 		in(qta);
-		ordine.accessori[i].idAccessorio = idAccessoriOrdine.result[i];
+		ordine.accessori[i].idAccessorio = int(idAccessoriOrdine.result[i]);
 		ordine.accessori[i].accessorioNomeTiny = accesorioTiny;
-		ordine.accessori[i].qta = qta;
+		ordine.accessori[i].qta = int(qta);
 		println@Console( "Aggiunte al carrello " + qta + " quantita' dell'accessorio " + accesorioTiny )()
 	}
 
