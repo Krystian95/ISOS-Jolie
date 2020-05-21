@@ -90,45 +90,99 @@ main
 		inviaOrdine( ordine )( void ) {
 
 			// Inserimento ordine nel db
-			scope ( insertOrdine ) {
-	        	install ( SQLException => println@Console("\n[!] ERRORE nell'inserimento ordine nel db\n")() );
-				query = "INSERT INTO ordine (idRivenditore) VALUES (" + ordine.idRivenditore + ")";
-				update@Database( query )( responseNewOrdine );
+			if(#ordine.cicli > 0 || #ordine.accessori > 0) {
+				scope ( insertOrdine ) {
+		        	install ( SQLException => println@Console("\n[!] ERRORE nell'inserimento ordine nel db\n")() );
 
-				query = "SELECT idOrdine FROM ordine WHERE idOrdine = (SELECT MAX(idOrdine) FROM ordine)";
-				query@Database( query )( responseNewOrdine );
-				idOrdine = responseNewOrdine.row[0].idOrdine;
-				println@Console("Ordine #" + idOrdine + " inserito")()
-			};
+					query = "INSERT INTO ordine (idRivenditore) VALUES (" + ordine.idRivenditore + ")";
+					update@Database( query )( responseNewOrdine );
 
-			// Inserimento Accessori nel db
-			scope ( insertAccessorioOrdine ) {
-	        	install ( SQLException => println@Console("\n[!] ERRORE nell'inserimento accessorio ordine nel db\n")() );
-				query = "INSERT INTO ordine_has_accessorio (idOrdine, idAccessorio, quantitaAccessorio) VALUES ";
+					query = "SELECT idOrdine FROM ordine WHERE idOrdine = (SELECT MAX(idOrdine) FROM ordine)";
+					query@Database( query )( responseNewOrdine );
+					idOrdine = responseNewOrdine.row[0].idOrdine;
+					println@Console("Ordine #" + idOrdine + " inserito")()
+				};
 
-				for ( i = 0, i < #ordine.accessori, i++ ) {
-					idAccessorio = int(ordine.accessori[i].idAccessorio);
-					quantitaAccessorio = int(ordine.accessori[i].qta);
-					query += "(" + idOrdine + ", " + idAccessorio + ", " + quantitaAccessorio + "),"
-				}
+				// Inserimento Cicli Ordine nel db
+				if(#ordine.cicli > 0) {
+					scope ( insertCicliOrdine ) {
+			        	install ( SQLException => println@Console("\n[!] ERRORE nell'inserimento ciclo ordine nel db\n")() );
 
-				query_raw = query;
-				query_raw.begin = 0;
-				length@StringUtils( query )( queryLength );
-				query_raw.end = queryLength - 1;
-				substring@StringUtils( query_raw )( substringResponse );
-				query = substringResponse;
+						query = "INSERT INTO ordine_has_ciclo (idOrdine, idCiclo, quantitaCiclo) VALUES ";
 
-	            update@Database( query )( responseNewOrdineAccessorio );
-	            println@Console("Accessori Ordine inseriti")()
-        	};
+						for ( i = 0, i < #ordine.cicli, i++ ) {
+							idCiclo = ordine.cicli[i].idCiclo;
+							quantitaCiclo = ordine.cicli[i].qta;
+							query += "(" + idOrdine + ", " + idCiclo + ", " + quantitaCiclo + "),"
+						}
 
-			// Message
-			message.messageName = "Ordine";
-            message.processVariables.ordine.value = "999";
-            message.processVariables.ordine.type = "String";
+						query_raw = query;
+						query_raw.begin = 0;
+						length@StringUtils( query )( queryLength );
+						query_raw.end = queryLength - 1;
+						substring@StringUtils( query_raw )( substringResponse );
+						query = substringResponse + ";";
 
-            message@CamundaPort(message)(risp)
+			            update@Database( query )( responseNewCicloOrdine );
+			            println@Console("Cicli Ordine inseriti")()
+		        	}
+
+				    // Inserimento Customizzazioni Cicli Ordine nel db
+				    scope ( insertCustomizzazioniCicliOrdine ) {
+						install ( SQLException => println@Console("\n[!] ERRORE nell'inserimento customizzazioni cicli ordine nel db\n")() );
+
+						query = "INSERT INTO ordine_has_ciclo_has_customizzazione (idOrdine, idCiclo, idCustomizzazione) VALUES ";
+
+						for ( i = 0, i < #ordine.customizzazioni[i], i++ ) {
+							idCiclo = ordine.customizzazioni[i].idCiclo;
+							idCustomizzazione = ordine.customizzazioni[i].idCustomizzazione;
+							query += "(" + idOrdine + ", " + idCiclo + ", " + idCustomizzazione + "),"
+						}
+
+						query_raw = query;
+						query_raw.begin = 0;
+						length@StringUtils( query )( queryLength );
+						query_raw.end = queryLength - 1;
+						substring@StringUtils( query_raw )( substringResponse );
+						query = substringResponse + ";";
+						
+			            update@Database( query )( responseNewCustomizzazioneCicloOrdine );
+			            println@Console("Customizzazione Ciclo Ordine inserita")()
+			        }
+	        	}
+
+				// Inserimento Accessori Ordine nel db
+				if(#ordine.accessori > 0) {
+					scope ( insertAccessoriOrdine ) {
+			        	install ( SQLException => println@Console("\n[!] ERRORE nell'inserimento accessorio ordine nel db\n")() );
+
+						query = "INSERT INTO ordine_has_accessorio (idOrdine, idAccessorio, quantitaAccessorio) VALUES ";
+
+						for ( i = 0, i < #ordine.accessori, i++ ) {
+							idAccessorio = ordine.accessori[i].idAccessorio;
+							quantitaAccessorio = ordine.accessori[i].qta;
+							query += "(" + idOrdine + ", " + idAccessorio + ", " + quantitaAccessorio + "),"
+						}
+
+						query_raw = query;
+						query_raw.begin = 0;
+						length@StringUtils( query )( queryLength );
+						query_raw.end = queryLength - 1;
+						substring@StringUtils( query_raw )( substringResponse );
+						query = substringResponse + ";";
+
+			            update@Database( query )( responseNewAccessorioOrdine );
+			            println@Console("Accessori Ordine inseriti")()
+		        	}
+	        	}
+
+				// Message
+				message.messageName = "Ordine";
+	            message.processVariables.ordine.value = "999";
+	            message.processVariables.ordine.type = "String";
+
+	            message@CamundaPort(message)(risp)
+        	}
 	    }
 	] {
 		println@Console("Ordine ricevuto")()

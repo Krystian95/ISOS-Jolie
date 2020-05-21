@@ -29,6 +29,19 @@ type Ordine: void{
   .idRivenditore: int
   .cicli*: CicloOrdine
   .accessori*: AccessorioOrdine
+  .customizzazioni*: CustomizzazioneOrdine
+}
+
+type CustomizzazioneOrdine: void{
+  .idCustomizzazione: int
+  .idCiclo?: int
+  .customizzazioneNomeTiny?: string
+}
+
+type AccessorioOrdine: void{
+  .idAccessorio: int
+  .accessorioNomeTiny: string
+  .qta: int
 }
 
 type CicloOrdine: void{
@@ -36,17 +49,6 @@ type CicloOrdine: void{
   .qta: int
   .cicloNomeTiny: string
   .customizzazioni*: CustomizzazioneOrdine
-}
-
-type CustomizzazioneOrdine: void{
-  .idCustomizzazione: int
-  .customizzazioneNomeTiny: string
-}
-
-type AccessorioOrdine: void{
-  .idAccessorio: int
-  .accessorioNomeTiny: string
-  .qta: int
 }
 
 interface RivenditoreServerInterface {

@@ -47,6 +47,8 @@ main
 
 	split@StringUtils( request )( idCicliOrdine );
 
+	z = 0;
+
 	for ( i = 0, i < #idCicliOrdine.result, i++ ) {
 		cicloTiny = "\"" + listino.cicli[int(idCicliOrdine.result[i])-1].modello + " (" + listino.cicli[int(idCicliOrdine.result[i])-1].colorazione + ")\"";
 		println@Console( "Quanti cicli " + cicloTiny + " vuoi acquistare?" )();
@@ -74,6 +76,11 @@ main
 			customizzazioneTiny = "\"" + listino.customizzazioni[int(idCustomizzazioniOrdine.result[j])-1].descrizione + " (" + listino.customizzazioni[int(idCustomizzazioniOrdine.result[j])-1].tipologia + ")\"" ;
 			ordine.cicli[i].customizzazioni[j].idCustomizzazione = int(idCustomizzazioniOrdine.result[j]);
 			ordine.cicli[i].customizzazioni[j].customizzazioneNomeTiny = customizzazioneTiny;
+
+			ordine.customizzazioni[z].idCustomizzazione = int(idCustomizzazioniOrdine.result[j]);
+			ordine.customizzazioni[z].idCiclo = ordine.cicli[i].idCiclo;
+			z++;
+			
 			println@Console( "Aggiunta al carrello la customizzazione " + customizzazioneTiny + " per il ciclo " + cicloTiny )()
 		}
 
