@@ -8,18 +8,18 @@ type Listino: void {
 }
 
 type Ciclo: void{
-  .idCiclo: int
+  .idCiclo: string
   .modello: string
   .colorazione: string
 }
 
 type Accessorio: void{
-  .idAccessorio: int
+  .idAccessorio: string
   .nome: string
 }
 
 type Customizzazione: void{
-  .idCustomizzazione: int
+  .idCustomizzazione: string
   .tipologia: string
   .descrizione: string
 }
@@ -31,23 +31,24 @@ type Ordine: void{
 }
 
 type CicloOrdine: void{
-  .idCiclo: int
-  .qta: int
+  .idCiclo: string
+  .qta: string
   .cicloNomeTiny: string
   .customizzazioni*: CustomizzazioneOrdine
 }
 
 type CustomizzazioneOrdine: void{
-  .idCustomizzazione: int
+  .idCustomizzazione: string
   .customizzazioneNomeTiny: string
 }
 
 type AccessorioOrdine: void{
-  .idAccessorio: int
+  .idAccessorio: string
   .accessorioNomeTiny: string
-  .qta: int
+  .qta: string
 }
 
-interface ServerRivenditoreInterface {
-  RequestResponse:  requestListino( void )( Listino )
+interface RivenditoreServerInterface {
+  RequestResponse:  requestListino(void)( Listino ),
+                    inviaOrdine( Ordine )( void )
 }

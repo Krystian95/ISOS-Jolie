@@ -1,12 +1,13 @@
 
 include "console.iol"
 include "string_utils.iol"
+
 include "serverRivenditoreService.iol"
 
 outputPort RivenditoreServerOutput {
 	Location: "socket://localhost:8001"
 	Protocol: soap
-	Interfaces: ServerRivenditoreInterface
+	Interfaces: RivenditoreServerInterface
 }
 
 main
@@ -55,7 +56,7 @@ main
 
 		for ( j = 0, j < #idCustomizzazioniOrdine.result, j++ ) {
 			customizzazioneTiny = "\"" + listino.customizzazioni[int(idCustomizzazioniOrdine.result[j])-1].descrizione + " (" + listino.customizzazioni[int(idCustomizzazioniOrdine.result[j])-1].tipologia + ")\"" ;
-			ordine.cicli[i].customizzazioni[j] = idCustomizzazioniOrdine.result[j];
+			ordine.cicli[i].customizzazioni[j].idCustomizzazione = idCustomizzazioniOrdine.result[j];
 			ordine.cicli[i].customizzazioni[j].customizzazioneNomeTiny = customizzazioneTiny;
 			println@Console( "Aggiunta al carrello la customizzazione " + customizzazioneTiny + " per il ciclo " + cicloTiny )()
 		}
@@ -106,7 +107,8 @@ main
 		println@Console( ordine.accessori[i].accessorioNomeTiny + " (" + ordine.accessori[i].qta + " unita')" )()
 	}
 
-
+	// Invio ordine
+	inviaOrdine@RivenditoreServerOutput( ordine )( void )
 
 
 }
