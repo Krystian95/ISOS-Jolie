@@ -30,8 +30,10 @@ type OrdineMessage: void {
   .businessKey?: string
   .messageName: string
   .processVariables: void {
-    .value: string
-    .type: string
+    .ordine: void {
+      .value: string
+      .type: string
+    }
   }
 }
 
