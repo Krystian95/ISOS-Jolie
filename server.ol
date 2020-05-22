@@ -177,9 +177,16 @@ main
 	        	}
 
 				// Message
-				ordineMessage.messageName = "Ordine";
+				
+				/*ordineMessage.messageName = "Ordine";
 				ordineMessage.ordine << ordine;
-	            ricezioneOrdine@CamundaPort(ordineMessage)(risp)
+	            ricezioneOrdine@CamundaPort(ordineMessage)(risp)*/
+
+	            message.messageName = "Ordine";
+	            message.processVariables.ordine.value = "999";
+	            message.processVariables.ordine.type = "String";
+
+	            message@CamundaPort(message)(risp)
         	}
 	    }
 	] {
