@@ -3,22 +3,16 @@ include "console.iol"
 include "database.iol"
 include "string_utils.iol"
 
-include "serverRivenditoreService.iol"
+include "ACMEInterface.iol"
 include "camundaInterface.iol"
 
-inputPort ServerRivenditoreInput {
+inputPort ACMEGestioneOrdiniRivenditoreInput {
 	Location: "socket://localhost:8001"
 	Protocol: soap
-	Interfaces: RivenditoreServerInterface
+	Interfaces: ACMEInterface
 }
 
-outputPort ServerRivenditoreOutput {
-	Location: "socket://localhost:8002"
-	Protocol: soap
-	Interfaces: RivenditoreServerInterface
-}
-
-outputPort CamundaPort {
+outputPort Camunda {
     Location: "socket://localhost:8080/engine-rest/"
     Protocol: http {
         .method = "post";
@@ -50,7 +44,7 @@ init {
 main
 {
 	[
-		requestListino( void )( listino ) {
+		richiediListino( void )( listino ) {
 
 			// Cicli
 			query = "SELECT idCiclo, modello, colorazione FROM ciclo";
@@ -180,7 +174,7 @@ main
 	            message.messageName = "Ordine";
 	            message.processVariables.ordine.value = string(ordine.idOrdine);
 	            message.processVariables.ordine.type = "String";
-	            message@CamundaPort( message )( risp )
+	            message@Camunda( message )( risp )
         	}
 	    }
 	] {

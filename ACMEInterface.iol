@@ -1,5 +1,4 @@
 
-
 // Listino
 type Listino: void {
   .cicli*: CicloListino
@@ -52,7 +51,7 @@ type CicloOrdine: void {
   .customizzazioni*: CustomizzazioneOrdine
 }
 
-interface RivenditoreServerInterface {
-  RequestResponse:  requestListino( void )( Listino ),
+interface ACMEInterface {
+  RequestResponse:  richiediListino( void )( Listino ),
                     inviaOrdine( Ordine )( void )
 }

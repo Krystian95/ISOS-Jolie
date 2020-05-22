@@ -2,12 +2,12 @@
 include "console.iol"
 include "string_utils.iol"
 
-include "serverRivenditoreService.iol"
+include "ACMEInterface.iol"
 
-outputPort RivenditoreServerOutput {
+outputPort ACMEService {
 	Location: "socket://localhost:8001"
 	Protocol: soap
-	Interfaces: RivenditoreServerInterface
+	Interfaces: ACMEInterface
 }
 
 inputPort RivenditoreServerService {
@@ -17,7 +17,7 @@ inputPort RivenditoreServerService {
         .wsdl.port = "RivenditoreServerService";
         .dropRootValue = true
     }
-	Interfaces: RivenditoreServerInterface
+	Interfaces: ACMEInterface
 }
 
 init{
@@ -28,7 +28,7 @@ main
 {
 	registerForInput@Console()();
 
-	requestListino@RivenditoreServerOutput()( listino );
+	richiediListino@ACMEService()( listino );
 
 	ordine.idRivenditore = global.idRivenditore
 
@@ -131,7 +131,7 @@ main
 	}
 
 	// Invio ordine
-	inviaOrdine@RivenditoreServerOutput( ordine )( void )
+	inviaOrdine@ACMEService( ordine )( void )
 
 
 }
