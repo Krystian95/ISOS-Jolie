@@ -6,7 +6,7 @@ include "string_utils.iol"
 include "camundaInterface.iol"
 
 include "ACMERivenditoreInterface.iol"
-include "ACMEInterface.iol"
+include "ACMEGestioneOrdiniInterface.iol"
 
 inputPort ACMEGestioneOrdiniRivenditoreInput {
 	Location: "socket://localhost:8001"
@@ -24,14 +24,14 @@ outputPort Camunda {
     Interfaces: CamundaInterface
 }
 
-inputPort ACMEService {
+inputPort ACMEGestioneOrdini {
 	Location: "socket://localhost:8005"
 	Protocol: soap {
         .wsdl = "./wsdlACMEGestioneOrdini.wsdl";
-        .wsdl.port = "ACMEService";
+        .wsdl.port = "ACMEGestioneOrdini";
         .dropRootValue = true
     }
-	Interfaces: ACMEInterface
+	Interfaces: ACMEGestioneOrdiniInterface
 }
 
 execution{ concurrent }
@@ -48,9 +48,9 @@ init {
 
 
     connect@Database(connectionInfo)();
-    println@Console("Connection to databse: SUCCESS")()
+    println@Console("Connection to databse: SUCCESS")();
 
-    /* GLOBAL variable init here */
+    global.ordine = null
 }
 
 main
@@ -88,7 +88,7 @@ main
 	        }
 	    }
 	] {
-		println@Console("Listino richiesto")()
+		println@Console("– richiediListino [completed]")()
 	}
 
 	[
@@ -182,6 +182,8 @@ main
 		        	}
 	        	}
 
+	        	global.ordine << ordine;
+
 				// Message
 	            message.messageName = "Ordine";
 	            message.processVariables.ordine.value = string(ordine.idOrdine);
@@ -190,15 +192,28 @@ main
         	}
 	    }
 	] {
-		println@Console("Invia Ordine")()
+		println@Console("– inviaOrdine [completed]")()
+	}
+
+	[
+		getIdOrdine( void )( idOrdine ) {
+			idOrdine.idOrdine = global.ordine.idOrdine
+	    }
+	] {
+		println@Console("– getIdOrdine [completed]")()
 	}
 
 	[
 		verificaCustomizzazioni( idOrdine )( esitoVerificaCustomizzazioni ) {
+
+			/*
+			 * TODO vertifica customizzazioni per specifico "idOrdine"
+			 */
+			
 			esitoVerificaCustomizzazioni.customizzazioniPossibili = false
 	    }
 	] {
-		println@Console("Verifica customizzazioni")()
+		println@Console("– verificaCustomizzazioni [completed]")()
 	}
 }
 
