@@ -37,7 +37,7 @@ init {
         .port = 3306;
         .database = "acme?serverTimezone=Europe/Rome";
         .username = "root";
-        .password = "rootroot"
+        .password = "root"
     };
 
 
@@ -177,7 +177,7 @@ main
 	        	}
 
 				// Message
-				
+
 				/*ordineMessage.messageName = "Ordine";
 				ordineMessage.ordine << ordine;
 	            ricezioneOrdine@CamundaPort(ordineMessage)(risp)*/
