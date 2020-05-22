@@ -13,7 +13,7 @@ outputPort ACMEService {
 inputPort RivenditoreServerService {
 	Location: "socket://localhost:8004"
 	Protocol: soap {
-        .wsdl = "./wsdlRivenditore.wsdl";
+        .wsdl = "./wsdlRivenditore1.wsdl";
         .wsdl.port = "RivenditoreServerService";
         .dropRootValue = true
     }
