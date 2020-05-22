@@ -1,11 +1,12 @@
-type StartRequest:void {
-    .businessKey?:string
-    .messageName:string
-    .processVariables:varType
+
+type StartRequest: void {
+    .businessKey?: string
+    .messageName: string
+    .processVariables: varType
     //.resultEnabled:bool
 }
 
-type varType:void{
+type varType: void{
   .conferma?: intStringType
   .ordine?:intStringType
   .menuModificato?: intStringType
@@ -13,9 +14,9 @@ type varType:void{
   .disponibilitaLocale?: intStringType 
 }
 
-type intStringType:void{
-  .value:string
-  .type:string
+type intStringType: void{
+  .value: string
+  .type: string
 }
 
 
@@ -24,8 +25,13 @@ type rit: void{
   .message?: string
 }
 
-
+// Ordine
+type OrdineMessage: void {
+  .businessKey?: string
+  .messageName: string
+  .ordine: Ordine
+}
 
 interface CamundaInterface {
-    RequestResponse: message(StartRequest)(rit)
+  RequestResponse: ricezioneOrdine(OrdineMessage)(rit)
 }

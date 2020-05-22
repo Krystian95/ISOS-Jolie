@@ -19,7 +19,6 @@ outputPort ServerRivenditoreOutput {
 }
 
 outputPort CamundaPort {
-
     Location: "socket://localhost:8080/engine-rest/"
     Protocol: http {
         .method = "post";
@@ -100,6 +99,7 @@ main
 					query = "SELECT idOrdine FROM ordine WHERE idOrdine = (SELECT MAX(idOrdine) FROM ordine)";
 					query@Database( query )( responseNewOrdine );
 					idOrdine = responseNewOrdine.row[0].idOrdine;
+					ordine.idOrdine = idOrdine;
 					println@Console("Ordine #" + idOrdine + " inserito")()
 				};
 
@@ -177,11 +177,9 @@ main
 	        	}
 
 				// Message
-				message.messageName = "Ordine";
-	            message.processVariables.ordine.value = "999";
-	            message.processVariables.ordine.type = "String";
-
-	            message@CamundaPort(message)(risp)
+				ordineMessage.messageName = "Ordine";
+				ordineMessage.ordine << ordine;
+	            ricezioneOrdine@CamundaPort(ordineMessage)(risp)
         	}
 	    }
 	] {

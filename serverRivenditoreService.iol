@@ -26,6 +26,7 @@ type CustomizzazioneListino: void{
 
 // Ordine
 type Ordine: void{
+  .idOrdine?: int
   .idRivenditore: int
   .cicli*: CicloOrdine
   .accessori*: AccessorioOrdine
