@@ -179,7 +179,8 @@ main
 				// Message
 
 				ordineMessage.messageName = "Ordine";
-				ordineMessage.processVariables << ordine;
+				ordineMessage.processVariables.value = ordine.idOrdine;
+				ordineMessage.processVariables.type = "String";
 	            ricezioneOrdine@CamundaPort(ordineMessage)(risp)
 
 	            /*message.messageName = "Ordine";

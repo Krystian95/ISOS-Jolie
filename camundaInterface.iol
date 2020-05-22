@@ -29,7 +29,10 @@ type rit: void{
 type OrdineMessage: void {
   .businessKey?: string
   .messageName: string
-  .processVariables: Ordine
+  .processVariables: void {
+    .value: string
+    .type: string
+  }
 }
 
 interface CamundaInterface {
