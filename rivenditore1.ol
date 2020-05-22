@@ -2,25 +2,25 @@
 include "console.iol"
 include "string_utils.iol"
 
-include "ACMEInterface.iol"
+include "ACMERivenditoreInterface.iol"
 
 outputPort ACMEService {
 	Location: "socket://localhost:8001"
 	Protocol: soap
-	Interfaces: ACMEInterface
+	Interfaces: ACMERivenditoreInterface
 }
 
-inputPort RivenditoreServerService {
+inputPort RivenditoreACMEService {
 	Location: "socket://localhost:8004"
 	Protocol: soap {
         .wsdl = "./wsdlRivenditore1.wsdl";
-        .wsdl.port = "RivenditoreServerService";
+        .wsdl.port = "RivenditoreACMEService";
         .dropRootValue = true
     }
-	Interfaces: ACMEInterface
+	Interfaces: ACMERivenditoreInterface
 }
 
-init{
+init {
 	global.idRivenditore = 1
 }
 
@@ -30,7 +30,7 @@ main
 
 	richiediListino@ACMEService()( listino );
 
-	ordine.idRivenditore = global.idRivenditore
+	ordine.idRivenditore = global.idRivenditore;
 
 	// CICLI
 

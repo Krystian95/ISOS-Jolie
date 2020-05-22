@@ -3,13 +3,15 @@ include "console.iol"
 include "database.iol"
 include "string_utils.iol"
 
-include "ACMEInterface.iol"
 include "camundaInterface.iol"
+
+include "ACMERivenditoreInterface.iol"
+include "ACMEInterface.iol"
 
 inputPort ACMEGestioneOrdiniRivenditoreInput {
 	Location: "socket://localhost:8001"
 	Protocol: soap
-	Interfaces: ACMEInterface
+	Interfaces: ACMERivenditoreInterface
 }
 
 outputPort Camunda {
@@ -20,6 +22,16 @@ outputPort Camunda {
         .format = "json"
     }
     Interfaces: CamundaInterface
+}
+
+inputPort ACMEService {
+	Location: "socket://localhost:8005"
+	Protocol: soap {
+        .wsdl = "./wsdlACMEGestioneOrdini.wsdl";
+        .wsdl.port = "ACMEService";
+        .dropRootValue = true
+    }
+	Interfaces: ACMEInterface
 }
 
 execution{ concurrent }
@@ -178,7 +190,15 @@ main
         	}
 	    }
 	] {
-		println@Console("Ordine ricevuto")()
+		println@Console("Invia Ordine")()
+	}
+
+	[
+		verificaCustomizzazioni( idOrdine )( esitoVerificaCustomizzazioni ) {
+			esitoVerificaCustomizzazioni.customizzazioniPossibili = false
+	    }
+	] {
+		println@Console("Verifica customizzazioni")()
 	}
 }
 
