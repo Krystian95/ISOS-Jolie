@@ -177,16 +177,10 @@ main
 	        	}
 
 				// Message
-
-				ordineMessage.messageName = "Ordine";
-				ordineMessage.processVariables.ordine.value = string(ordine.idOrdine);
-				ordineMessage.processVariables.ordine.type = "String";
-	            ricezioneOrdine@CamundaPort(ordineMessage)(risp)
-
-	            /*message.messageName = "Ordine";
-	            message.processVariables.ordine.value = "999";
+	            message.messageName = "Ordine";
+	            message.processVariables.ordine.value = string(ordine.idOrdine);
 	            message.processVariables.ordine.type = "String";
-	            message@CamundaPort(message)(risp)*/
+	            message@CamundaPort( message )( risp )
         	}
 	    }
 	] {
