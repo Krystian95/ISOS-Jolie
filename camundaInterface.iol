@@ -24,8 +24,21 @@ type rit: void{
   .message?: any
 }
 
+// Ordine
+
+type RiceviOrdineRequest: void {
+  .businessKey?: string
+  .messageName: string
+  .processVariables: void {
+    .idOrdine: void {
+      .value: string
+      .type: string
+    }
+  }
+}
+
 
 
 interface CamundaInterface {
-    RequestResponse: message(StartRequest)(rit)
+    OneWay: ricezioneOrdine( RiceviOrdineRequest)
 }

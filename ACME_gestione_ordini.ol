@@ -14,7 +14,7 @@ inputPort ACMEGestioneOrdiniRivenditoreInput {
 	Interfaces: ACMERivenditoreInterface
 }
 
-outputPort CamundaPort {
+outputPort Camunda {
     Location: "socket://localhost:8080/engine-rest/"
     Protocol: http {
         .method = "post";
@@ -183,20 +183,20 @@ main
 	        	}
 
 	        	global.ordine << ordine;
+	        	undef(ordine);
 
 				// Message
-	            ordine1.messageName = "Ordine";
-	            ordine1.processVariables.ordine.value = string(ordine.idOrdine);
-	            println@Console( string(ordine.idOrdine) )();
-	            ordine1.processVariables.ordine.type = "String";
-	            message@CamundaPort(ordine1)(risp)
+	            ordine.messageName = "Ordine";
+	            ordine.processVariables.idOrdine.value = string(global.ordine.idOrdine);
+	            ordine.processVariables.idOrdine.type = "String";
+	            ricezioneOrdine@Camunda(ordine)
         	}
 	    }
 	] {
 		println@Console("– inviaOrdine [completed]")()
 	}
 
-	[
+	/*[
 		getIdOrdine( void )( idOrdine ) {
 			idOrdine.idOrdine = global.ordine.idOrdine
 	    }
@@ -215,7 +215,7 @@ main
 	    }
 	] {
 		println@Console("– verificaCustomizzazioni [completed]")()
-	}
+	}*/
 }
 
 
