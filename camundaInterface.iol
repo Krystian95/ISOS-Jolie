@@ -20,8 +20,8 @@ type intStringType:void{
 
 
 type rit: void{
-  .type?: string
-  .message?: string
+  .type?: any
+  .message?: any
 }
 
 

@@ -207,9 +207,9 @@ main
 	[
 		verificaCustomizzazioni( idOrdine )( esitoVerificaCustomizzazioni ) {
 
-			/*
-			 * TODO vertifica customizzazioni per specifico "idOrdine"
-			 */
+			
+			 //TODO vertifica customizzazioni per specifico "idOrdine"
+			 
 
 			esitoVerificaCustomizzazioni.customizzazioniPossibili = false
 	    }
