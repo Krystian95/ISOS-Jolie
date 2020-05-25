@@ -1,4 +1,3 @@
-
 type StartRequest:void {
     .businessKey?:string
     .messageName:string
@@ -25,19 +24,8 @@ type rit: void{
   .message?: string
 }
 
-// Ordine
-type OrdineMessage: void {
-  .businessKey?: string
-  .messageName: string
-  .processVariables: void {
-    .ordine: void {
-      .value: string
-      .type: string
-    }
-  }
-}
+
 
 interface CamundaInterface {
-  RequestResponse:  ricezioneOrdine(OrdineMessage)(rit),
-                    message(StartRequest)(rit)
+    RequestResponse: message(StartRequest)(rit)
 }

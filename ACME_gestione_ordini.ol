@@ -3,7 +3,7 @@ include "console.iol"
 include "database.iol"
 include "string_utils.iol"
 
-include "camundaInterface.iol"
+include "CamundaInterface.iol"
 
 include "ACMERivenditoreInterface.iol"
 include "ACMEGestioneOrdiniInterface.iol"
@@ -14,7 +14,7 @@ inputPort ACMEGestioneOrdiniRivenditoreInput {
 	Interfaces: ACMERivenditoreInterface
 }
 
-outputPort Camunda {
+outputPort CamundaPort {
     Location: "socket://localhost:8080/engine-rest/"
     Protocol: http {
         .method = "post";
@@ -34,7 +34,7 @@ inputPort ACMEGestioneOrdini {
 	Interfaces: ACMEGestioneOrdiniInterface
 }
 
-execution{ concurrent }
+execution { concurrent }
 
 init {
     with(connectionInfo) {
@@ -185,10 +185,11 @@ main
 	        	global.ordine << ordine;
 
 				// Message
-	            message.messageName = "Ordine";
-	            message.processVariables.ordine.value = string(ordine.idOrdine);
-	            message.processVariables.ordine.type = "String";
-	            message@Camunda( message )( risp )
+	            ordine1.messageName = "Ordine";
+	            ordine1.processVariables.ordine.value = string(ordine.idOrdine);
+	            println@Console( string(ordine.idOrdine) )();
+	            ordine1.processVariables.ordine.type = "String";
+	            message@CamundaPort(ordine1)(risp)
         	}
 	    }
 	] {
@@ -209,7 +210,7 @@ main
 			/*
 			 * TODO vertifica customizzazioni per specifico "idOrdine"
 			 */
-			
+
 			esitoVerificaCustomizzazioni.customizzazioniPossibili = false
 	    }
 	] {
