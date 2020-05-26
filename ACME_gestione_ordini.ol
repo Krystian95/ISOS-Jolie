@@ -13,23 +13,27 @@ inputPort ACMEGestioneOrdiniRivenditoreInput {
 	Protocol: soap
 	Interfaces: ACMERivenditoreInterface
 }
-/*
-inputPort ServerPort {
-    Location: "socket://localhost:8002"
+
+inputPort ACMEGestioneOrdini {
+    Location: "socket://localhost:8000"
     Protocol: soap {
         .wsdl = "./wsdlRivenditore1.wsdl";
-        .wsdl.port = "ServerPort";
+        .wsdl.port = "ACMEGestioneOrdini";
+        .dropRootValue = true
+    }
+    Interfaces: ACMEGestioneOrdiniInterface
+}
+/*
+outputPort ACMEGestioneOrdini {
+	Location: "socket://localhost:8002"
+    Protocol: soap {
+        .wsdl = "./wsdlRivenditore1.wsdl";
+        .wsdl.port = "ACMEGestioneOrdini";
         .dropRootValue = true
     }
     Interfaces: ACMEGestioneOrdiniInterface
 }*/
 
-outputPort ACMEGestioneOrdini {
-	Location: "socket://localhost:8002"
-	Protocol: soap
-	Interfaces: ACMEGestioneOrdiniInterface
-}
-
 
 outputPort CamundaPort {
 
@@ -41,27 +45,6 @@ outputPort CamundaPort {
     }
     Interfaces: CamundaInterface
 }
-
-/*
-outputPort CamundaPort {
-    Location: "socket://localhost:8080/engine-rest/"
-    Protocol: http {
-        .method = "post";
-        .contentType = "application/json";
-        .format = "json"
-    }
-    Interfaces: CamundaInterface
-}
-
-inputPort ACMEGestioneOrdini {
-	Location: "socket://localhost:8000"
-	Protocol: soap {
-        .wsdl = "./wsdlACMEGestioneOrdini.wsdl";
-        .wsdl.port = "ACMEGestioneOrdini";
-        .dropRootValue = true
-    }
-	Interfaces: ACMEGestioneOrdiniInterface
-}*/
 
 execution { concurrent }
 
@@ -225,7 +208,7 @@ main
 	] {
 		println@Console("– inviaOrdine [completed]")()
 	}
-/*
+
 	[
 		getIdOrdine( void )( idOrdine ) {
 			idOrdine.idOrdine = global.ordine.idOrdine
@@ -246,7 +229,6 @@ main
 	] {
 		println@Console("– verificaCustomizzazioni [completed]")()
 	}
-	*/
 }
 
 
