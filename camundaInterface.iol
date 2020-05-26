@@ -40,5 +40,5 @@ type RiceviOrdineRequest: void {
 
 
 interface CamundaInterface {
-    OneWay: ricezioneOrdine( RiceviOrdineRequest)
+    RequestResponse: ricezioneOrdine( RiceviOrdineRequest)(rit)
 }

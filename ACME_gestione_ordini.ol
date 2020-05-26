@@ -25,7 +25,7 @@ outputPort Camunda {
 }
 
 inputPort ACMEGestioneOrdini {
-	Location: "socket://localhost:8005"
+	Location: "socket://localhost:8000"
 	Protocol: soap {
         .wsdl = "./wsdlACMEGestioneOrdini.wsdl";
         .wsdl.port = "ACMEGestioneOrdini";
@@ -196,7 +196,7 @@ main
 		println@Console("– inviaOrdine [completed]")()
 	}
 
-	/*[
+	[
 		getIdOrdine( void )( idOrdine ) {
 			idOrdine.idOrdine = global.ordine.idOrdine
 	    }
@@ -215,7 +215,7 @@ main
 	    }
 	] {
 		println@Console("– verificaCustomizzazioni [completed]")()
-	}*/
+	}
 }
 
 
