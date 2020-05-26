@@ -17,7 +17,7 @@ inputPort ACMEGestioneOrdiniRivenditoreInput {
 inputPort ACMEGestioneOrdini {
     Location: "socket://localhost:8000"
     Protocol: soap {
-        .wsdl = "./wsdlRivenditore1.wsdl";
+        .wsdl = "./wsdlACMEGestioneOrdini.wsdl";
         .wsdl.port = "ACMEGestioneOrdini";
         .dropRootValue = true
     }
@@ -211,7 +211,7 @@ main
 
 	[
 		getIdOrdine( void )( idOrdine ) {
-			idOrdine.idOrdine = global.ordine.idOrdine
+			idOrdine.idOrdine = string(global.ordine.idOrdine)
 	    }
 	] {
 		println@Console("– getIdOrdine [completed]")()
