@@ -26,7 +26,7 @@ type rit: void{
 
 // Ordine
 
-type RiceviOrdineRequest: void {
+type OrdineMessage: void {
   .businessKey?: string
   .messageName: string
   .processVariables: void {
@@ -40,5 +40,6 @@ type RiceviOrdineRequest: void {
 
 
 interface CamundaInterface {
-    RequestResponse: ricezioneOrdine( RiceviOrdineRequest)(rit)
+    RequestResponse: ricezioneOrdine(OrdineMessage)(rit),
+                    message(StartRequest)(rit)
 }
