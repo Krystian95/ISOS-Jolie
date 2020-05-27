@@ -217,7 +217,7 @@ main
 			message.messageName = "Ordine";
 			message.processVariables.idOrdine.value = string(global.ordine.idOrdine);
 			message.processVariables.idOrdine.type = "String";
-			message@CamundaPort(message)(rit)*
+			message@CamundaPort(message)(rit)
         }
 
 		println@Console("[inviaOrdine] COMPLETED")()
