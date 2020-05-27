@@ -12,14 +12,10 @@ outputPort ACMEService {
 	Interfaces: ACMERivenditoreInterface
 }
 
-// Porta CAMUNDA -> Rivenditore
+// Porta ACME Gestione Ordini -> Rivenditore
 inputPort Rivenditore {
 	Location: "socket://localhost:8005"
-	Protocol: soap /*{
-        .wsdl = "./wsdlRivenditore1.wsdl";
-        .wsdl.port = "Rivenditore";
-        .dropRootValue = true
-    }*/
+	Protocol: soap
 	Interfaces: RivenditoreInterface
 }
 
@@ -134,17 +130,16 @@ init {
 	}
 
 	// Invio ordine
-	inviaOrdine@ACMEService( ordine )
+	inviaOrdine@ACMEService( ordine );
+	println@Console( "ORDINE inviato correttamente ad ACME" )()
 }
 
 main
 {
 	[
-		notificaCustomizzazioniNonRealizzabili ( void )( void ) {
-
-			println@Console("Le customizzazioni richieste NON sono realizzabili!")()
-	    }
+		notificaCustomizzazioniNonRealizzabili ( idOrdine )
 	] {
+		println@Console("Le customizzazioni richieste NON sono realizzabili!")();
 		println@Console("[notificaCustomizzazioniNonRealizzabili] COMPLETED")()
 	}
 

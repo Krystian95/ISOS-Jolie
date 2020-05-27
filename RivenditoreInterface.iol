@@ -1,4 +1,6 @@
 
+type IdOrdineCustomizzazione: string
+
 interface RivenditoreInterface {
-  RequestResponse:  notificaCustomizzazioniNonRealizzabili( void )( void )
+  OneWay:  notificaCustomizzazioniNonRealizzabili( IdOrdineCustomizzazione )
 }

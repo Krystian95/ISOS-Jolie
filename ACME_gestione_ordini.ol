@@ -244,6 +244,22 @@ main
 	] {
 		println@Console("[verificaCustomizzazioni] COMPLETED")()
 	}
+
+	[
+		notificaCustomizzazioniNonRealizzabili ( notificaCustomizzazioniNonRealizzabili )( response ) {
+
+			idRivenditore = notificaCustomizzazioniNonRealizzabili.idRivenditore;
+			idOrdine = notificaCustomizzazioniNonRealizzabili.idOrdine;
+
+			idOrdineMessage.idOrdine = idOrdine;
+
+			notificaCustomizzazioniNonRealizzabili@Rivenditore( idOrdineMessage );
+
+			response.response = "Notifica customizzazioni NON realizzabili inviata al rivenditore #" + idRivenditore + " per l'ordine #" + idOrdine
+	    }
+	] {
+		println@Console("[notificaCustomizzazioniNonRealizzabili] COMPLETED")()
+	}
 }
 
 
