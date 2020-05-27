@@ -40,6 +40,6 @@ type OrdineMessage: void {
 
 
 interface CamundaInterface {
-    RequestResponse: ricezioneOrdine(OrdineMessage)(rit),
-                    message(StartRequest)(rit)
+    RequestResponse:  ricezioneOrdine(OrdineMessage)(rit),
+                      message(StartRequest)(rit)
 }

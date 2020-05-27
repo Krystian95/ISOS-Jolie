@@ -52,6 +52,6 @@ type CicloOrdine: void {
 }
 
 interface ACMERivenditoreInterface {
-  RequestResponse:  richiediListino( void )( Listino ),
-                    inviaOrdine( Ordine )( void )
+  RequestResponse:  richiediListino( void )( Listino )
+  OneWay:           inviaOrdine( Ordine )
 }

@@ -3,29 +3,32 @@ include "console.iol"
 include "string_utils.iol"
 
 include "ACMERivenditoreInterface.iol"
+include "RivenditoreInterface.iol"
 
+// Porta Rivenditore -> ACME Gestione Ordini
 outputPort ACMEService {
 	Location: "socket://localhost:8001"
 	Protocol: soap
 	Interfaces: ACMERivenditoreInterface
 }
 
-inputPort RivenditoreACMEService {
-	Location: "socket://localhost:8004"
-	Protocol: soap {
+// Porta CAMUNDA -> Rivenditore
+inputPort Rivenditore {
+	Location: "socket://localhost:8005"
+	Protocol: soap /*{
         .wsdl = "./wsdlRivenditore1.wsdl";
-        .wsdl.port = "RivenditoreACMEService";
+        .wsdl.port = "Rivenditore";
         .dropRootValue = true
-    }
-	Interfaces: ACMERivenditoreInterface
+    }*/
+	Interfaces: RivenditoreInterface
 }
 
 init {
-	global.idRivenditore = 1
-}
 
-main
-{
+	// Id rivenditore
+	global.idRivenditore = 1;
+
+	// LISTINO
 	registerForInput@Console()();
 
 	richiediListino@ACMEService()( listino );
@@ -131,7 +134,18 @@ main
 	}
 
 	// Invio ordine
-	inviaOrdine@ACMEService( ordine )( void )
+	inviaOrdine@ACMEService( ordine )
+}
 
+main
+{
+	[
+		notificaCustomizzazioniNonRealizzabili ( void )( void ) {
+
+			println@Console("Le customizzazioni richieste NON sono realizzabili!")()
+	    }
+	] {
+		println@Console("[notificaCustomizzazioniNonRealizzabili] COMPLETED")()
+	}
 
 }
