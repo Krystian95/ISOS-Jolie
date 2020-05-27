@@ -249,11 +249,11 @@ main
 					"SELECT idCustomizzazione FROM ordine_has_ciclo_has_customizzazione WHERE idOrdine = " + idOrdine.idOrdine +
 					") AND disponibilita = 0";
         	query@Database( query )( resultCustomizzazioniNonRealizzabili );
-        	
+
 	        if ( #resultCustomizzazioniNonRealizzabili.row == 0 ) {
-	        	esitoVerificaCustomizzazioni.customizzazioniPossibili = "1"
+	        	esitoVerificaCustomizzazioni.customizzazioniPossibili = true
 	        } else {
-				esitoVerificaCustomizzazioni.customizzazioniPossibili = "0"
+				esitoVerificaCustomizzazioni.customizzazioniPossibili = false
 	        }
 	    }
 	] {

@@ -7,7 +7,7 @@ type IdRivenditore: void {
 }
 
 type EsitoVerificaCustomizzazioni: void {
-  .customizzazioniPossibili: string
+  .customizzazioniPossibili: bool
 }
 
 type NotificaCustomizzazioniNonRealizzabili: void {

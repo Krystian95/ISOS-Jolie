@@ -22,7 +22,7 @@ inputPort Rivenditore {
 
 init {
 	// 27 non realizzabili - 62: realizzabili
-	idOrdine.idOrdine = "63";
+	idOrdine.idOrdine = "62";
 	verificaCustomizzazioni@ACMEService(idOrdine)(response);
 	println@Console("response = " + response.customizzazioniPossibili)()
 }
