@@ -233,6 +233,15 @@ main
 	}
 
 	[
+		getIdRivenditore( void )( idRivenditore ) {
+
+			idRivenditore.idRivenditore = string(global.ordine.getIdRivenditore)
+	    }
+	] {
+		println@Console("[getIdRivenditore] COMPLETED")()
+	}
+
+	[
 		verificaCustomizzazioni( idOrdine )( esitoVerificaCustomizzazioni ) {
 
 			
