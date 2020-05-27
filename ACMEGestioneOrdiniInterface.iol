@@ -19,11 +19,12 @@ type Response: void {
 	.response: string
 }
 
-type empty: void
+type emptyGetIdOrdine: void
+type emptyGetIdRivenditore: void
 
 interface ACMEGestioneOrdiniInterface {
-  RequestResponse:  getIdOrdine( empty )( IdOrdine ),
-  					getIdRivenditore( empty )( IdRivenditore ),
+  RequestResponse:  getIdOrdine( emptyGetIdOrdine )( IdOrdine ),
+  					getIdRivenditore( emptyGetIdRivenditore )( IdRivenditore ),
                     verificaCustomizzazioni( IdOrdine )( EsitoVerificaCustomizzazioni ),
                     notificaCustomizzazioniNonRealizzabili( NotificaCustomizzazioniNonRealizzabili )( Response )
 }

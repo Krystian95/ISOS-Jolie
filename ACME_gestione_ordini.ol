@@ -19,7 +19,7 @@ inputPort ACMEGestioneOrdiniRivenditoreInput {
 
 // Porta [TEST] ACME Gestione Ordini -> Rivenditore
 outputPort Rivenditore {
-	Location: "socket://localhost:8005"
+	Location: "socket://localhost:8002"
 	Protocol: soap
 	Interfaces: RivenditoreInterface
 }
