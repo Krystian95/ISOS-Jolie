@@ -212,12 +212,12 @@ main
 	        }
 
 	        global.ordine << ordine;
-	        undef(ordine)
+	        undef(ordine);
 
 			// Message
 			message.messageName = "Ordine";
-			message.processVariables.idOrdine.value = string( global.ordine.idOrdine );
-			message.processVariables.idOrdine.type = "String";
+			message.processVariables.ordine.value = string( global.ordine.idOrdine );
+			message.processVariables.ordine.type = "String";
 			message@CamundaPort(message)(rit)
         }
 
