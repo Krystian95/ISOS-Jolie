@@ -117,7 +117,8 @@ main
 	[
 		inviaOrdine( ordine )
 	] {
-		install ( 
+		install (
+			// TODO remove print and leave blank
 			Timeout => println@Console("[Timeout fault handled for inviaOrdine]")(),
 			TypeMismatch => println@Console("[TypeMismatch fault handled for inviaOrdine]")()
 		);
@@ -215,7 +216,7 @@ main
 
 			// Message
 			message.messageName = "Ordine";
-			message.processVariables.idOrdine.value = string(global.ordine.idOrdine);
+			message.processVariables.idOrdine.value = string( global.ordine.idOrdine );
 			message.processVariables.idOrdine.type = "String";
 			message@CamundaPort(message)(rit)
         }
@@ -226,7 +227,7 @@ main
 	[
 		getIdOrdine( void )( idOrdine ) {
 
-			idOrdine.idOrdine = string(global.ordine.idOrdine)
+			idOrdine.idOrdine = string( global.ordine.idOrdine )
 	    }
 	] {
 		println@Console("[getIdOrdine] COMPLETED")()
@@ -235,7 +236,7 @@ main
 	[
 		getIdRivenditore( void )( idRivenditore ) {
 
-			idRivenditore.idRivenditore = string(global.ordine.getIdRivenditore)
+			idRivenditore.idRivenditore = string( global.ordine.getIdRivenditore )
 	    }
 	] {
 		println@Console("[getIdRivenditore] COMPLETED")()
@@ -244,11 +245,16 @@ main
 	[
 		verificaCustomizzazioni( idOrdine )( esitoVerificaCustomizzazioni ) {
 
-			
-			 //TODO vertifica customizzazioni per specifico "idOrdine"
-			 
+			query = "SELECT DISTINCT idCustomizzazione FROM customizzazione WHERE idCustomizzazione IN (" +
+					"SELECT idCustomizzazione FROM ordine_has_ciclo_has_customizzazione WHERE idOrdine = " + idOrdine.idOrdine +
+					") AND disponibilita = 0";
+        	query@Database( query )( resultCustomizzazioniNonRealizzabili );
 
-			esitoVerificaCustomizzazioni.customizzazioniPossibili = false
+	        if ( #resultCustomizzazioniNonRealizzabili == 0 ) {
+	        	esitoVerificaCustomizzazioni.customizzazioniPossibili = true
+	        } else {
+				esitoVerificaCustomizzazioni.customizzazioniPossibili = false
+	        }
 	    }
 	] {
 		println@Console("[verificaCustomizzazioni] COMPLETED")()
@@ -261,6 +267,8 @@ main
 			idOrdine = notificaCustomizzazioniNonRealizzabili.idOrdine;
 
 			idOrdineMessage.idOrdine = idOrdine;
+
+			// TODO invocare @Rivenditore 1 o 2 in base all'idRivenditore
 
 			notificaCustomizzazioniNonRealizzabili@Rivenditore( idOrdineMessage );
 
