@@ -214,12 +214,10 @@ main
 	        undef(ordine)
 
 			// Message
-			/*message.messageName = "Ordine";
+			message.messageName = "Ordine";
 			message.processVariables.idOrdine.value = string(global.ordine.idOrdine);
 			message.processVariables.idOrdine.type = "String";
-			message@CamundaPort(message)(rit)*/
-
-			notificaCustomizzazioniNonRealizzabili@Rivenditore()()
+			message@CamundaPort(message)(rit)*
         }
 
 		println@Console("[inviaOrdine] COMPLETED")()
