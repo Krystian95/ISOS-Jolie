@@ -2,21 +2,14 @@
 include "console.iol"
 include "string_utils.iol"
 
-include "ACMERivenditoreInterface.iol"
-include "RivenditoreInterface.iol"
+include "interfaces/ACMERivenditoreInterface.iol"
+include "interfaces/RivenditoreInterface.iol"
 
 // Porta Rivenditore -> ACME Gestione Ordini
 outputPort ACMEService {
 	Location: "socket://localhost:8001"
 	Protocol: soap
 	Interfaces: ACMERivenditoreInterface
-}
-
-// Porta ACME Gestione Ordini -> Rivenditore
-inputPort Rivenditore {
-	Location: "socket://localhost:8002"
-	Protocol: soap
-	Interfaces: RivenditoreInterface
 }
 
 init {

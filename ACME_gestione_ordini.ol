@@ -3,12 +3,14 @@ include "console.iol"
 include "database.iol"
 include "string_utils.iol"
 
-include "CamundaInterface.iol"
+include "interfaces/CamundaInterface.iol"
 
-include "ACMERivenditoreInterface.iol"
-include "RivenditoreInterface.iol"
+include "interfaces/ACMEGestioneOrdiniInterface.iol"
 
-include "ACMEGestioneOrdiniInterface.iol"
+include "interfaces/ACMERivenditoreInterface.iol"
+include "interfaces/RivenditoreInterface.iol"
+
+include "interfaces/ACMEMagazzinoInterface.iol"
 
 // Porta Rivenditore -> ACME Gestione Ordini
 inputPort ACMEGestioneOrdiniRivenditoreInput {
@@ -17,11 +19,25 @@ inputPort ACMEGestioneOrdiniRivenditoreInput {
 	Interfaces: ACMERivenditoreInterface
 }
 
-// Porta [TEST] ACME Gestione Ordini -> Rivenditore
+// Porta ACME Gestione Ordini -> Rivenditore
 outputPort Rivenditore {
 	Location: "socket://localhost:8002"
 	Protocol: soap
 	Interfaces: RivenditoreInterface
+}
+
+// Porta ACME Gestione Ordini -> ACME Magazzino Principale
+outputPort MagazzinoPrincipale {
+	Location: "socket://localhost:8006"
+	Protocol: soap
+	Interfaces: ACMEMagazzinoInterface
+}
+
+// Porta [TEST] Test -> ACME Gestione Ordini
+inputPort ACMETest {
+	Location: "socket://localhost:8003"
+	Protocol: soap
+	Interfaces: ACMEGestioneOrdiniInterface
 }
 
 /*
@@ -69,9 +85,10 @@ init {
         .password = "root"
     };
 
-
     connect@Database(connectionInfo)();
-    println@Console("Connection to databse: SUCCESS")();
+    println@Console("\nConnection to database: SUCCESS")();
+
+    println@Console("\nACME GESTIONE ORDINI running...\n")();
 
     global.ordine = null
 }
@@ -82,7 +99,8 @@ main
 		richiediListino( void )( listino ) {
 
 			// Cicli
-			query = "SELECT idCiclo, modello, colorazione FROM ciclo";
+			query = "SELECT idCiclo, modello, colorazione
+					 FROM ciclo";
         	query@Database( query )( resultCicli );
 
 	        for ( i = 0, i < #resultCicli.row, i++ ) {
@@ -92,7 +110,8 @@ main
 	        }
 
 			// Customizzazioni
-			query = "SELECT idCustomizzazione, tipologia, descrizione FROM customizzazione";
+			query = "SELECT idCustomizzazione, tipologia, descrizione
+					 FROM customizzazione";
         	query@Database( query )( resultCustomizzazioni );
 
 	        for ( i = 0, i < #resultCustomizzazioni.row, i++ ) {
@@ -102,7 +121,8 @@ main
 	        }
 
 			// Accessori
-			query = "SELECT idAccessorio, nome FROM accessorio";
+			query = "SELECT idAccessorio, nome
+					 FROM accessorio";
         	query@Database( query )( resultAccessori );
 
 	        for ( i = 0, i < #resultAccessori.row, i++ ) {
@@ -131,7 +151,12 @@ main
 				query = "INSERT INTO ordine (idRivenditore) VALUES (" + ordine.idRivenditore + ")";
 				update@Database( query )( responseNewOrdine );
 
-				query = "SELECT idOrdine FROM ordine WHERE idOrdine = (SELECT MAX(idOrdine) FROM ordine)";
+				query = "SELECT idOrdine
+						 FROM ordine
+						 WHERE idOrdine = (
+						 	SELECT MAX(idOrdine)
+						 	FROM ordine
+						 )";
 				query@Database( query )( responseNewOrdine );
 				idOrdine = responseNewOrdine.row[0].idOrdine;
 				ordine.idOrdine = idOrdine;
@@ -245,8 +270,12 @@ main
 	[
 		verificaCustomizzazioni( idOrdine )( esitoVerificaCustomizzazioni ) {
 
-			query = "SELECT DISTINCT idCustomizzazione FROM customizzazione WHERE idCustomizzazione IN (" +
-					"SELECT idCustomizzazione FROM ordine_has_ciclo_has_customizzazione WHERE idOrdine = " + idOrdine.idOrdine +
+			query = "SELECT DISTINCT idCustomizzazione
+					 FROM customizzazione
+					 WHERE idCustomizzazione IN (
+					 	SELECT idCustomizzazione
+					 	FROM ordine_has_ciclo_has_customizzazione
+					 	WHERE idOrdine = " + idOrdine.idOrdine +
 					") AND disponibilita = 0";
         	query@Database( query )( resultCustomizzazioniNonRealizzabili );
 
@@ -276,6 +305,15 @@ main
 	    }
 	] {
 		println@Console("[notificaCustomizzazioniNonRealizzabili] COMPLETED")()
+	}
+
+	[
+		verificaDisponibilitaComponentiAccessoriMP ( params )( response ) {
+
+			verificaDisponibilitaComponentiAccessori@MagazzinoPrincipale( params )( response )
+	    }
+	] {
+		println@Console("[verificaDisponibilitaComponentiAccessoriMP] COMPLETED")()
 	}
 }
 
