@@ -16,6 +16,10 @@ execution { concurrent }
 
 init
 {
+	// Id Magazzino
+	global.idMagazzino = 1;
+
+	// Database
 	with(connectionInfo) {
         .host = "127.0.0.1";
         .driver = "mysql";
@@ -28,10 +32,7 @@ init
     connect@Database(connectionInfo)();
     println@Console("\nConnection to database: SUCCESS")();
 
-    println@Console("\nACME MAGAZZINO PRINCIPALE running...\n")();
-
-	// Id Magazzino
-	global.idMagazzino = 1
+    println@Console("\nACME MAGAZZINO #"+global.idMagazzino+" running...\n")()
 }
 
 main
@@ -41,10 +42,10 @@ main
 
 			idOrdine = params.idOrdine;
 
-			println@Console("Verifico disponibilità componenti e accessori nel MP per l'ordine #" + idOrdine + "\n")();
+			println@Console("Verifico disponibilità componenti e accessori nel Magazzino #"+global.idMagazzino+" per l'ordine #" + idOrdine + "\n")();
 
-			tuttiAccessoriOrdinePresentiMP = true;
-			tuttiComponentiOrdinePresentiMP = true;
+			tuttiAccessoriOrdinePresenti = true;
+			tuttiComponentiOrdinePresenti = true;
 
 			// Accessori
 
@@ -54,7 +55,7 @@ main
         	query@Database( query )( accessoriOrdine );
 
 	        if ( #accessoriOrdine.row > 0 ) {
-	        	// Elenco degli accessori presenti nel MP per uno specifico ordine
+	        	// Elenco degli accessori presenti nel magazzino per uno specifico ordine
 	        	query = "SELECT
 							ordine_has_accessorio.idOrdine,
 						    ordine_has_accessorio.idAccessorio,
@@ -64,25 +65,25 @@ main
 						FROM ordine_has_accessorio
 						LEFT JOIN magazzino_has_accessorio ON ordine_has_accessorio.idAccessorio = magazzino_has_accessorio.idAccessorio
 						WHERE ordine_has_accessorio.idOrdine = " + idOrdine +" AND magazzino_has_accessorio.idMagazzino = " + global.idMagazzino;
-        		query@Database( query )( accessoriOrdineMP );
+        		query@Database( query )( accessoriOrdineMagazzino );
 
-        		if(#accessoriOrdine.row != #accessoriOrdineMP.row){
-        			tuttiAccessoriOrdinePresentiMP = false
+        		if(#accessoriOrdine.row != #accessoriOrdineMagazzino.row){
+        			tuttiAccessoriOrdinePresenti = false
         		}
 
         		// Per ogni accessorio prenoto la qta richiesta oppure quella disponibile
-        		for ( i = 0, i < #accessoriOrdineMP.row, i++ ) {
-        			qta_richiesta = accessoriOrdineMP.row[i].qta_richiesta;
-        			qta_disponibile = accessoriOrdineMP.row[i].qta_disponibile;
+        		for ( i = 0, i < #accessoriOrdineMagazzino.row, i++ ) {
+        			qta_richiesta = accessoriOrdineMagazzino.row[i].qta_richiesta;
+        			qta_disponibile = accessoriOrdineMagazzino.row[i].qta_disponibile;
 		            qta_mancante = qta_richiesta - qta_disponibile;
 
-		            idMagazzino = accessoriOrdineMP.row[i].idMagazzino;
-		            idAccessorio = accessoriOrdineMP.row[i].idAccessorio;
+		            idMagazzino = accessoriOrdineMagazzino.row[i].idMagazzino;
+		            idAccessorio = accessoriOrdineMagazzino.row[i].idAccessorio;
 
 		           	println@Console("Il magazzino #" + idMagazzino + " possiede "+qta_disponibile+" qta su "+qta_richiesta+" qta richieste (ne mancano "+qta_mancante+") dell'accessorio # "+idAccessorio+" per l'ordine #" + idOrdine + "\n")();
 
 		            if(qta_mancante > 0) {
-		            	tuttiAccessoriOrdinePresentiMP = false;
+		            	tuttiAccessoriOrdinePresenti = false;
 
 		            	if(qta_disponibile >= qta_richiesta){
 		            		qta_prenotabile = qta_richiesta
@@ -101,7 +102,7 @@ main
 								 SET quantita = quantita - " + qta_prenotabile + "
 								 WHERE idMagazzino = " + idMagazzino + " AND idAccessorio = " + idAccessorio;
 						update@Database( query )( responseScaloQtaMagazzino );
-						println@Console("Ho scalato " + qta_prenotabile + " qta dell'accessorio #" + idAccessorio + " dal magazzino #" + idMagazzino + " poiche' prenotate" + "\n")()
+						println@Console("Ho scalato " + qta_prenotabile + " qta dell'accessorio #" + idAccessorio + " dal magazzino #" + idMagazzino + " poiché prenotate" + "\n")()
 		            }
 		        }
 	        }
@@ -115,7 +116,7 @@ main
         	query@Database( query )( componentiOrdine );
 
         	if ( #componentiOrdine.row > 0 ) {
-	        	// Elenco dei componenti presenti nel MP per uno specifico ordine
+	        	// Elenco dei componenti presenti nel magazzino per uno specifico ordine
 	        	query = "SELECT *
 						 FROM ordine_has_ciclo
 						 LEFT JOIN ciclo_has_componente ON ordine_has_ciclo.idCiclo = ciclo_has_componente.idCiclo
@@ -124,28 +125,26 @@ main
     						FROM magazzino_has_componente
     						WHERE idMagazzino = " + global.idMagazzino + " AND quantita > 0
 						 )";
-        		query@Database( query )( componentiOrdinePresentiMP );
+        		query@Database( query )( componentiOrdinePresentiMagazzino );
 
-        		if ( #componentiOrdinePresentiMP.row != #componentiOrdine.row ) {
-        			tuttiComponentiOrdinePresentiMP = false
+        		if ( #componentiOrdinePresentiMagazzino.row != #componentiOrdine.row ) {
+        			tuttiComponentiOrdinePresenti = false
         		}
 	        }
 
-	        // TODO controllare le quantità e prenotare quelle presenti/necessarie
+	        // Finale (response)
 
-	        // Finale
-
-	        if ( tuttiAccessoriOrdinePresentiMP && tuttiComponentiOrdinePresentiMP ) {
+	        if ( tuttiAccessoriOrdinePresenti && tuttiComponentiOrdinePresenti ) {
 	        	response.tuttiMaterialiRichiestiPresentiMP = true;
-	        	response.response = "Nel MP sono presenti tutti i Componenti/Accessori richiesti dall'ordine #" + idOrdine
+	        	response.message = "Nel MP #"+global.idMagazzino+" sono presenti tutti i Componenti/Accessori richiesti dall'ordine #" + idOrdine
 	        } else {
 				response.tuttiMaterialiRichiestiPresentiMP = false;
-				response.response = "Nel MP NON sono presenti tutti i Componenti/Accessori richiesti dall'ordine #" + idOrdine
+				response.message = "Nel MP #"+global.idMagazzino+" NON sono presenti tutti i Componenti/Accessori richiesti dall'ordine #" + idOrdine
 	        }
 
-	        println@Console(response.response + "\n")()
+	        println@Console(response.message + "\n")()
 	    }
 	] {
-		println@Console("[verificaDisponibilitaComponentiAccessoriMP] COMPLETED")()
+		println@Console("[verificaDisponibilitaComponentiAccessori] COMPLETED")()
 	}
 }
