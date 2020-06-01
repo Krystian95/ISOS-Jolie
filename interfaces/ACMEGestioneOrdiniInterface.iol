@@ -9,6 +9,8 @@ type IdRivenditore: void {
 
 type EsitoVerificaCustomizzazioni: void {
   .customizzazioniPossibili: bool
+  .ordineContieneAccessoriDaNonAssemblare: bool
+  .ordineContieneComponentiAccessoriDaAssemblare: bool
 }
 
 type NotificaCustomizzazioniNonRealizzabili: void {

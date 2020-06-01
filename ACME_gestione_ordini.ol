@@ -270,6 +270,8 @@ main
 	[
 		verificaCustomizzazioni( idOrdine )( esitoVerificaCustomizzazioni ) {
 
+			// Customizzazioni realizzabili oppure no
+
 			query = "SELECT DISTINCT idCustomizzazione
 					 FROM customizzazione
 					 WHERE idCustomizzazione IN (
@@ -284,6 +286,22 @@ main
 	        } else {
 				esitoVerificaCustomizzazioni.customizzazioniPossibili = false
 	        }
+
+	        // Accessori da non assemblare/assemblare facilmente
+
+			query = "SELECT *
+					 FROM Ordine_has_Accessorio
+					 LEFT JOIN Accessorio ON Ordine_has_Accessorio.idAccessorio = Accessorio.idAccessorio
+					 WHERE idOrdine = " + idOrdine.idOrdine + " AND tipologia IN ('Non assemblabile', 'Assemblabile facilmente')";
+        	query@Database( query )( resultAccessoriNonAssemblare );
+
+        	if ( #resultAccessoriNonAssemblare.row > 0 ) {
+	        	esitoVerificaCustomizzazioni.ordineContieneAccessoriDaNonAssemblare = true
+	        } else {
+				esitoVerificaCustomizzazioni.ordineContieneAccessoriDaNonAssemblare = false
+	        }
+
+	        esitoVerificaCustomizzazioni.ordineContieneComponentiAccessoriDaAssemblare = true
 	    }
 	] {
 		println@Console("[verificaCustomizzazioni] COMPLETED")()

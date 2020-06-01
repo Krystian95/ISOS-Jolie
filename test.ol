@@ -29,18 +29,19 @@ main
 
 	// 27 non realizzabili
 	// 62: realizzabili
-	/*
-	idOrdine.idOrdine = "62";
+	
+	idOrdine.idOrdine = "27";
 	verificaCustomizzazioni@ACMEService(idOrdine)(response);
-	println@Console("response = " + response.customizzazioniPossibili)()
-	*/
+	println@Console("response = " + response.customizzazioniPossibili)();
+	println@Console("response = " + response.ordineContieneAccessoriDaNonAssemblare)();
+	println@Console("response = " + response.ordineContieneComponentiAccessoriDaAssemblare)()
 
 	// Verifica disponibilità accessori e componenti nel MP
 
 	// 27 (1 accessorio sì, 1 no - no tutti componenti)
 	// 63 (1 accessorio sì - no tutti componenti)
-	prenotazioneMaterialiPresentiMPDelegate.idOrdine = "63";
+	/*prenotazioneMaterialiPresentiMPDelegate.idOrdine = "63";
 	prenotazioneMaterialiPresentiMPDelegate@ACMEServiceMP(prenotazioneMaterialiPresentiMPDelegate)(response);
 	println@Console("response = " + response.tuttiMaterialiRichiestiPresentiMP)();
-	println@Console("response = " + response.response)()
+	println@Console("response = " + response.response)()*/
 }
