@@ -12,6 +12,13 @@ outputPort ACMEService {
 	Interfaces: ACMERivenditoreInterface
 }
 
+// Porta ACME Gestione Ordini -> Rivenditore
+inputPort Rivenditore {
+	Location: "socket://localhost:8002"
+	Protocol: soap
+	Interfaces: RivenditoreInterface
+}
+
 init {
 
 	// Id rivenditore
