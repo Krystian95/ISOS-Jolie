@@ -308,7 +308,7 @@ main
 	}
 
 	[
-		verificaDisponibilitaComponentiAccessoriMP ( params )( response ) {
+		prenotazioneMaterialiPresentiMPDelegate ( params )( response ) {
 
 			verificaDisponibilitaComponentiAccessori@MagazzinoPrincipale( params )( response )
 	    }

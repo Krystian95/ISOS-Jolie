@@ -39,8 +39,8 @@ main
 
 	// 27 (1 accessorio sì, 1 no - no tutti componenti)
 	// 63 (1 accessorio sì - no tutti componenti)
-	verificaDisponibilitaComponentiAccessoriMP.idOrdine = "63";
-	verificaDisponibilitaComponentiAccessoriMP@ACMEServiceMP(verificaDisponibilitaComponentiAccessoriMP)(response);
+	prenotazioneMaterialiPresentiMPDelegate.idOrdine = "63";
+	prenotazioneMaterialiPresentiMPDelegate@ACMEServiceMP(prenotazioneMaterialiPresentiMPDelegate)(response);
 	println@Console("response = " + response.tuttiMaterialiRichiestiPresentiMP)();
 	println@Console("response = " + response.response)()
 }
