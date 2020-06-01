@@ -55,7 +55,7 @@ outputPort ACMEGestioneOrdini {
 inputPort ACMEGestioneOrdini {
     Location: "socket://localhost:8000"
     Protocol: soap {
-        .wsdl = "./wsdlACMEGestioneOrdini.wsdl";
+        .wsdl = "./wsdl/wsdlACMEGestioneOrdini.wsdl";
         .wsdl.port = "ACMEGestioneOrdini";
         .dropRootValue = true
     }
