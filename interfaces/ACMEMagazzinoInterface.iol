@@ -7,7 +7,7 @@ type VerificaDisponibilitaComponentiAccessoriMP: void {
 
 type ResponseVerificaDisponibilitaComponentiAccessoriMP: void {
   .tuttiMaterialiRichiestiPresentiMP: bool
-  .response: string
+  .message: string
 }
 
 interface ACMEMagazzinoInterface {

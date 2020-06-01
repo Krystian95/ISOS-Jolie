@@ -26,7 +26,7 @@ type PrenotazioneMaterialiPresentiMPDelegate: void {
 
 type ResponsePrenotazioneMaterialiPresentiMPDelegate: void {
   .tuttiMaterialiRichiestiPresentiMP: bool
-  .response: string
+  .message: string
 }
 
 // Risposte

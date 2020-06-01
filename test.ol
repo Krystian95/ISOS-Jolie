@@ -40,6 +40,6 @@ main
 	// 63 (1 accessorio sì - no tutti componenti)
 	prenotazioneMaterialiPresentiMPDelegate.idOrdine = "70";
 	prenotazioneMaterialiPresentiMPDelegate@ACMEServiceMP(prenotazioneMaterialiPresentiMPDelegate)(response);
-	println@Console("response = " + response.tuttiMaterialiRichiestiPresentiMP)();
-	println@Console("response = " + response.response)()
+	println@Console("tuttiMaterialiRichiestiPresentiMP = " + response.tuttiMaterialiRichiestiPresentiMP)();
+	println@Console("response = " + response.message)()
 }

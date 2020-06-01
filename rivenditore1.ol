@@ -139,7 +139,7 @@ main
 	[
 		notificaCustomizzazioniNonRealizzabili ( idOrdine )
 	] {
-		println@Console("Le customizzazioni richieste NON sono realizzabili!")();
+		println@Console("Le customizzazioni richieste per l'ordine #" + idOrdine.idOrdine + " NON sono realizzabili!")();
 		println@Console("[notificaCustomizzazioniNonRealizzabili] COMPLETED")()
 	}
 

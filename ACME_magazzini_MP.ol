@@ -80,16 +80,16 @@ main
 		            idMagazzino = accessoriOrdineMagazzino.row[i].idMagazzino;
 		            idAccessorio = accessoriOrdineMagazzino.row[i].idAccessorio;
 
-		           	println@Console("Il magazzino #" + idMagazzino + " possiede "+qta_disponibile+" qta su "+qta_richiesta+" qta richieste (ne mancano "+qta_mancante+") dell'accessorio # "+idAccessorio+" per l'ordine #" + idOrdine + "\n")();
+		            if(qta_disponibile >= qta_richiesta){
+		           		qta_prenotabile = qta_richiesta
+		           	} else {
+		           		qta_prenotabile = qta_disponibile
+		           	}
 
-		            if(qta_mancante > 0) {
+		           	println@Console("Il magazzino #" + idMagazzino + " possiede "+qta_disponibile+" qta su "+qta_richiesta+" qta richieste ("+qta_prenotabile+" prenotabili) dell'accessorio # "+idAccessorio+" per l'ordine #" + idOrdine + "\n")();
+
+		            if(qta_prenotabile > 0) {
 		            	tuttiAccessoriOrdinePresenti = false;
-
-		            	if(qta_disponibile >= qta_richiesta){
-		            		qta_prenotabile = qta_richiesta
-		            	} else {
-		            		qta_prenotabile = qta_disponibile
-		            	}
 
 		            	query = "INSERT INTO Magazzino_accessorio_prenotato
 				            	(idOrdine, idMagazzino, idAccessorio, quantita)
