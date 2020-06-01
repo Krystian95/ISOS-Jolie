@@ -41,7 +41,7 @@ main
 
 			idOrdine = params.idOrdine;
 
-			println@Console("Verifico disponibilità componenti e accessori nel MP per l'ordine #" + idOrdine)();
+			println@Console("Verifico disponibilità componenti e accessori nel MP per l'ordine #" + idOrdine + "\n")();
 
 			tuttiAccessoriOrdinePresentiMP = true;
 			tuttiComponentiOrdinePresentiMP = true;
@@ -55,22 +55,55 @@ main
 
 	        if ( #accessoriOrdine.row > 0 ) {
 	        	// Elenco degli accessori presenti nel MP per uno specifico ordine
-	        	query = "SELECT idAccessorio
-	        			 FROM ordine_has_accessorio
-	        			 WHERE idOrdine = " + idOrdine + " AND
-	        			 idAccessorio IN (
-							SELECT idAccessorio FROM (
-								SELECT idAccessorio
-								FROM magazzino
-								LEFT JOIN magazzino_has_accessorio ON magazzino.idMagazzino = magazzino_has_accessorio.idMagazzino
-								WHERE tipologia = 'Primario'
-							) AS accessori_MP
-						)";
-        		query@Database( query )( accessoriOrdinePresentiMP );
+	        	query = "SELECT
+							ordine_has_accessorio.idOrdine,
+						    ordine_has_accessorio.idAccessorio,
+						    ordine_has_accessorio.quantitaAccessorio AS qta_richiesta,
+						    magazzino_has_accessorio.idMagazzino,
+						    magazzino_has_accessorio.quantita AS qta_disponibile
+						FROM ordine_has_accessorio
+						LEFT JOIN magazzino_has_accessorio ON ordine_has_accessorio.idAccessorio = magazzino_has_accessorio.idAccessorio
+						WHERE ordine_has_accessorio.idOrdine = " + idOrdine +" AND magazzino_has_accessorio.idMagazzino = " + global.idMagazzino;
+        		query@Database( query )( accessoriOrdineMP );
 
-        		if ( #accessoriOrdinePresentiMP.row != #accessoriOrdine.row ) {
+        		if(#accessoriOrdine.row != #accessoriOrdineMP.row){
         			tuttiAccessoriOrdinePresentiMP = false
         		}
+
+        		// Per ogni accessorio prenoto la qta richiesta oppure quella disponibile
+        		for ( i = 0, i < #accessoriOrdineMP.row, i++ ) {
+        			qta_richiesta = accessoriOrdineMP.row[i].qta_richiesta;
+        			qta_disponibile = accessoriOrdineMP.row[i].qta_disponibile;
+		            qta_mancante = qta_richiesta - qta_disponibile;
+
+		            idMagazzino = accessoriOrdineMP.row[i].idMagazzino;
+		            idAccessorio = accessoriOrdineMP.row[i].idAccessorio;
+
+		           	println@Console("Il magazzino #" + idMagazzino + " possiede "+qta_disponibile+" qta su "+qta_richiesta+" qta richieste (ne mancano "+qta_mancante+") dell'accessorio # "+idAccessorio+" per l'ordine #" + idOrdine + "\n")();
+
+		            if(qta_mancante > 0) {
+		            	tuttiAccessoriOrdinePresentiMP = false;
+
+		            	if(qta_disponibile >= qta_richiesta){
+		            		qta_prenotabile = qta_richiesta
+		            	} else {
+		            		qta_prenotabile = qta_disponibile
+		            	}
+
+		            	query = "INSERT INTO Magazzino_accessorio_prenotato
+				            	(idOrdine, idMagazzino, idAccessorio, quantita)
+				            	VALUES
+				            	(" + idOrdine + ", " + idMagazzino + ", " + idAccessorio + ", " + qta_prenotabile + ")";
+						update@Database( query )( responseNewPrenotazioneAccessorio );
+						println@Console("Prenoto " + qta_prenotabile + " qta dell'accessorio #" + idAccessorio + " nel magazzino #" + idMagazzino + " per l'ordine #" + idOrdine + "\n")();
+
+						query = "UPDATE magazzino_has_accessorio
+								 SET quantita = quantita - " + qta_prenotabile + "
+								 WHERE idMagazzino = " + idMagazzino + " AND idAccessorio = " + idAccessorio;
+						update@Database( query )( responseScaloQtaMagazzino );
+						println@Console("Ho scalato " + qta_prenotabile + " qta dell'accessorio #" + idAccessorio + " dal magazzino #" + idMagazzino + " poiche' prenotate" + "\n")()
+		            }
+		        }
 	        }
 
 	        // Componenti
@@ -86,10 +119,10 @@ main
 	        	query = "SELECT *
 						 FROM ordine_has_ciclo
 						 LEFT JOIN ciclo_has_componente ON ordine_has_ciclo.idCiclo = ciclo_has_componente.idCiclo
-						 WHERE idOrdine = 27 AND idComponente IN (
+						 WHERE idOrdine = " + idOrdine + " AND idComponente IN (
 							SELECT idComponente
     						FROM magazzino_has_componente
-    						WHERE idMagazzino = " + global.idMagazzino + "
+    						WHERE idMagazzino = " + global.idMagazzino + " AND quantita > 0
 						 )";
         		query@Database( query )( componentiOrdinePresentiMP );
 
@@ -110,7 +143,7 @@ main
 				response.response = "Nel MP NON sono presenti tutti i Componenti/Accessori richiesti dall'ordine #" + idOrdine
 	        }
 
-	        println@Console(response.response)()
+	        println@Console(response.response + "\n")()
 	    }
 	] {
 		println@Console("[verificaDisponibilitaComponentiAccessoriMP] COMPLETED")()
