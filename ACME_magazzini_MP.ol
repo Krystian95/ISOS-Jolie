@@ -87,7 +87,7 @@ main
 		            	tuttiAccessoriOrdinePresenti = false // quantità accessori richiesta mancate dal magazzino
 		           	}
 
-		           	println@Console("Il magazzino #" + idMagazzino + " possiede "+qta_disponibile+" qta su "+qta_richiesta+" qta richieste ("+qta_prenotabile+" prenotabili) dell'accessorio # "+idAccessorio+" per l'ordine #" + idOrdine + "\n")();
+		           	println@Console("Il magazzino #" + idMagazzino + " possiede "+qta_disponibile+" qta su "+qta_richiesta+" qta richieste ("+qta_prenotabile+" prenotabili) dell'accessorio # "+idAccessorio+" per l'ordine #" + idOrdine)();
 
 		            if(qta_prenotabile > 0) {
 		            	query = "INSERT INTO Magazzino_accessorio_prenotato
@@ -101,8 +101,10 @@ main
 								 SET quantita = quantita - " + qta_prenotabile + "
 								 WHERE idMagazzino = " + idMagazzino + " AND idAccessorio = " + idAccessorio;
 						update@Database( query )( responseScaloQtaMagazzino );
-						println@Console("\tHo scalato " + qta_prenotabile + " qta dell'accessorio #" + idAccessorio + " dal magazzino #" + idMagazzino + " poiche' prenotate" + "\n")()
+						println@Console("Ho scalato " + qta_prenotabile + " qta dell'accessorio #" + idAccessorio + " dal magazzino #" + idMagazzino + " poiche' prenotate")()
 		            }
+
+		            println@Console("\n")()
 		        }
 	        }
 
@@ -122,8 +124,7 @@ main
 						    ordine_has_ciclo.idCiclo,
 						    ordine_has_ciclo.quantitaCiclo AS qta_ciclo,
 						    magazzino_has_componente.idMagazzino,
-						    ciclo_has_componente.idComponente,
-						    magazzino_has_componente.quantita AS qta_disponibile
+						    ciclo_has_componente.idComponente
 						 FROM ordine_has_ciclo
 						 LEFT JOIN ciclo_has_componente ON ordine_has_ciclo.idCiclo = ciclo_has_componente.idCiclo
                          LEFT JOIN magazzino_has_componente ON ciclo_has_componente.idComponente = magazzino_has_componente.idComponente
@@ -140,35 +141,49 @@ main
 		            qta_ciclo = componentiOrdineMagazzino.row[i].qta_ciclo;
 		            idMagazzino = componentiOrdineMagazzino.row[i].idMagazzino;
 		            idComponente = componentiOrdineMagazzino.row[i].idComponente;
-		            qta_disponibile = componentiOrdineMagazzino.row[i].qta_disponibile;
+
+		            // Reperisco la disponibilità attuale perchè in caso di ordini con più cicli che hanno
+		            // in comune uno stesso componente, questo potrebbe essere già stato prenotato prima
+		            // e quindi la sua diponibilità essere variata.
+		            query = "SELECT quantita 
+							 FROM magazzino_has_componente 
+							 WHERE idMagazzino = " + idMagazzino + " AND idComponente = " + idComponente;
+					query@Database( query )( responseQtaAttuale );
+					qta_disponibile = responseQtaAttuale.row[0].quantita;
+					println@Console("qta_disponibile = " + qta_disponibile)();
 
 		            qta_richiesta = 1 * qta_ciclo;
 
 		            if(qta_disponibile >= qta_richiesta){
-		           		qta_prenotabile = qta_richiesta
-		           	} else {
+		           		qta_prenotabile = qta_richiesta;
+		           		println@Console("qta_richiesta = " + qta_richiesta)();
+		           		println@Console("qta_prenotabile = " + qta_prenotabile)()
+		           	} else { // qta_disponibile < qta_richiesta
 		           		qta_prenotabile = qta_disponibile;
+		           		println@Console("qta_disponibile = " + qta_disponibile)();
+		           		println@Console("qta_prenotabile = " + qta_prenotabile)()
 		            	tuttiAccessoriOrdinePresenti = false // quantità componenti richiesta mancate dal magazzino
 		           	}
 
-		           	println@Console("Il magazzino #" + idMagazzino + " possiede "+qta_disponibile+" qta su "+qta_richiesta+" qta richieste ("+qta_prenotabile+" prenotabili) del componente # "+idComponente+" per l'ordine #" + idOrdine + "\n")();
+		           	println@Console("Il magazzino #" + idMagazzino + " possiede "+qta_disponibile+" qta su "+qta_richiesta+" qta richieste ("+qta_prenotabile+" prenotabili) del componente #"+idComponente+" per l'ordine #" + idOrdine)();
 
 		            if(qta_prenotabile > 0) {
+
 		            	query = "INSERT INTO magazzino_componente_prenotato
 				            	(idOrdine, idMagazzino, idCiclo, idComponente, quantita)
 				            	VALUES
 				            	(" + idOrdine + ", " + idMagazzino + ", " + idCiclo + ", " + idComponente + ", " + qta_prenotabile + ")";
 						update@Database( query )( responseNewPrenotazioneComponente );
-						println@Console("\tPrenoto " + qta_prenotabile + " qta del componente #" + idComponente + " (ciclo #"+idCiclo+") nel magazzino #" + idMagazzino + " per l'ordine #" + idOrdine)();
-
-						// TODO problema qta negative in magazzino
+						println@Console("Prenoto " + qta_prenotabile + " qta del componente #" + idComponente + " (ciclo #"+idCiclo+") nel magazzino #" + idMagazzino + " per l'ordine #" + idOrdine)();
 
 						query = "UPDATE magazzino_has_componente
 								 SET quantita = quantita - " + qta_prenotabile + "
 								 WHERE idMagazzino = " + idMagazzino + " AND idComponente = " + idComponente;
 						update@Database( query )( responseScaloQtaMagazzino );
-						println@Console("\t\tHo scalato " + qta_prenotabile + " qta del componente #" + idComponente + " dal magazzino #" + idMagazzino + " poiche' prenotate" + "\n")()
+						println@Console("Ho scalato " + qta_prenotabile + " qta del componente #" + idComponente + " dal magazzino #" + idMagazzino + " poiche' prenotate")()
 		            }
+
+		            println@Console("\n")()
 		        }
 	        }
 
