@@ -6,7 +6,7 @@ include "database.iol"
 include "interfaces/ACMEMagazzinoInterface.iol"
 
 // Porta ACME Gestione Ordini -> ACME Magazzino Principale
-inputPort MagazzinoPrincipale {
+inputPort MagazzinoPrincipale1 {
 	Location: "socket://localhost:8006"
 	Protocol: soap
 	Interfaces: ACMEMagazzinoInterface
@@ -42,7 +42,7 @@ main
 
 			idOrdine = params.idOrdine;
 
-			println@Console("Verifico disponibilita' componenti e accessori nel Magazzino #"+global.idMagazzino+" per l'ordine #" + idOrdine + ":\n")();
+			println@Console("Verifico disponibilita' componenti e accessori nel magazzino #"+global.idMagazzino+" per l'ordine #" + idOrdine + ":\n")();
 
 			tuttiAccessoriOrdinePresenti = true;
 			tuttiComponentiOrdinePresenti = true;
@@ -186,10 +186,10 @@ main
 
 	        if ( tuttiAccessoriOrdinePresenti && tuttiComponentiOrdinePresenti ) {
 	        	response.tuttiMaterialiRichiestiPresenti = true;
-	        	response.message = "Nel Magazzino #"+global.idMagazzino+" sono presenti tutti i componenti/accessori richiesti dall'ordine #" + idOrdine
+	        	response.message = "Nel magazzino #"+global.idMagazzino+" sono presenti tutti i componenti/accessori richiesti dall'ordine #" + idOrdine
 	        } else {
 				response.tuttiMaterialiRichiestiPresenti = false;
-				response.message = "Nel Magazzino #"+global.idMagazzino+" NON sono presenti tutti i componenti/accessori richiesti dall'ordine #" + idOrdine
+				response.message = "Nel magazzino #"+global.idMagazzino+" NON sono presenti tutti i componenti/accessori richiesti dall'ordine #" + idOrdine
 	        }
 
 	        println@Console(response.message + "\n")()

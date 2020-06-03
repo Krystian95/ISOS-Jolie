@@ -15,7 +15,7 @@ outputPort ACMEService {
 }
 
 // Porta [TEST]
-outputPort ACMEServiceMP {
+outputPort ACMETest {
 	Location: "socket://localhost:8003"
 	Protocol: soap
 	Interfaces: ACMEGestioneOrdiniInterface
@@ -38,8 +38,18 @@ main
 
 	// 27 (1 accessorio sì, 1 no - no tutti componenti)
 	// 63 (1 accessorio sì - no tutti componenti)
-	prenotazioneMaterialiPresentiMP.idOrdine = "27";
-	prenotazioneMaterialiPresentiMP@ACMEServiceMP(prenotazioneMaterialiPresentiMP)(response);
+	prenotazioneMaterialiPresentiMP.idOrdine = "86";
+	prenotazioneMaterialiPresentiMP@ACMETest(prenotazioneMaterialiPresentiMP)(response);
 	println@Console("tuttiMaterialiRichiestiPresentiMP = " + response.tuttiMaterialiRichiestiPresentiMP)();
 	println@Console("response = " + response.message)()
+
+	// Verifica disponibilità accessori e componenti nel MS
+
+	// 27 (1 accessorio sì, 1 no - no tutti componenti)
+	// 63 (1 accessorio sì - no tutti componenti)
+	/*prenotazioneMaterialiPresentiMS.idOrdine = "27";
+	prenotazioneMaterialiPresentiMS@ACMETest(prenotazioneMaterialiPresentiMS)(response);
+	println@Console("response = " + response.message)()*/
 }
+
+

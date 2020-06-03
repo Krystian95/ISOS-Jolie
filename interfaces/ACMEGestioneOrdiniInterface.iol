@@ -29,6 +29,17 @@ type ResponsePrenotazioneMaterialiPresentiMP: void {
   .message: string
 }
 
+// Verifica disponibilità componenti accessori MS
+
+type PrenotazioneMaterialiPresentiMS: void {
+  .idOrdine: string
+}
+
+type ResponsePrenotazioneMaterialiPresentiMS: void {
+  .tuttiMaterialiRichiestiPresentiMS: bool
+  .message: string
+}
+
 // Risposte
 
 type Response: void {
@@ -43,5 +54,9 @@ interface ACMEGestioneOrdiniInterface {
                     getIdRivenditore( emptyGetIdRivenditore )( IdRivenditore ),
                     verificaCustomizzazioni( IdOrdine )( EsitoVerificaCustomizzazioni ),
                     notificaCustomizzazioniNonRealizzabili( NotificaCustomizzazioniNonRealizzabili )( Response ),
-                    prenotazioneMaterialiPresentiMP( PrenotazioneMaterialiPresentiMP )( ResponsePrenotazioneMaterialiPresentiMP )
+                    prenotazioneMaterialiPresentiMP( PrenotazioneMaterialiPresentiMP )( ResponsePrenotazioneMaterialiPresentiMP ),
+                    prenotazioneMaterialiPresentiMS( PrenotazioneMaterialiPresentiMS )( ResponsePrenotazioneMaterialiPresentiMS )
 }
+
+
+

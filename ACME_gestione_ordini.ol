@@ -26,9 +26,16 @@ outputPort Rivenditore {
 	Interfaces: RivenditoreInterface
 }
 
-// Porta ACME Gestione Ordini -> ACME Magazzino Principale
-outputPort MagazzinoPrincipale {
+// Porta ACME Gestione Ordini -> ACME Magazzino Principale 1
+outputPort MagazzinoPrincipale1 {
 	Location: "socket://localhost:8006"
+	Protocol: soap
+	Interfaces: ACMEMagazzinoInterface
+}
+
+// Porta ACME Gestione Ordini -> ACME Magazzino Secondario 2
+outputPort MagazzinoSecondario2 {
+	Location: "socket://localhost:8007"
 	Protocol: soap
 	Interfaces: ACMEMagazzinoInterface
 }
@@ -328,12 +335,33 @@ main
 	[
 		prenotazioneMaterialiPresentiMP ( params )( response ) {
 			
-			verificaDisponibilitaComponentiAccessori@MagazzinoPrincipale( params )( responseMagazzino );
+			verificaDisponibilitaComponentiAccessori@MagazzinoPrincipale1( params )( responseMagazzino );
 			response.tuttiMaterialiRichiestiPresentiMP = responseMagazzino.tuttiMaterialiRichiestiPresenti;
 			response.message = responseMagazzino.message
 	    }
 	] {
 		println@Console("[prenotazioneMaterialiPresentiMP] COMPLETED")()
+	}
+
+	[
+		prenotazioneMaterialiPresentiMS ( params )( response ) {
+
+			query = "SELECT idMagazzino
+					 FROM Magazzino
+					 WHERE tipologia = 'Secondario'";
+        	query@Database( query )( magazziniSecondari );
+
+	        /*for ( i = 0, i < #magazziniSecondari.row, i++ ) {
+	            idMagazzino = magazziniSecondari.row[i].idMagazzino;
+				verificaDisponibilitaComponentiAccessori@MagazzinoSecondario2( params )( responseMagazzino )
+	        }*/
+
+	        verificaDisponibilitaComponentiAccessori@MagazzinoSecondario2( params )( responseMagazzino );
+
+	        response.message = "Tutti i magazzini secondari sono stati verificati"
+	    }
+	] {
+		println@Console("[prenotazioneMaterialiPresentiMS] COMPLETED")()
 	}
 }
 
