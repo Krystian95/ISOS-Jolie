@@ -1,15 +1,15 @@
 
 // Verifica disponibilità componenti accessori MP
 
-type VerificaDisponibilitaComponentiAccessoriMP: void {
+type VerificaDisponibilitaComponentiAccessori: void {
   .idOrdine: string
 }
 
-type ResponseVerificaDisponibilitaComponentiAccessoriMP: void {
-  .tuttiMaterialiRichiestiPresentiMP: bool
+type ResponseVerificaDisponibilitaComponentiAccessori: void {
+  .tuttiMaterialiRichiestiPresenti: bool
   .message: string
 }
 
 interface ACMEMagazzinoInterface {
-	RequestResponse:	verificaDisponibilitaComponentiAccessori( VerificaDisponibilitaComponentiAccessoriMP )( ResponseVerificaDisponibilitaComponentiAccessoriMP )
+	RequestResponse:	verificaDisponibilitaComponentiAccessori( VerificaDisponibilitaComponentiAccessori )( ResponseVerificaDisponibilitaComponentiAccessori )
 }

@@ -38,8 +38,8 @@ main
 
 	// 27 (1 accessorio sì, 1 no - no tutti componenti)
 	// 63 (1 accessorio sì - no tutti componenti)
-	prenotazioneMaterialiPresentiMPDelegate.idOrdine = "27";
-	prenotazioneMaterialiPresentiMPDelegate@ACMEServiceMP(prenotazioneMaterialiPresentiMPDelegate)(response);
+	prenotazioneMaterialiPresentiMP.idOrdine = "27";
+	prenotazioneMaterialiPresentiMP@ACMEServiceMP(prenotazioneMaterialiPresentiMP)(response);
 	println@Console("tuttiMaterialiRichiestiPresentiMP = " + response.tuttiMaterialiRichiestiPresentiMP)();
 	println@Console("response = " + response.message)()
 }

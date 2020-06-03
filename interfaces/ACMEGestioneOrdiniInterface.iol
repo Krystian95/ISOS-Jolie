@@ -20,11 +20,11 @@ type NotificaCustomizzazioniNonRealizzabili: void {
 
 // Verifica disponibilità componenti accessori MP
 
-type PrenotazioneMaterialiPresentiMPDelegate: void {
+type PrenotazioneMaterialiPresentiMP: void {
   .idOrdine: string
 }
 
-type ResponsePrenotazioneMaterialiPresentiMPDelegate: void {
+type ResponsePrenotazioneMaterialiPresentiMP: void {
   .tuttiMaterialiRichiestiPresentiMP: bool
   .message: string
 }
@@ -43,5 +43,5 @@ interface ACMEGestioneOrdiniInterface {
                     getIdRivenditore( emptyGetIdRivenditore )( IdRivenditore ),
                     verificaCustomizzazioni( IdOrdine )( EsitoVerificaCustomizzazioni ),
                     notificaCustomizzazioniNonRealizzabili( NotificaCustomizzazioniNonRealizzabili )( Response ),
-                    prenotazioneMaterialiPresentiMPDelegate( PrenotazioneMaterialiPresentiMPDelegate )( ResponsePrenotazioneMaterialiPresentiMPDelegate )
+                    prenotazioneMaterialiPresentiMP( PrenotazioneMaterialiPresentiMP )( ResponsePrenotazioneMaterialiPresentiMP )
 }

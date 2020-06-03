@@ -326,12 +326,14 @@ main
 	}
 
 	[
-		prenotazioneMaterialiPresentiMPDelegate ( params )( response ) {
+		prenotazioneMaterialiPresentiMP ( params )( response ) {
 			
-			verificaDisponibilitaComponentiAccessori@MagazzinoPrincipale( params )( response )
+			verificaDisponibilitaComponentiAccessori@MagazzinoPrincipale( params )( responseMagazzino );
+			response.tuttiMaterialiRichiestiPresentiMP = responseMagazzino.tuttiMaterialiRichiestiPresenti;
+			response.message = responseMagazzino.message
 	    }
 	] {
-		println@Console("[verificaDisponibilitaComponentiAccessoriMP] COMPLETED")()
+		println@Console("[prenotazioneMaterialiPresentiMP] COMPLETED")()
 	}
 }
 

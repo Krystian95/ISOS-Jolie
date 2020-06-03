@@ -82,7 +82,7 @@ main
 
 		            if(qta_disponibile >= qta_richiesta){
 		           		qta_prenotabile = qta_richiesta
-		           	} else {
+		           	} else { // qta_disponibile < qta_richiesta
 		           		qta_prenotabile = qta_disponibile;
 		            	tuttiAccessoriOrdinePresenti = false // quantità accessori richiesta mancate dal magazzino
 		           	}
@@ -150,19 +150,14 @@ main
 							 WHERE idMagazzino = " + idMagazzino + " AND idComponente = " + idComponente;
 					query@Database( query )( responseQtaAttuale );
 					qta_disponibile = responseQtaAttuale.row[0].quantita;
-					println@Console("qta_disponibile = " + qta_disponibile)();
 
 		            qta_richiesta = 1 * qta_ciclo;
 
 		            if(qta_disponibile >= qta_richiesta){
-		           		qta_prenotabile = qta_richiesta;
-		           		println@Console("qta_richiesta = " + qta_richiesta)();
-		           		println@Console("qta_prenotabile = " + qta_prenotabile)()
+		           		qta_prenotabile = qta_richiesta
 		           	} else { // qta_disponibile < qta_richiesta
-		           		qta_prenotabile = qta_disponibile;
-		           		println@Console("qta_disponibile = " + qta_disponibile)();
-		           		println@Console("qta_prenotabile = " + qta_prenotabile)()
-		            	tuttiAccessoriOrdinePresenti = false // quantità componenti richiesta mancate dal magazzino
+		           		qta_prenotabile = qta_disponibile
+		            	tuttiComponentiOrdinePresenti = false // quantità componenti richiesta mancate dal magazzino
 		           	}
 
 		           	println@Console("Il magazzino #" + idMagazzino + " possiede "+qta_disponibile+" qta su "+qta_richiesta+" qta richieste ("+qta_prenotabile+" prenotabili) del componente #"+idComponente+" per l'ordine #" + idOrdine)();
@@ -190,10 +185,10 @@ main
 	        // Response
 
 	        if ( tuttiAccessoriOrdinePresenti && tuttiComponentiOrdinePresenti ) {
-	        	response.tuttiMaterialiRichiestiPresentiMP = true;
+	        	response.tuttiMaterialiRichiestiPresenti = true;
 	        	response.message = "Nel Magazzino #"+global.idMagazzino+" sono presenti tutti i componenti/accessori richiesti dall'ordine #" + idOrdine
 	        } else {
-				response.tuttiMaterialiRichiestiPresentiMP = false;
+				response.tuttiMaterialiRichiestiPresenti = false;
 				response.message = "Nel Magazzino #"+global.idMagazzino+" NON sono presenti tutti i componenti/accessori richiesti dall'ordine #" + idOrdine
 	        }
 
