@@ -6,8 +6,8 @@ include "database.iol"
 include "interfaces/ACMEMagazzinoInterface.iol"
 
 // Porta ACME Gestione Ordini -> ACME Magazzino Principale
-inputPort MagazzinoPrincipale1 { // TO CHANGE
-	Location: "socket://localhost:8006" // TO CHANGE
+inputPort MagazzinoSecondario2 {
+	Location: "socket://localhost:8007"
 	Protocol: soap
 	Interfaces: ACMEMagazzinoInterface
 }
@@ -17,7 +17,7 @@ execution { concurrent }
 init
 {
 	// Id Magazzino
-	global.idMagazzino = 1; // TO CHANGE
+	global.idMagazzino = 2;
 
 	// Database
 	with(connectionInfo) {
@@ -32,7 +32,7 @@ init
     connect@Database(connectionInfo)();
     println@Console("\nConnection to database: SUCCESS")();
 
-    println@Console("\nACME MAGAZZINO PRINCIPALE #"+global.idMagazzino+" running...\n")() // TO CHANGE
+    println@Console("\nACME MAGAZZINO SECONDARIO #"+global.idMagazzino+" running...\n")()
 }
 
 main

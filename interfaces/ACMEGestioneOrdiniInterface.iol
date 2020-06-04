@@ -36,7 +36,6 @@ type PrenotazioneMaterialiPresentiMS: void {
 }
 
 type ResponsePrenotazioneMaterialiPresentiMS: void {
-  .tuttiMaterialiRichiestiPresentiMS: bool
   .message: string
 }
 

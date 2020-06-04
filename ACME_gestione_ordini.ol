@@ -358,7 +358,7 @@ main
 
 	        verificaDisponibilitaComponentiAccessori@MagazzinoSecondario2( params )( responseMagazzino );
 
-	        response.message = "Tutti i magazzini secondari sono stati verificati"
+	        response.message = "Tutti i magazzini secondari secondari sono stati interrogati"
 	    }
 	] {
 		println@Console("[prenotazioneMaterialiPresentiMS] COMPLETED")()

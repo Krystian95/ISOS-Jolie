@@ -38,7 +38,7 @@ main
 
 	// 27 (1 accessorio sì, 1 no - no tutti componenti)
 	// 63 (1 accessorio sì - no tutti componenti)
-	prenotazioneMaterialiPresentiMP.idOrdine = "86";
+	prenotazioneMaterialiPresentiMP.idOrdine = "92";
 	prenotazioneMaterialiPresentiMP@ACMETest(prenotazioneMaterialiPresentiMP)(response);
 	println@Console("tuttiMaterialiRichiestiPresentiMP = " + response.tuttiMaterialiRichiestiPresentiMP)();
 	println@Console("response = " + response.message)()
@@ -47,7 +47,7 @@ main
 
 	// 27 (1 accessorio sì, 1 no - no tutti componenti)
 	// 63 (1 accessorio sì - no tutti componenti)
-	/*prenotazioneMaterialiPresentiMS.idOrdine = "27";
+	/*prenotazioneMaterialiPresentiMS.idOrdine = "91";
 	prenotazioneMaterialiPresentiMS@ACMETest(prenotazioneMaterialiPresentiMS)(response);
 	println@Console("response = " + response.message)()*/
 }
