@@ -12,30 +12,57 @@ include "interfaces/RivenditoreInterface.iol"
 
 include "interfaces/ACMEMagazzinoInterface.iol"
 
-// Porta Rivenditore -> ACME Gestione Ordini
-inputPort ACMEGestioneOrdiniRivenditoreInput {
+// Porta Rivenditore 1 -> ACME Gestione Ordini
+inputPort ACMEGestioneOrdiniRivenditore1 {
 	Location: "socket://localhost:8001"
 	Protocol: soap
 	Interfaces: ACMERivenditoreInterface
 }
 
-// Porta ACME Gestione Ordini -> Rivenditore
-outputPort Rivenditore {
+// Porta ACME Gestione Ordini -> Rivenditore 1
+outputPort Rivenditore1 {
 	Location: "socket://localhost:8002"
 	Protocol: soap
 	Interfaces: RivenditoreInterface
 }
+// Porta Rivenditore 2 -> ACME Gestione Ordini
+inputPort ACMEGestioneOrdiniRivenditore2 {
+	Location: "socket://localhost:8010"
+	Protocol: soap
+	Interfaces: ACMERivenditoreInterface
+}
 
-// Porta ACME Gestione Ordini -> ACME Magazzino Principale 1
-outputPort MagazzinoPrincipale1 {
+// Porta ACME Gestione Ordini -> Rivenditore 2
+outputPort Rivenditore2 {
+	Location: "socket://localhost:8011"
+	Protocol: soap
+	Interfaces: RivenditoreInterface
+}
+
+// Porta ACME Gestione Ordini -> ACME Magazzino Principale
+outputPort MagazzinoPrincipale {
 	Location: "socket://localhost:8006"
+	Protocol: soap
+	Interfaces: ACMEMagazzinoInterface
+}
+
+// Porta ACME Gestione Ordini -> ACME Magazzino Secondario 1
+outputPort MagazzinoSecondario1 {
+	Location: "socket://localhost:8007"
 	Protocol: soap
 	Interfaces: ACMEMagazzinoInterface
 }
 
 // Porta ACME Gestione Ordini -> ACME Magazzino Secondario 2
 outputPort MagazzinoSecondario2 {
-	Location: "socket://localhost:8007"
+	Location: "socket://localhost:8008"
+	Protocol: soap
+	Interfaces: ACMEMagazzinoInterface
+}
+
+// Porta ACME Gestione Ordini -> ACME Magazzino Secondario 3
+outputPort MagazzinoSecondario3 {
+	Location: "socket://localhost:8009"
 	Protocol: soap
 	Interfaces: ACMEMagazzinoInterface
 }
@@ -322,9 +349,11 @@ main
 
 			idOrdineMessage.idOrdine = idOrdine;
 
-			// TODO invocare @Rivenditore 1 o 2 in base all'idRivenditore
-
-			notificaCustomizzazioniNonRealizzabili@Rivenditore( idOrdineMessage );
+			if (idRivenditore == 1) {
+				notificaCustomizzazioniNonRealizzabili@Rivenditore1( idOrdineMessage )
+	        } else if(idRivenditore == 2){
+	            notificaCustomizzazioniNonRealizzabili@Rivenditore2( idOrdineMessage )
+	        }
 
 			response.response = "Notifica customizzazioni NON realizzabili inviata al rivenditore #" + idRivenditore + " per l'ordine #" + idOrdine
 	    }
@@ -335,7 +364,7 @@ main
 	[
 		prenotazioneMaterialiPresentiMP ( params )( response ) {
 			
-			verificaDisponibilitaComponentiAccessori@MagazzinoPrincipale1( params )( responseMagazzino );
+			verificaDisponibilitaComponentiAccessori@MagazzinoPrincipale( params )( responseMagazzino );
 			response.tuttiMaterialiRichiestiPresentiMP = responseMagazzino.tuttiMaterialiRichiestiPresenti;
 			response.message = responseMagazzino.message
 	    }
@@ -351,12 +380,17 @@ main
 					 WHERE tipologia = 'Secondario'";
         	query@Database( query )( magazziniSecondari );
 
-	        /*for ( i = 0, i < #magazziniSecondari.row, i++ ) {
+	        for ( i = 0, i < #magazziniSecondari.row, i++ ) {
 	            idMagazzino = magazziniSecondari.row[i].idMagazzino;
-				verificaDisponibilitaComponentiAccessori@MagazzinoSecondario2( params )( responseMagazzino )
-	        }*/
 
-	        verificaDisponibilitaComponentiAccessori@MagazzinoSecondario2( params )( responseMagazzino );
+	            if(idMagazzino == 2) {
+					verificaDisponibilitaComponentiAccessori@MagazzinoSecondario1( params )( responseMagazzino )
+	            } else if(idMagazzino == 3){
+	            	verificaDisponibilitaComponentiAccessori@MagazzinoSecondario2( params )( responseMagazzino )
+	            } else if(idMagazzino == 4){
+	            	verificaDisponibilitaComponentiAccessori@MagazzinoSecondario3( params )( responseMagazzino )
+	            }
+	        }
 
 	        response.message = "Tutti i magazzini secondari secondari sono stati interrogati"
 	    }

@@ -6,8 +6,8 @@ include "database.iol"
 include "interfaces/ACMEMagazzinoInterface.iol"
 
 // Porta ACME Gestione Ordini -> ACME Magazzino Principale
-inputPort MagazzinoPrincipale1 { // TO CHANGE
-	Location: "socket://localhost:8006" // TO CHANGE
+inputPort MagazzinoSecondario3 { // TO CHANGE
+	Location: "socket://localhost:8009" // TO CHANGE
 	Protocol: soap
 	Interfaces: ACMEMagazzinoInterface
 }
@@ -17,7 +17,7 @@ execution { concurrent }
 init
 {
 	// Id Magazzino
-	global.idMagazzino = 1; // TO CHANGE
+	global.idMagazzino = 4; // TO CHANGE
 
 	// Database
 	with(connectionInfo) {
@@ -32,7 +32,7 @@ init
     connect@Database(connectionInfo)();
     println@Console("\nConnection to database: SUCCESS")();
 
-    println@Console("\nACME MAGAZZINO PRINCIPALE #"+global.idMagazzino+" running...\n")() // TO CHANGE
+    println@Console("\nACME MAGAZZINO SECONDARIO #"+global.idMagazzino+" running...\n")() // TO CHANGE
 }
 
 main
@@ -130,25 +130,26 @@ main
         	if ( #componentiOrdine.row > 0 ) {
 	        	// Elenco dei componenti presenti nel magazzino per uno specifico ordine (che non sono ancora stati prenotati)
 	        	query ="SELECT
-	ordine_has_ciclo.idOrdine,
-	ordine_has_ciclo.idCiclo,
-	ordine_has_ciclo.quantitaCiclo AS qta_ciclo,
-    ciclo_has_componente.idComponente,
-	magazzino_has_componente.idMagazzino,
-	(ordine_has_ciclo.quantitaCiclo - CASE WHEN SUM(magazzino_componente_prenotato.quantita) IS NULL THEN 0 ELSE SUM(magazzino_componente_prenotato.quantita) END) AS qta_ancora_necessaria,
-	magazzino_has_componente.idMagazzino,
-	magazzino_has_componente.quantita AS qta_disponibile,
-	SUM(magazzino_componente_prenotato.quantita) AS qta_prenotata
-	FROM ordine_has_ciclo
-	LEFT JOIN ciclo_has_componente ON ordine_has_ciclo.idCiclo = ciclo_has_componente.idCiclo
-	LEFT JOIN magazzino_componente_prenotato ON ordine_has_ciclo.idOrdine = magazzino_componente_prenotato.idOrdine AND ciclo_has_componente.idComponente = magazzino_componente_prenotato.idComponente
-	LEFT JOIN magazzino_has_componente ON ciclo_has_componente.idComponente = magazzino_has_componente.idComponente
-	WHERE ordine_has_ciclo.idOrdine = " + idOrdine + " AND magazzino_has_componente.idMagazzino = " + global.idMagazzino + " AND 
-	(
-		magazzino_componente_prenotato.quantita < ordine_has_ciclo.quantitaCiclo OR 
-		magazzino_componente_prenotato.quantita IS NULL
-	)
-	GROUP BY ordine_has_ciclo.idOrdine, ordine_has_ciclo.idCiclo,magazzino_has_componente.idComponente";
+							ordine_has_ciclo.idOrdine,
+							ordine_has_ciclo.idCiclo,
+							ordine_has_ciclo.quantitaCiclo AS qta_ciclo,
+						    ciclo_has_componente.idComponente,
+							magazzino_has_componente.idMagazzino,
+							(ordine_has_ciclo.quantitaCiclo - CASE WHEN SUM(magazzino_componente_prenotato.quantita) IS NULL THEN 0 ELSE SUM(magazzino_componente_prenotato.quantita) END) AS qta_ancora_necessaria,
+							magazzino_has_componente.idMagazzino,
+							magazzino_has_componente.quantita AS qta_disponibile,
+							SUM(magazzino_componente_prenotato.quantita) AS qta_prenotata
+						FROM ordine_has_ciclo
+						LEFT JOIN ciclo_has_componente ON ordine_has_ciclo.idCiclo = ciclo_has_componente.idCiclo
+						LEFT JOIN magazzino_componente_prenotato ON ordine_has_ciclo.idOrdine = magazzino_componente_prenotato.idOrdine AND 
+																	ciclo_has_componente.idComponente = magazzino_componente_prenotato.idComponente
+						LEFT JOIN magazzino_has_componente ON ciclo_has_componente.idComponente = magazzino_has_componente.idComponente
+						WHERE ordine_has_ciclo.idOrdine = " + idOrdine + " AND magazzino_has_componente.idMagazzino = " + global.idMagazzino + " AND 
+						(
+							magazzino_componente_prenotato.quantita < ordine_has_ciclo.quantitaCiclo OR 
+							magazzino_componente_prenotato.quantita IS NULL
+						)
+						GROUP BY ordine_has_ciclo.idOrdine, ordine_has_ciclo.idCiclo,magazzino_has_componente.idComponente";
         		query@Database( query )( componentiOrdineMagazzino );
 
         		if(#componentiOrdine.row != #componentiOrdineMagazzino.row){
@@ -171,8 +172,6 @@ main
 							 WHERE idMagazzino = " + idMagazzino + " AND idComponente = " + idComponente;
 					query@Database( query )( responseQtaAttuale );
 					qta_disponibile = responseQtaAttuale.row[0].quantita;
-
-		            //qta_ancora_necessaria = 1 * qta_ciclo;
 
 		            if(qta_disponibile >= qta_ancora_necessaria){
 		           		qta_prenotabile = qta_ancora_necessaria

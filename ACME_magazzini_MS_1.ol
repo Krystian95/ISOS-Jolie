@@ -6,8 +6,8 @@ include "database.iol"
 include "interfaces/ACMEMagazzinoInterface.iol"
 
 // Porta ACME Gestione Ordini -> ACME Magazzino Principale
-inputPort MagazzinoSecondario2 { // TO CHANGE
-	Location: "socket://localhost:8008" // TO CHANGE
+inputPort MagazzinoSecondario1 { // TO CHANGE
+	Location: "socket://localhost:8007" // TO CHANGE
 	Protocol: soap
 	Interfaces: ACMEMagazzinoInterface
 }
@@ -17,7 +17,7 @@ execution { concurrent }
 init
 {
 	// Id Magazzino
-	global.idMagazzino = 3; // TO CHANGE
+	global.idMagazzino = 2; // TO CHANGE
 
 	// Database
 	with(connectionInfo) {

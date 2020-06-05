@@ -1,5 +1,5 @@
 
-// Verifica disponibilità componenti accessori MP
+// Verifica disponibilità componenti accessori
 
 type VerificaDisponibilitaComponentiAccessori: void {
   .idOrdine: string
