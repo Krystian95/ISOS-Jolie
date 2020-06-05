@@ -6,8 +6,8 @@ include "database.iol"
 include "interfaces/ACMEMagazzinoInterface.iol"
 
 // Porta ACME Gestione Ordini -> ACME Magazzino Principale
-inputPort MagazzinoPrincipale1 { // TO CHANGE
-	Location: "socket://localhost:8006" // TO CHANGE
+inputPort MagazzinoPrincipale {
+	Location: "socket://localhost:8006"
 	Protocol: soap
 	Interfaces: ACMEMagazzinoInterface
 }
@@ -17,7 +17,7 @@ execution { concurrent }
 init
 {
 	// Id Magazzino
-	global.idMagazzino = 1; // TO CHANGE
+	global.idMagazzino = 1;
 
 	// Database
 	with(connectionInfo) {
@@ -32,7 +32,7 @@ init
     connect@Database(connectionInfo)();
     println@Console("\nConnection to database: SUCCESS")();
 
-    println@Console("\nACME MAGAZZINO PRINCIPALE #"+global.idMagazzino+" running...\n")() // TO CHANGE
+    println@Console("\nACME MAGAZZINO #"+global.idMagazzino+" running...\n")()
 }
 
 main
@@ -42,7 +42,7 @@ main
 
 			idOrdine = params.idOrdine;
 
-			println@Console("Verifico disponibilita' componenti e accessori nel magazzino #"+global.idMagazzino+" per l'ordine #" + idOrdine + ":\n")();
+			println@Console("Verifico disponibilita' componenti e accessori nel Magazzino #"+global.idMagazzino+" per l'ordine #" + idOrdine + ":\n")();
 
 			tuttiAccessoriOrdinePresenti = true;
 			tuttiComponentiOrdinePresenti = true;
@@ -55,27 +55,16 @@ main
         	query@Database( query )( accessoriOrdine );
 
 	        if ( #accessoriOrdine.row > 0 ) {
-	        	// Elenco degli accessori presenti nel magazzino per uno specifico ordine (che non sono ancora stati prenotati)
+	        	// Elenco degli accessori presenti nel magazzino per uno specifico ordine
 	        	query = "SELECT
 							ordine_has_accessorio.idOrdine,
 						    ordine_has_accessorio.idAccessorio,
-						    (ordine_has_accessorio.quantitaAccessorio - CASE WHEN SUM(magazzino_accessorio_prenotato.quantita) IS NULL THEN 0 ELSE SUM(magazzino_accessorio_prenotato.quantita) END) AS qta_ancora_necessaria,
+						    ordine_has_accessorio.quantitaAccessorio AS qta_richiesta,
 						    magazzino_has_accessorio.idMagazzino,
-						    magazzino_has_accessorio.quantita AS qta_disponibile,
-                            SUM(magazzino_accessorio_prenotato.quantita) AS qta_prenotata
+						    magazzino_has_accessorio.quantita AS qta_disponibile
 						FROM ordine_has_accessorio
-                        LEFT JOIN accessorio ON ordine_has_accessorio.idAccessorio = accessorio.idAccessorio
-                        LEFT JOIN magazzino_accessorio_prenotato ON ordine_has_accessorio.idOrdine = magazzino_accessorio_prenotato.idOrdine AND 
-                        											ordine_has_accessorio.idAccessorio = magazzino_accessorio_prenotato.idAccessorio
 						LEFT JOIN magazzino_has_accessorio ON ordine_has_accessorio.idAccessorio = magazzino_has_accessorio.idAccessorio
-						WHERE ordine_has_accessorio.idOrdine = " + idOrdine + " AND 
-						magazzino_has_accessorio.idMagazzino = " + global.idMagazzino + " AND 
-						accessorio.tipologia = 'Assemblabile' AND 
-						(
-							magazzino_accessorio_prenotato.quantita < ordine_has_accessorio.quantitaAccessorio OR 
-							magazzino_accessorio_prenotato.quantita IS NULL
-						)
-                        GROUP BY ordine_has_accessorio.idOrdine, ordine_has_accessorio.idAccessorio";
+						WHERE ordine_has_accessorio.idOrdine = " + idOrdine +" AND magazzino_has_accessorio.idMagazzino = " + global.idMagazzino;
         		query@Database( query )( accessoriOrdineMagazzino );
 
         		if(#accessoriOrdine.row != #accessoriOrdineMagazzino.row){
@@ -84,23 +73,27 @@ main
 
         		// Per ogni accessorio prenoto la qta richiesta oppure quella disponibile
         		for ( i = 0, i < #accessoriOrdineMagazzino.row, i++ ) {
-        			qta_ancora_necessaria = accessoriOrdineMagazzino.row[i].qta_ancora_necessaria;
+        			qta_richiesta = accessoriOrdineMagazzino.row[i].qta_richiesta;
         			qta_disponibile = accessoriOrdineMagazzino.row[i].qta_disponibile;
-		            qta_mancante = qta_ancora_necessaria - qta_disponibile;
+		            qta_mancante = qta_richiesta - qta_disponibile;
 
 		            idMagazzino = accessoriOrdineMagazzino.row[i].idMagazzino;
 		            idAccessorio = accessoriOrdineMagazzino.row[i].idAccessorio;
 
-		            if(qta_disponibile >= qta_ancora_necessaria){
-		           		qta_prenotabile = qta_ancora_necessaria
-		           	} else { // qta_disponibile < qta_ancora_necessaria
+		            if(qta_disponibile >= qta_richiesta){
+		           		qta_prenotabile = qta_richiesta
+		           	} else { // qta_disponibile < qta_richiesta
 		           		qta_prenotabile = qta_disponibile;
 		            	tuttiAccessoriOrdinePresenti = false // quantità accessori richiesta mancate dal magazzino
 		           	}
 
-		           	println@Console("Il magazzino #" + idMagazzino + " possiede "+qta_disponibile+" qta su "+qta_ancora_necessaria+" qta ancora necessarie ("+qta_prenotabile+" prenotabili) dell'accessorio #"+idAccessorio+" per l'ordine #" + idOrdine)();
+		           	println@Console("Il magazzino #" + idMagazzino + " possiede "+qta_disponibile+" qta su "+qta_richiesta+" qta richieste ("+qta_prenotabile+" prenotabili) dell'accessorio # "+idAccessorio+" per l'ordine #" + idOrdine)();
 
 		            if(qta_prenotabile > 0) {
+		            	println@Console("Id ordine: " + idOrdine)();
+		            	println@Console("Id magazzino: " + idMagazzino)();
+		            	println@Console("Id accessorio: " + idAccessorio)();
+		            	println@Console("Quantita: " + qta_prenotabile)();
 		            	query = "INSERT INTO Magazzino_accessorio_prenotato
 				            	(idOrdine, idMagazzino, idAccessorio, quantita)
 				            	VALUES
@@ -128,27 +121,18 @@ main
         	query@Database( query )( componentiOrdine );
 
         	if ( #componentiOrdine.row > 0 ) {
-	        	// Elenco dei componenti presenti nel magazzino per uno specifico ordine (che non sono ancora stati prenotati)
-	        	query ="SELECT
-	ordine_has_ciclo.idOrdine,
-	ordine_has_ciclo.idCiclo,
-	ordine_has_ciclo.quantitaCiclo AS qta_ciclo,
-    ciclo_has_componente.idComponente,
-	magazzino_has_componente.idMagazzino,
-	(ordine_has_ciclo.quantitaCiclo - CASE WHEN SUM(magazzino_componente_prenotato.quantita) IS NULL THEN 0 ELSE SUM(magazzino_componente_prenotato.quantita) END) AS qta_ancora_necessaria,
-	magazzino_has_componente.idMagazzino,
-	magazzino_has_componente.quantita AS qta_disponibile,
-	SUM(magazzino_componente_prenotato.quantita) AS qta_prenotata
-	FROM ordine_has_ciclo
-	LEFT JOIN ciclo_has_componente ON ordine_has_ciclo.idCiclo = ciclo_has_componente.idCiclo
-	LEFT JOIN magazzino_componente_prenotato ON ordine_has_ciclo.idOrdine = magazzino_componente_prenotato.idOrdine AND ciclo_has_componente.idComponente = magazzino_componente_prenotato.idComponente
-	LEFT JOIN magazzino_has_componente ON ciclo_has_componente.idComponente = magazzino_has_componente.idComponente
-	WHERE ordine_has_ciclo.idOrdine = " + idOrdine + " AND magazzino_has_componente.idMagazzino = " + global.idMagazzino + " AND 
-	(
-		magazzino_componente_prenotato.quantita < ordine_has_ciclo.quantitaCiclo OR 
-		magazzino_componente_prenotato.quantita IS NULL
-	)
-	GROUP BY ordine_has_ciclo.idOrdine, ordine_has_ciclo.idCiclo,magazzino_has_componente.idComponente";
+	        	// Elenco dei componenti presenti nel magazzino per uno specifico ordine
+	        	query = "
+	        			SELECT 
+							ordine_has_ciclo.idOrdine,
+						    ordine_has_ciclo.idCiclo,
+						    ordine_has_ciclo.quantitaCiclo AS qta_ciclo,
+						    magazzino_has_componente.idMagazzino,
+						    ciclo_has_componente.idComponente
+						 FROM ordine_has_ciclo
+						 LEFT JOIN ciclo_has_componente ON ordine_has_ciclo.idCiclo = ciclo_has_componente.idCiclo
+                         LEFT JOIN magazzino_has_componente ON ciclo_has_componente.idComponente = magazzino_has_componente.idComponente
+						 WHERE ordine_has_ciclo.idOrdine = " + idOrdine + " AND magazzino_has_componente.idMagazzino = " + global.idMagazzino;
         		query@Database( query )( componentiOrdineMagazzino );
 
         		if(#componentiOrdine.row != #componentiOrdineMagazzino.row){
@@ -157,7 +141,6 @@ main
 
         		// Per ogni componente prenoto la qta necessaria
         		for ( i = 0, i < #componentiOrdineMagazzino.row, i++ ) {
-        			qta_ancora_necessaria = componentiOrdineMagazzino.row[i].qta_ancora_necessaria;
 		            idCiclo = componentiOrdineMagazzino.row[i].idCiclo;
 		            qta_ciclo = componentiOrdineMagazzino.row[i].qta_ciclo;
 		            idMagazzino = componentiOrdineMagazzino.row[i].idMagazzino;
@@ -172,16 +155,16 @@ main
 					query@Database( query )( responseQtaAttuale );
 					qta_disponibile = responseQtaAttuale.row[0].quantita;
 
-		            //qta_ancora_necessaria = 1 * qta_ciclo;
+		            qta_richiesta = 1 * qta_ciclo;
 
-		            if(qta_disponibile >= qta_ancora_necessaria){
-		           		qta_prenotabile = qta_ancora_necessaria
-		           	} else { // qta_disponibile < qta_ancora_necessaria
+		            if(qta_disponibile >= qta_richiesta){
+		           		qta_prenotabile = qta_richiesta
+		           	} else { // qta_disponibile < qta_richiesta
 		           		qta_prenotabile = qta_disponibile
 		            	tuttiComponentiOrdinePresenti = false // quantità componenti richiesta mancate dal magazzino
 		           	}
 
-		           	println@Console("Il magazzino #" + idMagazzino + " possiede "+qta_disponibile+" qta su "+qta_ancora_necessaria+" qta ancora necessarie ("+qta_prenotabile+" prenotabili) del componente #"+idComponente+" per l'ordine #" + idOrdine)();
+		           	println@Console("Il magazzino #" + idMagazzino + " possiede "+qta_disponibile+" qta su "+qta_richiesta+" qta richieste ("+qta_prenotabile+" prenotabili) del componente #"+idComponente+" per l'ordine #" + idOrdine)();
 
 		            if(qta_prenotabile > 0) {
 
@@ -207,10 +190,10 @@ main
 
 	        if ( tuttiAccessoriOrdinePresenti && tuttiComponentiOrdinePresenti ) {
 	        	response.tuttiMaterialiRichiestiPresenti = true;
-	        	response.message = "Nel magazzino #"+global.idMagazzino+" sono presenti tutti i componenti/accessori richiesti dall'ordine #" + idOrdine
+	        	response.message = "Nel Magazzino #"+global.idMagazzino+" sono presenti tutti i componenti/accessori richiesti dall'ordine #" + idOrdine
 	        } else {
 				response.tuttiMaterialiRichiestiPresenti = false;
-				response.message = "Nel magazzino #"+global.idMagazzino+" NON sono presenti tutti i componenti/accessori richiesti dall'ordine #" + idOrdine
+				response.message = "Nel Magazzino #"+global.idMagazzino+" NON sono presenti tutti i componenti/accessori richiesti dall'ordine #" + idOrdine
 	        }
 
 	        println@Console(response.message + "\n")()

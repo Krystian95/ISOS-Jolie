@@ -129,17 +129,26 @@ main
 
         	if ( #componentiOrdine.row > 0 ) {
 	        	// Elenco dei componenti presenti nel magazzino per uno specifico ordine (che non sono ancora stati prenotati)
-	        	query = "
-	        			SELECT 
-							ordine_has_ciclo.idOrdine,
-						    ordine_has_ciclo.idCiclo,
-						    ordine_has_ciclo.quantitaCiclo AS qta_ciclo,
-						    magazzino_has_componente.idMagazzino,
-						    ciclo_has_componente.idComponente
-						 FROM ordine_has_ciclo
-						 LEFT JOIN ciclo_has_componente ON ordine_has_ciclo.idCiclo = ciclo_has_componente.idCiclo
-                         LEFT JOIN magazzino_has_componente ON ciclo_has_componente.idComponente = magazzino_has_componente.idComponente
-						 WHERE ordine_has_ciclo.idOrdine = " + idOrdine + " AND magazzino_has_componente.idMagazzino = " + global.idMagazzino;
+	        	query = "SELECT
+	ordine_has_ciclo.idOrdine,
+	ordine_has_ciclo.idCiclo,
+	ordine_has_ciclo.quantitaCiclo AS qta_ciclo,
+    ciclo_has_componente.idComponente,
+	magazzino_has_componente.idMagazzino,
+	(ordine_has_ciclo.quantitaCiclo - CASE WHEN SUM(magazzino_componente_prenotato.quantita) IS NULL THEN 0 ELSE SUM(magazzino_componente_prenotato.quantita) END) AS qta_ancora_necessaria,
+	magazzino_has_componente.idMagazzino,
+	magazzino_has_componente.quantita AS qta_disponibile,
+	SUM(magazzino_componente_prenotato.quantita) AS qta_prenotata
+	FROM ordine_has_ciclo
+	LEFT JOIN ciclo_has_componente ON ordine_has_ciclo.idCiclo = ciclo_has_componente.idCiclo
+	LEFT JOIN magazzino_componente_prenotato ON ordine_has_ciclo.idOrdine = magazzino_componente_prenotato.idOrdine AND ciclo_has_componente.idComponente = magazzino_componente_prenotato.idComponente
+	LEFT JOIN magazzino_has_componente ON ciclo_has_componente.idComponente = magazzino_has_componente.idComponente
+	WHERE ordine_has_ciclo.idOrdine = " + idOrdine + " AND magazzino_has_componente.idMagazzino = " + global.idMagazzino + " AND 
+	(
+		magazzino_componente_prenotato.quantita < ordine_has_ciclo.quantitaCiclo OR 
+		magazzino_componente_prenotato.quantita IS NULL
+	)
+	GROUP BY ordine_has_ciclo.idOrdine, ordine_has_ciclo.idCiclo,magazzino_has_componente.idComponente";
         		query@Database( query )( componentiOrdineMagazzino );
 
         		if(#componentiOrdine.row != #componentiOrdineMagazzino.row){
@@ -148,6 +157,7 @@ main
 
         		// Per ogni componente prenoto la qta necessaria
         		for ( i = 0, i < #componentiOrdineMagazzino.row, i++ ) {
+        			qta_ancora_necessaria = componentiOrdineMagazzino.row[i].qta_ancora_necessaria;
 		            idCiclo = componentiOrdineMagazzino.row[i].idCiclo;
 		            qta_ciclo = componentiOrdineMagazzino.row[i].qta_ciclo;
 		            idMagazzino = componentiOrdineMagazzino.row[i].idMagazzino;
@@ -162,16 +172,16 @@ main
 					query@Database( query )( responseQtaAttuale );
 					qta_disponibile = responseQtaAttuale.row[0].quantita;
 
-		            qta_richiesta = 1 * qta_ciclo;
+		            //qta_ancora_necessaria = 1 * qta_ciclo;
 
-		            if(qta_disponibile >= qta_richiesta){
-		           		qta_prenotabile = qta_richiesta
-		           	} else { // qta_disponibile < qta_richiesta
+		            if(qta_disponibile >= qta_ancora_necessaria){
+		           		qta_prenotabile = qta_ancora_necessaria
+		           	} else { // qta_disponibile < qta_ancora_necessaria
 		           		qta_prenotabile = qta_disponibile
 		            	tuttiComponentiOrdinePresenti = false // quantità componenti richiesta mancate dal magazzino
 		           	}
 
-		           	println@Console("Il magazzino #" + idMagazzino + " possiede "+qta_disponibile+" qta su "+qta_richiesta+" qta ancora necessarie ("+qta_prenotabile+" prenotabili) del componente #"+idComponente+" per l'ordine #" + idOrdine)();
+		           	println@Console("Il magazzino #" + idMagazzino + " possiede "+qta_disponibile+" qta su "+qta_ancora_necessaria+" qta ancora necessarie ("+qta_prenotabile+" prenotabili) del componente #"+idComponente+" per l'ordine #" + idOrdine)();
 
 		            if(qta_prenotabile > 0) {
 
