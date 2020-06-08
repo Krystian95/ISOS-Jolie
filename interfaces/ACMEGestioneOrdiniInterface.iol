@@ -39,7 +39,16 @@ type ResponsePrenotazioneMaterialiPresentiMS: void {
   .message: string
 }
 
-// Risposte
+// GIS
+type SceltaMagazzinoPiuVicinoSedeCliente: void {
+  .idOrdine: string
+}
+
+type ResponseSceltaMagazzinoPiuVicinoSedeCliente: void {
+  .message: string
+}
+
+// Risposte generiche
 
 type Response: void {
   .response: string
@@ -54,7 +63,8 @@ interface ACMEGestioneOrdiniInterface {
                     verificaCustomizzazioni( IdOrdine )( EsitoVerificaCustomizzazioni ),
                     notificaCustomizzazioniNonRealizzabili( NotificaCustomizzazioniNonRealizzabili )( Response ),
                     prenotazioneMaterialiPresentiMP( PrenotazioneMaterialiPresentiMP )( ResponsePrenotazioneMaterialiPresentiMP ),
-                    prenotazioneMaterialiPresentiMS( PrenotazioneMaterialiPresentiMS )( ResponsePrenotazioneMaterialiPresentiMS )
+                    prenotazioneMaterialiPresentiMS( PrenotazioneMaterialiPresentiMS )( ResponsePrenotazioneMaterialiPresentiMS ),
+                    sceltaMagazzinoPiuVicinoSedeCliente( SceltaMagazzinoPiuVicinoSedeCliente )( ResponseSceltaMagazzinoPiuVicinoSedeCliente )
 }
 
 

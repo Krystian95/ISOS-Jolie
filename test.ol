@@ -6,6 +6,7 @@ include "interfaces/ACMERivenditoreInterface.iol"
 include "interfaces/RivenditoreInterface.iol"
 include "interfaces/ACMEGestioneOrdiniInterface.iol"
 include "interfaces/ACMEMagazzinoInterface.iol"
+include "interfaces/GISInterface.iol"
 
 // Porta [TEST]
 outputPort ACMEService {
@@ -19,6 +20,13 @@ outputPort ACMETest {
 	Location: "socket://localhost:8003"
 	Protocol: soap
 	Interfaces: ACMEGestioneOrdiniInterface
+}
+
+// Porta [TEST] -> GIS
+outputPort GISService {
+	Location: "socket://localhost:8016"
+	Protocol: soap
+	Interfaces: GISInterface
 }
 
 main
@@ -38,18 +46,30 @@ main
 
 	// 27 (1 accessorio sì, 1 no - no tutti componenti)
 	// 63 (1 accessorio sì - no tutti componenti)
-	prenotazioneMaterialiPresentiMP.idOrdine = "96";
+	/*prenotazioneMaterialiPresentiMP.idOrdine = "96";
 	prenotazioneMaterialiPresentiMP@ACMETest(prenotazioneMaterialiPresentiMP)(response);
 	println@Console("tuttiMaterialiRichiestiPresentiMP = " + response.tuttiMaterialiRichiestiPresentiMP)();
-	println@Console("response = " + response.message)();
+	println@Console("response = " + response.message)();*/
 
 	// Verifica disponibilità accessori e componenti nel MS
 
 	// 27 (1 accessorio sì, 1 no - no tutti componenti)
 	// 63 (1 accessorio sì - no tutti componenti)
-	prenotazioneMaterialiPresentiMS.idOrdine = "96";
+	/*prenotazioneMaterialiPresentiMS.idOrdine = "96";
 	prenotazioneMaterialiPresentiMS@ACMETest(prenotazioneMaterialiPresentiMS)(response);
-	println@Console("response = " + response.message)()
+	println@Console("response = " + response.message)()*/
+
+	// GIS 
+	/*request.key = "6wEJ0kvFptHTcXxlYerm4AtwojJhnUJE";
+	request.from = "Via Vittorio Veneto 12, 40131, Bologna (BO), Italia";
+	request.to = "Via Siena 27, 41126, Modena (MO), Italia";
+	request.unit = "k";
+	distanceBetween@GISService(request)(response)*/
+
+	// sceltaMagazzinoPiuVicinoSedeCliente
+
+	params.idOrdine = "67";
+	sceltaMagazzinoPiuVicinoSedeCliente@ACMETest(params)()
 }
 
 

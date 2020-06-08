@@ -173,8 +173,8 @@ main
 	] {
 		install (
 			// TODO remove print and leave blank
-			Timeout => println@Console("[Timeout fault handled for inviaOrdine]")(),
-			TypeMismatch => println@Console("[TypeMismatch fault handled for inviaOrdine]")()
+			Timeout => println@Console("")(),
+			TypeMismatch => println@Console("")()
 		);
 
 		// Inserimento ordine nel db
@@ -295,7 +295,7 @@ main
 	[
 		getIdRivenditore( void )( idRivenditore ) {
 
-			idRivenditore.idRivenditore = string( global.ordine.getIdRivenditore )
+			idRivenditore.idRivenditore = string( global.ordine.idRivenditore )
 	    }
 	] {
 		println@Console("[getIdRivenditore] COMPLETED")()
@@ -396,6 +396,76 @@ main
 	    }
 	] {
 		println@Console("[prenotazioneMaterialiPresentiMS] COMPLETED")()
+	}
+
+	[
+		sceltaMagazzinoPiuVicinoSedeCliente ( params )( response ) {
+
+			query = "SELECT Rivenditore.indirizzo,
+							Ordine.idRivenditore
+					 FROM Ordine
+					 LEFT JOIN Rivenditore ON Ordine.idRivenditore = Rivenditore.idRivenditore
+					 WHERE Ordine.idOrdine = " + params.idOrdine;
+        	query@Database( query )( resultRivenditore );
+        	indirizzoRivenditore = resultRivenditore.row[0].indirizzo;
+        	idRivenditore = resultRivenditore.row[0].idRivenditore;
+        	println@Console("indirizzoRivenditore = " + indirizzoRivenditore)();
+
+        	// Distance from Magazzini
+
+        	query = "DELETE
+        			 FROM temp_distanze_rivenditore_magazzini
+        			 WHERE idRivenditore = " + idRivenditore;
+        	update@Database( query )( resultClear );
+
+        	query = "SELECT idMagazzino
+					 FROM Magazzino";
+        	query@Database( query )( magazzini );
+
+	        for ( i = 0, i < #magazzini.row, i++ ) {
+	            idMagazzino = magazzini.row[i].idMagazzino;
+
+	            if(idMagazzino == 1) {
+					distanceFromRivenditore@MagazzinoPrincipale(indirizzoRivenditore)(distance)
+	            } else if(idMagazzino == 2) {
+					distanceFromRivenditore@MagazzinoSecondario1(indirizzoRivenditore)(distance)
+	            } else if(idMagazzino == 3){
+	            	distanceFromRivenditore@MagazzinoSecondario2(indirizzoRivenditore)(distance)
+	            } else if(idMagazzino == 4){
+	            	distanceFromRivenditore@MagazzinoSecondario3(indirizzoRivenditore)(distance)
+	            }
+
+	        	println@Console("Il magazzino #" + idMagazzino + " dista " + distance + "km dal rivenditore")();
+				query = "INSERT INTO temp_distanze_rivenditore_magazzini
+					     (idRivenditore, idMagazzino, distance)
+					     VALUES
+					     (" + idRivenditore + ", " + idMagazzino + ", " + distance + ")";
+				update@Database( query )( responseNewDistance );
+	        }
+
+
+
+			query = "SELECT Ordine_has_Accessorio.idAccessorio,
+					 		Ordine_has_Accessorio.quantitaAccessorio AS qta_richiesta,
+					 		magazzino_has_accessorio.idMagazzino,
+					 		magazzino_has_accessorio.quantita AS qta_magazzino
+					 FROM Ordine_has_Accessorio
+					 LEFT JOIN Accessorio ON Ordine_has_Accessorio.idAccessorio = Accessorio.idAccessorio
+                     LEFT JOIN magazzino_has_accessorio ON Ordine_has_Accessorio.idAccessorio = magazzino_has_accessorio.idAccessorio
+					 WHERE idOrdine = " + params.idOrdine + " AND tipologia IN ('Non assemblabile', 'Assemblabile facilmente') AND magazzino_has_accessorio.quantita > 0";
+        	query@Database( query )( accessoriMagazzini );
+
+        	for ( i = 0, i < #accessoriMagazzini.row, i++ ) {
+        		with( response.accessoriMagazzini[i] ){
+        		  .idAccessorio = accessoriMagazzini.row[i].idAccessorio;
+        		  .idMagazzino = accessoriMagazzini.row[i].idMagazzino
+        		}
+        		println@Console("response.accessoriMagazzini["+i+"].idAccessorio = " + response.accessoriMagazzini[i].idAccessorio)();
+        		println@Console("response.accessoriMagazzini["+i+"].idMagazzino = " + response.accessoriMagazzini[i].idMagazzino)()
+	        }
+	    }
+	] {
+		println@Console("[sceltaMagazzinoPiuVicinoSedeCliente] COMPLETED")()
 	}
 }
 

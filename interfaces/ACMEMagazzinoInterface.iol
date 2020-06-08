@@ -11,5 +11,6 @@ type ResponseVerificaDisponibilitaComponentiAccessori: void {
 }
 
 interface ACMEMagazzinoInterface {
-	RequestResponse:	verificaDisponibilitaComponentiAccessori( VerificaDisponibilitaComponentiAccessori )( ResponseVerificaDisponibilitaComponentiAccessori )
+	RequestResponse:	verificaDisponibilitaComponentiAccessori( VerificaDisponibilitaComponentiAccessori )( ResponseVerificaDisponibilitaComponentiAccessori ),
+						distanceFromRivenditore( string )( double )
 }
