@@ -60,8 +60,7 @@ main
 	println@Console("response = " + response.message)()*/
 
 	// GIS 
-	/*request.key = "6wEJ0kvFptHTcXxlYerm4AtwojJhnUJE";
-	request.from = "Via Vittorio Veneto 12, 40131, Bologna (BO), Italia";
+	/*request.from = "Via Vittorio Veneto 12, 40131, Bologna (BO), Italia";
 	request.to = "Via Siena 27, 41126, Modena (MO), Italia";
 	request.unit = "k";
 	distanceBetween@GISService(request)(response)*/

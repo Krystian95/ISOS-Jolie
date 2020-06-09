@@ -137,7 +137,7 @@ main
 
         	if ( #componentiOrdine.row > 0 ) {
 	        	// Elenco dei componenti presenti nel magazzino per uno specifico ordine (che non sono ancora stati prenotati)
-	        	query ="SELECT
+	        	query = "SELECT
 							ordine_has_ciclo.idOrdine,
 							ordine_has_ciclo.idCiclo,
 							ordine_has_ciclo.quantitaCiclo AS qta_ciclo,
@@ -234,7 +234,6 @@ main
 					 WHERE idMagazzino = " + global.idMagazzino;
 			query@Database( query )( indirizzoMagazzino );
 			
-			request.key = "6wEJ0kvFptHTcXxlYerm4AtwojJhnUJE";
 			request.from = indirizzoMagazzino.row[0].indirizzo;
 			request.to = indirizzoRivenditore;
 			request.unit = "k";

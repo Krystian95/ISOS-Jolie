@@ -26,6 +26,11 @@ inputPort GISService {
 	Interfaces: GISInterface
 }
 
+constants
+{
+	KEY = "6wEJ0kvFptHTcXxlYerm4AtwojJhnUJE"
+}
+
 execution { concurrent }
 
 init
@@ -37,6 +42,8 @@ main
 {
 	[
 		distanceBetween( request )( response ) {
+
+			request.key = KEY;
 
 			default@DistanceMatrixService( request )( responseService );
 			response.distance = responseService.route[0].distance[0];
@@ -51,6 +58,6 @@ main
 			response.distance = distance
 	    }
 	] {
-		println@Console("[distanceBetween] COMPLETED")()
+		nullProcess
 	}
 }

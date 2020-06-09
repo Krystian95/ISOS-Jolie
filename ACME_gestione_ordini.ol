@@ -2,6 +2,7 @@
 include "console.iol"
 include "database.iol"
 include "string_utils.iol"
+include "time.iol"
 
 include "interfaces/CamundaInterface.iol"
 
@@ -392,7 +393,7 @@ main
 	            }
 	        }
 
-	        response.message = "Tutti i magazzini secondari secondari sono stati interrogati"
+	        response.message = "Tutti i magazzini secondari sono stati interrogati"
 	    }
 	] {
 		println@Console("[prenotazioneMaterialiPresentiMS] COMPLETED")()
@@ -418,51 +419,109 @@ main
         			 WHERE idRivenditore = " + idRivenditore;
         	update@Database( query )( resultClear );
 
-        	query = "SELECT idMagazzino
-					 FROM Magazzino";
-        	query@Database( query )( magazzini );
+        	{
+				distanceFromRivenditore@MagazzinoPrincipale(indirizzoRivenditore)(distanceMagazzino1)  |
+				distanceFromRivenditore@MagazzinoSecondario1(indirizzoRivenditore)(distanceMagazzino2) |
+	            distanceFromRivenditore@MagazzinoSecondario2(indirizzoRivenditore)(distanceMagazzino3) |
+	            distanceFromRivenditore@MagazzinoSecondario3(indirizzoRivenditore)(distanceMagazzino4) ;
 
-	        for ( i = 0, i < #magazzini.row, i++ ) {
-	            idMagazzino = magazzini.row[i].idMagazzino;
-
-	            if(idMagazzino == 1) {
-					distanceFromRivenditore@MagazzinoPrincipale(indirizzoRivenditore)(distance)
-	            } else if(idMagazzino == 2) {
-					distanceFromRivenditore@MagazzinoSecondario1(indirizzoRivenditore)(distance)
-	            } else if(idMagazzino == 3){
-	            	distanceFromRivenditore@MagazzinoSecondario2(indirizzoRivenditore)(distance)
-	            } else if(idMagazzino == 4){
-	            	distanceFromRivenditore@MagazzinoSecondario3(indirizzoRivenditore)(distance)
-	            }
-
-	        	println@Console("Il magazzino #" + idMagazzino + " dista " + distance + "km dal rivenditore")();
+	            idMagazzino = 1;
+	            distance = distanceMagazzino1;
+	            println@Console("Il magazzino #" + idMagazzino + " dista " + distance + "km dal rivenditore")();
 				query = "INSERT INTO temp_distanze_rivenditore_magazzini
 					     (idRivenditore, idMagazzino, distance)
 					     VALUES
 					     (" + idRivenditore + ", " + idMagazzino + ", " + distance + ")";
 				update@Database( query )( responseNewDistance );
-	        }
 
+	            idMagazzino = 2;
+	            distance = distanceMagazzino2;
+	            println@Console("Il magazzino #" + idMagazzino + " dista " + distance + "km dal rivenditore")();
+				query = "INSERT INTO temp_distanze_rivenditore_magazzini
+					     (idRivenditore, idMagazzino, distance)
+					     VALUES
+					     (" + idRivenditore + ", " + idMagazzino + ", " + distance + ")";
+				update@Database( query )( responseNewDistance );
 
+	            idMagazzino = 3;
+	            distance = distanceMagazzino3;
+	            println@Console("Il magazzino #" + idMagazzino + " dista " + distance + "km dal rivenditore")();
+				query = "INSERT INTO temp_distanze_rivenditore_magazzini
+					     (idRivenditore, idMagazzino, distance)
+					     VALUES
+					     (" + idRivenditore + ", " + idMagazzino + ", " + distance + ")";
+				update@Database( query )( responseNewDistance );
 
-			query = "SELECT Ordine_has_Accessorio.idAccessorio,
-					 		Ordine_has_Accessorio.quantitaAccessorio AS qta_richiesta,
-					 		magazzino_has_accessorio.idMagazzino,
-					 		magazzino_has_accessorio.quantita AS qta_magazzino
+	            idMagazzino = 4;
+	            distance = distanceMagazzino4;
+	            println@Console("Il magazzino #" + idMagazzino + " dista " + distance + "km dal rivenditore")();
+				query = "INSERT INTO temp_distanze_rivenditore_magazzini
+					     (idRivenditore, idMagazzino, distance)
+					     VALUES
+					     (" + idRivenditore + ", " + idMagazzino + ", " + distance + ")";
+				update@Database( query )( responseNewDistance )
+	    	}
+
+			query = "SELECT Ordine.idOrdine,
+							Ordine_has_Accessorio.idAccessorio,
+							Ordine_has_Accessorio.quantitaAccessorio AS qta_richiesta,
+                            magazzino_has_accessorio.idMagazzino,
+                            magazzino_has_accessorio.quantita AS qta_disponibile,
+                            temp_distanze_rivenditore_magazzini.distance
 					 FROM Ordine_has_Accessorio
 					 LEFT JOIN Accessorio ON Ordine_has_Accessorio.idAccessorio = Accessorio.idAccessorio
                      LEFT JOIN magazzino_has_accessorio ON Ordine_has_Accessorio.idAccessorio = magazzino_has_accessorio.idAccessorio
-					 WHERE idOrdine = " + params.idOrdine + " AND tipologia IN ('Non assemblabile', 'Assemblabile facilmente') AND magazzino_has_accessorio.quantita > 0";
+                     LEFT JOIN Ordine ON Ordine_has_Accessorio.idOrdine = Ordine.idOrdine
+                     LEFT JOIN temp_distanze_rivenditore_magazzini ON magazzino_has_accessorio.idMagazzino = temp_distanze_rivenditore_magazzini.idMagazzino AND
+																	Ordine.idRivenditore = temp_distanze_rivenditore_magazzini.idRivenditore
+					 WHERE Ordine_has_Accessorio.idOrdine = " + params.idOrdine + " AND 
+							tipologia IN ('Non assemblabile', 'Assemblabile facilmente') AND 
+                            magazzino_has_accessorio.quantita > 0
+					ORDER BY temp_distanze_rivenditore_magazzini.distance ASC";
         	query@Database( query )( accessoriMagazzini );
 
         	for ( i = 0, i < #accessoriMagazzini.row, i++ ) {
-        		with( response.accessoriMagazzini[i] ){
-        		  .idAccessorio = accessoriMagazzini.row[i].idAccessorio;
-        		  .idMagazzino = accessoriMagazzini.row[i].idMagazzino
-        		}
-        		println@Console("response.accessoriMagazzini["+i+"].idAccessorio = " + response.accessoriMagazzini[i].idAccessorio)();
-        		println@Console("response.accessoriMagazzini["+i+"].idMagazzino = " + response.accessoriMagazzini[i].idMagazzino)()
+		        idAccessorio = accessoriOrdineMagazzino.row[i].idAccessorio;
+		        idMagazzino = accessoriOrdineMagazzino.row[i].idMagazzino;
+
+        		qta_disponibile = accessoriOrdineMagazzino.row[i].qta_disponibile;
+		        accessori_ordine.(idAccessorio).qta_richiesta = accessoriOrdineMagazzino.row[i].qta_richiesta;
+		        qta_mancante = accessori_ordine.(idAccessorio).qta_richiesta - accessori_ordine.(idAccessorio).qta_prenotata;
+
+		        println@Console("accessori_ordine.("+idAccessorio+").qta_richiesta = "+accessori_ordine.(idAccessorio).qta_richiesta)();
+		        println@Console("accessori_ordine.("+idAccessorio+").qta_prenotata = "+accessori_ordine.(idAccessorio).qta_prenotata)();
+
+		        if(qta_mancante > 0){
+			        if(qta_disponibile >= accessori_ordine.(idAccessorio).qta_richiesta){
+			           	qta_prenotabile = accessori_ordine.(idAccessorio).qta_richiesta
+			        } else { // qta_disponibile < qta_richiesta
+			           	qta_prenotabile = qta_disponibile
+			        }
+
+			        accessori_ordine.(idAccessorio).qta_prenotata += qta_prenotabile;
+
+			        println@Console("Il magazzino #" + idMagazzino + " possiede "+qta_disponibile+" qta su "+accessori_ordine.(idAccessorio).qta_richiesta+" qta ancora necessarie ("+qta_prenotabile+" prenotabili) dell'accessorio #"+idAccessorio+" per l'ordine #" + idOrdine)();
+
+			        if(qta_prenotabile > 0) {
+			            query = "INSERT INTO Magazzino_accessorio_prenotato
+					            (idOrdine, idMagazzino, idAccessorio, quantita)
+					            VALUES
+					            (" + idOrdine + ", " + idMagazzino + ", " + idAccessorio + ", " + qta_prenotabile + ")";
+						update@Database( query )( responseNewPrenotazioneAccessorio );
+						println@Console("Prenoto " + qta_prenotabile + " qta dell'accessorio #" + idAccessorio + " nel magazzino #" + idMagazzino + " per l'ordine #" + idOrdine)();
+
+						query = "UPDATE magazzino_has_accessorio
+								 SET quantita = quantita - " + qta_prenotabile + "
+								 WHERE idMagazzino = " + idMagazzino + " AND idAccessorio = " + idAccessorio;
+						update@Database( query )( responseScaloQtaMagazzino );
+						println@Console("Ho scalato " + qta_prenotabile + " qta dell'accessorio #" + idAccessorio + " dal magazzino #" + idMagazzino + " poiche' prenotate")()
+			        }
+
+			        println@Console("\n")()
+		    	}
 	        }
+
+	        response.message = "Tutti i magazzini sono stati interrogati"
 	    }
 	] {
 		println@Console("[sceltaMagazzinoPiuVicinoSedeCliente] COMPLETED")()

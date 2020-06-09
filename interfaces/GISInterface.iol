@@ -1,6 +1,5 @@
 
 type GISRequest: void {
-	.key: string
 	.from: string
 	.to: string
 	.unit: string
