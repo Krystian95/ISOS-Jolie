@@ -423,44 +423,44 @@ main
 				distanceFromRivenditore@MagazzinoPrincipale(indirizzoRivenditore)(distanceMagazzino1)  |
 				distanceFromRivenditore@MagazzinoSecondario1(indirizzoRivenditore)(distanceMagazzino2) |
 	            distanceFromRivenditore@MagazzinoSecondario2(indirizzoRivenditore)(distanceMagazzino3) |
-	            distanceFromRivenditore@MagazzinoSecondario3(indirizzoRivenditore)(distanceMagazzino4) ;
+	            distanceFromRivenditore@MagazzinoSecondario3(indirizzoRivenditore)(distanceMagazzino4)
+	        };
 
-	            idMagazzino = 1;
-	            distance = distanceMagazzino1;
-	            println@Console("Il magazzino #" + idMagazzino + " dista " + distance + "km dal rivenditore")();
-				query = "INSERT INTO temp_distanze_rivenditore_magazzini
-					     (idRivenditore, idMagazzino, distance)
-					     VALUES
-					     (" + idRivenditore + ", " + idMagazzino + ", " + distance + ")";
-				update@Database( query )( responseNewDistance );
+	        idMagazzino = 1;
+	        distance = distanceMagazzino1;
+	        println@Console("Il magazzino #" + idMagazzino + " dista " + distance + "km dal rivenditore")();
+			query = "INSERT INTO temp_distanze_rivenditore_magazzini
+					 (idRivenditore, idMagazzino, distance)
+					 VALUES
+					 (" + idRivenditore + ", " + idMagazzino + ", " + distance + ")";
+			update@Database( query )( responseNewDistance );
 
-	            idMagazzino = 2;
-	            distance = distanceMagazzino2;
-	            println@Console("Il magazzino #" + idMagazzino + " dista " + distance + "km dal rivenditore")();
-				query = "INSERT INTO temp_distanze_rivenditore_magazzini
-					     (idRivenditore, idMagazzino, distance)
-					     VALUES
-					     (" + idRivenditore + ", " + idMagazzino + ", " + distance + ")";
-				update@Database( query )( responseNewDistance );
+	        idMagazzino = 2;
+	        distance = distanceMagazzino2;
+	        println@Console("Il magazzino #" + idMagazzino + " dista " + distance + "km dal rivenditore")();
+			query = "INSERT INTO temp_distanze_rivenditore_magazzini
+					 (idRivenditore, idMagazzino, distance)
+					 VALUES
+					 (" + idRivenditore + ", " + idMagazzino + ", " + distance + ")";
+			update@Database( query )( responseNewDistance );
 
-	            idMagazzino = 3;
-	            distance = distanceMagazzino3;
-	            println@Console("Il magazzino #" + idMagazzino + " dista " + distance + "km dal rivenditore")();
-				query = "INSERT INTO temp_distanze_rivenditore_magazzini
-					     (idRivenditore, idMagazzino, distance)
-					     VALUES
-					     (" + idRivenditore + ", " + idMagazzino + ", " + distance + ")";
-				update@Database( query )( responseNewDistance );
+	        idMagazzino = 3;
+	        distance = distanceMagazzino3;
+	        println@Console("Il magazzino #" + idMagazzino + " dista " + distance + "km dal rivenditore")();
+			query = "INSERT INTO temp_distanze_rivenditore_magazzini
+					 (idRivenditore, idMagazzino, distance)
+					 VALUES
+					 (" + idRivenditore + ", " + idMagazzino + ", " + distance + ")";
+			update@Database( query )( responseNewDistance );
 
-	            idMagazzino = 4;
-	            distance = distanceMagazzino4;
-	            println@Console("Il magazzino #" + idMagazzino + " dista " + distance + "km dal rivenditore")();
-				query = "INSERT INTO temp_distanze_rivenditore_magazzini
-					     (idRivenditore, idMagazzino, distance)
-					     VALUES
-					     (" + idRivenditore + ", " + idMagazzino + ", " + distance + ")";
-				update@Database( query )( responseNewDistance )
-	    	}
+	        idMagazzino = 4;
+	        distance = distanceMagazzino4;
+	        println@Console("Il magazzino #" + idMagazzino + " dista " + distance + "km dal rivenditore")();
+			query = "INSERT INTO temp_distanze_rivenditore_magazzini
+					 (idRivenditore, idMagazzino, distance)
+					 VALUES
+					 (" + idRivenditore + ", " + idMagazzino + ", " + distance + ")";
+			update@Database( query )( responseNewDistance );
 
 			query = "SELECT Ordine.idOrdine,
 							Ordine_has_Accessorio.idAccessorio,
@@ -481,15 +481,13 @@ main
         	query@Database( query )( accessoriMagazzini );
 
         	for ( i = 0, i < #accessoriMagazzini.row, i++ ) {
-		        idAccessorio = accessoriOrdineMagazzino.row[i].idAccessorio;
-		        idMagazzino = accessoriOrdineMagazzino.row[i].idMagazzino;
+		        idOrdine = accessoriMagazzini.row[i].idOrdine;
+		        idAccessorio = accessoriMagazzini.row[i].idAccessorio;
+		        idMagazzino = accessoriMagazzini.row[i].idMagazzino;
 
-        		qta_disponibile = accessoriOrdineMagazzino.row[i].qta_disponibile;
-		        accessori_ordine.(idAccessorio).qta_richiesta = accessoriOrdineMagazzino.row[i].qta_richiesta;
+        		qta_disponibile = accessoriMagazzini.row[i].qta_disponibile;
+		        accessori_ordine.(idAccessorio).qta_richiesta = accessoriMagazzini.row[i].qta_richiesta;
 		        qta_mancante = accessori_ordine.(idAccessorio).qta_richiesta - accessori_ordine.(idAccessorio).qta_prenotata;
-
-		        println@Console("accessori_ordine.("+idAccessorio+").qta_richiesta = "+accessori_ordine.(idAccessorio).qta_richiesta)();
-		        println@Console("accessori_ordine.("+idAccessorio+").qta_prenotata = "+accessori_ordine.(idAccessorio).qta_prenotata)();
 
 		        if(qta_mancante > 0){
 			        if(qta_disponibile >= accessori_ordine.(idAccessorio).qta_richiesta){
