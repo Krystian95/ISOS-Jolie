@@ -240,7 +240,7 @@ main
 					query_raw.end = queryLength - 1;
 					substring@StringUtils( query_raw )( substringResponse );
 					query = substringResponse + ";";
-						
+
 			           update@Database( query )( responseNewCustomizzazioneCicloOrdine );
 			           println@Console("Customizzazione Ciclo Ordine inserita")()
 			    }
@@ -364,7 +364,7 @@ main
 
 	[
 		prenotazioneMaterialiPresentiMP ( params )( response ) {
-			
+
 			verificaDisponibilitaComponentiAccessori@MagazzinoPrincipale( params )( responseMagazzino );
 			response.tuttiMaterialiRichiestiPresentiMP = responseMagazzino.tuttiMaterialiRichiestiPresenti;
 			response.message = responseMagazzino.message
@@ -474,8 +474,8 @@ main
                      LEFT JOIN Ordine ON Ordine_has_Accessorio.idOrdine = Ordine.idOrdine
                      LEFT JOIN temp_distanze_rivenditore_magazzini ON magazzino_has_accessorio.idMagazzino = temp_distanze_rivenditore_magazzini.idMagazzino AND
 																	Ordine.idRivenditore = temp_distanze_rivenditore_magazzini.idRivenditore
-					 WHERE Ordine_has_Accessorio.idOrdine = " + params.idOrdine + " AND 
-							tipologia IN ('Non assemblabile', 'Assemblabile facilmente') AND 
+					 WHERE Ordine_has_Accessorio.idOrdine = " + params.idOrdine + " AND
+							tipologia IN ('Non assemblabile', 'Assemblabile facilmente') AND
                             magazzino_has_accessorio.quantita > 0
 					ORDER BY temp_distanze_rivenditore_magazzini.distance ASC";
         	query@Database( query )( accessoriMagazzini );
@@ -527,8 +527,3 @@ main
 		println@Console("[sceltaMagazzinoPiuVicinoSedeCliente] COMPLETED")()
 	}
 }
-
-
-
-
-
