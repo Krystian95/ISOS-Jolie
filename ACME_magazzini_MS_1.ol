@@ -41,30 +41,6 @@ init
     println@Console("\nConnection to database: SUCCESS")();
 
     println@Console("\nACME MAGAZZINO SECONDARIO #"+global.idMagazzino+" running...\n")() // TO CHANGE
-
-    [
-		distanceFromRivenditore ( indirizzoRivenditore )( distance ) {
-
-			query = "SELECT indirizzo
-					 FROM Magazzino
-					 WHERE idMagazzino = " + global.idMagazzino;
-			query@Database( query )( indirizzoMagazzino );
-			
-			request.key = "6wEJ0kvFptHTcXxlYerm4AtwojJhnUJE";
-			request.from = indirizzoMagazzino.row[0].indirizzo;
-			request.to = indirizzoRivenditore;
-			request.unit = "k";
-
-			println@Console("request.from: " + request.from)();
-			println@Console("request.to: " + request.to)();
-
-			distanceBetween@GISService(request)(response);
-			distance = response.distance;
-			println@Console("Il magazzino #" + global.idMagazzino + " dista " + distance + "km dal rivenditore " + indirizzoRivenditore)()
-	    }
-	] {
-		println@Console("[distanceFromRivenditore] COMPLETED")()
-	}
 }
 
 main
@@ -248,5 +224,29 @@ main
 	    }
 	] {
 		println@Console("[verificaDisponibilitaComponentiAccessori] COMPLETED")()
+	}
+
+	[
+		distanceFromRivenditore ( indirizzoRivenditore )( distance ) {
+
+			query = "SELECT indirizzo
+					 FROM Magazzino
+					 WHERE idMagazzino = " + global.idMagazzino;
+			query@Database( query )( indirizzoMagazzino );
+			
+			request.key = "6wEJ0kvFptHTcXxlYerm4AtwojJhnUJE";
+			request.from = indirizzoMagazzino.row[0].indirizzo;
+			request.to = indirizzoRivenditore;
+			request.unit = "k";
+
+			println@Console("request.from: " + request.from)();
+			println@Console("request.to: " + request.to)();
+
+			distanceBetween@GISService(request)(response);
+			distance = response.distance;
+			println@Console("Il magazzino #" + global.idMagazzino + " dista " + distance + "km dal rivenditore " + indirizzoRivenditore)()
+	    }
+	] {
+		println@Console("[distanceFromRivenditore] COMPLETED")()
 	}
 }
