@@ -440,7 +440,7 @@ main
 					     (idRivenditore, idMagazzino, distance)
 					     VALUES
 					     (" + idRivenditore + ", " + idMagazzino + ", " + distance + ")";
-				update@Database( query )( responseNewDistance );
+				update@Database( query )( responseNewDistance )
 	        }
 
 

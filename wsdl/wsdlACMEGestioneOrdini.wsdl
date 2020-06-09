@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wsdl:definitions targetNamespace="mytest.test.com.wsdl" xmlns:xsd1="mytest.test.com.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="mytest.test.com.wsdl" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
   <wsdl:types>
-    <xs:schema targetNamespace="mytest.test.com.xsd" xmlns:sch="mytest.test.com.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema"><xs:element name="notificaCustomizzazioniNonRealizzabili"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idRivenditore" type="xs:string"/><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="notificaCustomizzazioniNonRealizzabiliResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="response" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="prenotazioneMaterialiPresentiMP"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="prenotazioneMaterialiPresentiMPResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="message" type="xs:string"/><xs:element maxOccurs="1" minOccurs="1" name="tuttiMaterialiRichiestiPresentiMP" type="xs:boolean"/></xs:sequence></xs:complexType></xs:element><xs:element name="getIdOrdine"><xs:complexType><xs:sequence/></xs:complexType></xs:element><xs:element name="getIdOrdineResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="verificaCustomizzazioni"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="verificaCustomizzazioniResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="ordineContieneAccessoriDaNonAssemblare" type="xs:boolean"/><xs:element maxOccurs="1" minOccurs="1" name="customizzazioniPossibili" type="xs:boolean"/><xs:element maxOccurs="1" minOccurs="1" name="ordineContieneComponentiAccessoriDaAssemblare" type="xs:boolean"/></xs:sequence></xs:complexType></xs:element><xs:element name="getIdRivenditore"><xs:complexType><xs:sequence/></xs:complexType></xs:element><xs:element name="getIdRivenditoreResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idRivenditore" type="xs:string"/></xs:sequence></xs:complexType></xs:element></xs:schema>
+    <xs:schema targetNamespace="mytest.test.com.xsd" xmlns:sch="mytest.test.com.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema"><xs:element name="notificaCustomizzazioniNonRealizzabili"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idRivenditore" type="xs:string"/><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="notificaCustomizzazioniNonRealizzabiliResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="response" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="prenotazioneMaterialiPresentiMP"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="prenotazioneMaterialiPresentiMPResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="message" type="xs:string"/><xs:element maxOccurs="1" minOccurs="1" name="tuttiMaterialiRichiestiPresentiMP" type="xs:boolean"/></xs:sequence></xs:complexType></xs:element><xs:element name="getIdOrdine"><xs:complexType><xs:sequence/></xs:complexType></xs:element><xs:element name="getIdOrdineResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="verificaCustomizzazioni"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="verificaCustomizzazioniResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="ordineContieneAccessoriDaNonAssemblare" type="xs:boolean"/><xs:element maxOccurs="1" minOccurs="1" name="customizzazioniPossibili" type="xs:boolean"/><xs:element maxOccurs="1" minOccurs="1" name="ordineContieneComponentiAccessoriDaAssemblare" type="xs:boolean"/></xs:sequence></xs:complexType></xs:element><xs:element name="getIdRivenditore"><xs:complexType><xs:sequence/></xs:complexType></xs:element><xs:element name="getIdRivenditoreResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idRivenditore" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="prenotazioneMaterialiPresentiMS"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="prenotazioneMaterialiPresentiMSResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="message" type="xs:string"/></xs:sequence></xs:complexType></xs:element></xs:schema>
   </wsdl:types>
   <wsdl:message name="NotificaCustomizzazioniNonRealizzabili">
     <wsdl:part name="body" element="xsd1:notificaCustomizzazioniNonRealizzabili"/>
@@ -9,11 +9,17 @@
   <wsdl:message name="IdRivenditore">
     <wsdl:part name="body" element="xsd1:getIdRivenditoreResponse"/>
   </wsdl:message>
+  <wsdl:message name="PrenotazioneMaterialiPresentiMS">
+    <wsdl:part name="body" element="xsd1:prenotazioneMaterialiPresentiMS"/>
+  </wsdl:message>
   <wsdl:message name="Response">
     <wsdl:part name="body" element="xsd1:notificaCustomizzazioniNonRealizzabiliResponse"/>
   </wsdl:message>
   <wsdl:message name="ResponsePrenotazioneMaterialiPresentiMP">
     <wsdl:part name="body" element="xsd1:prenotazioneMaterialiPresentiMPResponse"/>
+  </wsdl:message>
+  <wsdl:message name="ResponsePrenotazioneMaterialiPresentiMS">
+    <wsdl:part name="body" element="xsd1:prenotazioneMaterialiPresentiMSResponse"/>
   </wsdl:message>
   <wsdl:message name="IdOrdine">
     <wsdl:part name="body" element="xsd1:verificaCustomizzazioni"/>
@@ -50,6 +56,10 @@
     <wsdl:operation name="getIdRivenditore">
       <wsdl:input message="tns:emptyGetIdRivenditore"/>
       <wsdl:output message="tns:IdRivenditore"/>
+    </wsdl:operation>
+    <wsdl:operation name="prenotazioneMaterialiPresentiMS">
+      <wsdl:input message="tns:PrenotazioneMaterialiPresentiMS"/>
+      <wsdl:output message="tns:ResponsePrenotazioneMaterialiPresentiMS"/>
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="ACMEGestioneOrdiniSOAPBinding" type="tns:ACMEGestioneOrdini">
@@ -92,6 +102,15 @@
     </wsdl:operation>
     <wsdl:operation name="getIdRivenditore">
       <soap:operation soapAction="getIdRivenditore" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="prenotazioneMaterialiPresentiMS">
+      <soap:operation soapAction="prenotazioneMaterialiPresentiMS" style="document"/>
       <wsdl:input>
         <soap:body use="literal"/>
       </wsdl:input>
