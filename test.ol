@@ -67,7 +67,7 @@ main
 
 	// sceltaMagazzinoPiuVicinoSedeCliente
 
-	params.idOrdine = "67";
+	params.idOrdine = "98";
 	sceltaMagazzinoPiuVicinoSedeCliente@ACMETest(params)()
 }
 

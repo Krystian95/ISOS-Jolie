@@ -437,7 +437,7 @@ main
 
 	        idMagazzino = 2;
 	        distance = distanceMagazzino2;
-	        println@Console("\nIl magazzino #" + idMagazzino + " dista " + distance + "km dal rivenditore")();
+	        println@Console("Il magazzino #" + idMagazzino + " dista " + distance + "km dal rivenditore")();
 			query = "INSERT INTO temp_distanze_rivenditore_magazzini
 					 (idRivenditore, idMagazzino, distance)
 					 VALUES
@@ -489,6 +489,10 @@ main
 		        accessori_ordine.(idAccessorio).qta_richiesta = accessoriMagazzini.row[i].qta_richiesta;
 		        qta_mancante = accessori_ordine.(idAccessorio).qta_richiesta - accessori_ordine.(idAccessorio).qta_prenotata;
 
+		        println@Console("\nqta_disponibile = "+qta_disponibile)();
+		        println@Console("accessori_ordine.("+idAccessorio+").qta_richiesta = "+accessori_ordine.(idAccessorio).qta_richiesta)();
+		        println@Console("qta_mancante = "+qta_mancante)();
+
 		        if(qta_mancante > 0){
 			        if(qta_disponibile >= accessori_ordine.(idAccessorio).qta_richiesta){
 			           	qta_prenotabile = accessori_ordine.(idAccessorio).qta_richiesta
@@ -498,7 +502,10 @@ main
 
 			        accessori_ordine.(idAccessorio).qta_prenotata += qta_prenotabile;
 
-			        println@Console("Il magazzino #" + idMagazzino + " possiede "+qta_disponibile+" qta su "+accessori_ordine.(idAccessorio).qta_richiesta+" qta ancora necessarie ("+qta_prenotabile+" prenotabili) dell'accessorio #"+idAccessorio+" per l'ordine #" + idOrdine)();
+			        println@Console("\nqta_prenotabile = "+qta_prenotabile)();
+			        println@Console("accessori_ordine.("+idAccessorio+").qta_prenotata = "+accessori_ordine.(idAccessorio).qta_prenotata)();
+
+			        println@Console("\nIl magazzino #" + idMagazzino + " possiede "+qta_disponibile+" qta su "+qta_mancante+" qta ancora necessarie ("+qta_prenotabile+" prenotabili) dell'accessorio #"+idAccessorio+" per l'ordine #" + idOrdine)();
 
 			        if(qta_prenotabile > 0) {
 			            query = "INSERT INTO Magazzino_accessorio_prenotato
