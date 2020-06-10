@@ -437,7 +437,7 @@ main
 
 	        idMagazzino = 2;
 	        distance = distanceMagazzino2;
-	        println@Console("Il magazzino #" + idMagazzino + " dista " + distance + "km dal rivenditore")();
+	        println@Console("\nIl magazzino #" + idMagazzino + " dista " + distance + "km dal rivenditore")();
 			query = "INSERT INTO temp_distanze_rivenditore_magazzini
 					 (idRivenditore, idMagazzino, distance)
 					 VALUES
@@ -514,8 +514,6 @@ main
 						update@Database( query )( responseScaloQtaMagazzino );
 						println@Console("Ho scalato " + qta_prenotabile + " qta dell'accessorio #" + idAccessorio + " dal magazzino #" + idMagazzino + " poiche' prenotate")()
 			        }
-
-			        println@Console("\n")()
 		    	}
 	        }
 
