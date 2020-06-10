@@ -1,0 +1,14 @@
+cd resources
+sh ACME_gestione_ordini.sh
+sleep 1
+sh GIS.sh
+sleep 1
+sh ACME_magazzini_MP.sh
+sleep 1
+sh ACME_magazzini_MS_1.sh
+sleep 1
+sh ACME_magazzini_MS_2.sh
+sleep 1
+sh ACME_magazzini_MS_3.sh
+sleep 1
+sh rivenditore1.sh
