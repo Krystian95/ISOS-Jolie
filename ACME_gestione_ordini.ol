@@ -400,7 +400,7 @@ main
 	}
 
 	[
-		sceltaMagazzinoPiuVicinoSedeCliente ( params )( response ) {
+		generazioneListaAccessoriPresentiMagazzini ( params )( response ) {
 
 			query = "SELECT Rivenditore.indirizzo,
 							Ordine.idRivenditore
@@ -489,9 +489,9 @@ main
 		        accessori_ordine.(idAccessorio).qta_richiesta = accessoriMagazzini.row[i].qta_richiesta;
 		        qta_mancante = accessori_ordine.(idAccessorio).qta_richiesta - accessori_ordine.(idAccessorio).qta_prenotata;
 
-		        println@Console("\nqta_disponibile = "+qta_disponibile)();
+		        /*println@Console("\nqta_disponibile = "+qta_disponibile)();
 		        println@Console("accessori_ordine.("+idAccessorio+").qta_richiesta = "+accessori_ordine.(idAccessorio).qta_richiesta)();
-		        println@Console("qta_mancante = "+qta_mancante)();
+		        println@Console("qta_mancante = "+qta_mancante)();*/
 
 		        if(qta_mancante > 0){
 			        if(qta_disponibile >= accessori_ordine.(idAccessorio).qta_richiesta){
@@ -502,8 +502,8 @@ main
 
 			        accessori_ordine.(idAccessorio).qta_prenotata += qta_prenotabile;
 
-			        println@Console("\nqta_prenotabile = "+qta_prenotabile)();
-			        println@Console("accessori_ordine.("+idAccessorio+").qta_prenotata = "+accessori_ordine.(idAccessorio).qta_prenotata)();
+			        /*println@Console("\nqta_prenotabile = "+qta_prenotabile)();
+			        println@Console("accessori_ordine.("+idAccessorio+").qta_prenotata = "+accessori_ordine.(idAccessorio).qta_prenotata)();*/
 
 			        println@Console("\nIl magazzino #" + idMagazzino + " possiede "+qta_disponibile+" qta su "+qta_mancante+" qta ancora necessarie ("+qta_prenotabile+" prenotabili) dell'accessorio #"+idAccessorio+" per l'ordine #" + idOrdine)();
 

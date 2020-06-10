@@ -40,11 +40,11 @@ type ResponsePrenotazioneMaterialiPresentiMS: void {
 }
 
 // GIS
-type SceltaMagazzinoPiuVicinoSedeCliente: void {
+type GenerazioneListaAccessoriPresentiMagazzini: void {
   .idOrdine: string
 }
 
-type ResponseSceltaMagazzinoPiuVicinoSedeCliente: void {
+type ResponseGenerazioneListaAccessoriPresentiMagazzini: void {
   .message: string
 }
 
@@ -64,7 +64,7 @@ interface ACMEGestioneOrdiniInterface {
                     notificaCustomizzazioniNonRealizzabili( NotificaCustomizzazioniNonRealizzabili )( Response ),
                     prenotazioneMaterialiPresentiMP( PrenotazioneMaterialiPresentiMP )( ResponsePrenotazioneMaterialiPresentiMP ),
                     prenotazioneMaterialiPresentiMS( PrenotazioneMaterialiPresentiMS )( ResponsePrenotazioneMaterialiPresentiMS ),
-                    sceltaMagazzinoPiuVicinoSedeCliente( SceltaMagazzinoPiuVicinoSedeCliente )( ResponseSceltaMagazzinoPiuVicinoSedeCliente )
+                    generazioneListaAccessoriPresentiMagazzini( GenerazioneListaAccessoriPresentiMagazzini )( ResponseGenerazioneListaAccessoriPresentiMagazzini )
 }
 
 

@@ -65,10 +65,10 @@ main
 	request.unit = "k";
 	distanceBetween@GISService(request)(response)*/
 
-	// sceltaMagazzinoPiuVicinoSedeCliente
+	// generazioneListaAccessoriPresentiMagazzini
 
 	params.idOrdine = "98";
-	sceltaMagazzinoPiuVicinoSedeCliente@ACMETest(params)()
+	generazioneListaAccessoriPresentiMagazzini@ACMETest(params)()
 }
 
 
