@@ -123,9 +123,7 @@ init {
     connect@Database(connectionInfo)();
     println@Console("\nConnection to database: SUCCESS")();
 
-    println@Console("\nACME GESTIONE ORDINI running...\n")();
-
-    global.ordine = null
+    println@Console("\nACME GESTIONE ORDINI running...\n")()
 }
 
 main
@@ -193,9 +191,8 @@ main
 						 	FROM ordine
 						 )";
 				query@Database( query )( responseNewOrdine );
-				idOrdine = responseNewOrdine.row[0].idOrdine;
-				ordine.idOrdine = idOrdine;
-				println@Console("Ordine #" + idOrdine + " inserito")()
+				ordine.idOrdine = responseNewOrdine.row[0].idOrdine;
+				println@Console("Ordine #" + ordine.idOrdine + " inserito")()
 			};
 
 			// Inserimento Cicli Ordine nel db
@@ -208,7 +205,7 @@ main
 					for ( i = 0, i < #ordine.cicli, i++ ) {
 						idCiclo = ordine.cicli[i].idCiclo;
 						quantitaCiclo = ordine.cicli[i].qta;
-						query += "(" + idOrdine + ", " + idCiclo + ", " + quantitaCiclo + "),"
+						query += "(" + ordine.idOrdine + ", " + idCiclo + ", " + quantitaCiclo + "),"
 					}
 
 					query_raw = query;
@@ -231,7 +228,7 @@ main
 					for ( i = 0, i < #ordine.customizzazioni[i], i++ ) {
 						idCiclo = ordine.customizzazioni[i].idCiclo;
 						idCustomizzazione = ordine.customizzazioni[i].idCustomizzazione;
-						query += "(" + idOrdine + ", " + idCiclo + ", " + idCustomizzazione + "),"
+						query += "(" + ordine.idOrdine + ", " + idCiclo + ", " + idCustomizzazione + "),"
 					}
 
 					query_raw = query;
@@ -256,7 +253,7 @@ main
 					for ( i = 0, i < #ordine.accessori, i++ ) {
 						idAccessorio = ordine.accessori[i].idAccessorio;
 						quantitaAccessorio = ordine.accessori[i].qta;
-						query += "(" + idOrdine + ", " + idAccessorio + ", " + quantitaAccessorio + "),"
+						query += "(" + ordine.idOrdine + ", " + idAccessorio + ", " + quantitaAccessorio + "),"
 					}
 
 					query_raw = query;
@@ -271,12 +268,13 @@ main
 		        }
 	        }
 
-	        global.ordine << ordine;
+	        global.ordini.(ordine.idOrdine) << ordine;
+	        global.lastIdOrdine = ordine.idOrdine;
 	        undef(ordine);
 
 			// Message
 			message.messageName = "Ordine";
-			message.processVariables.ordine.value = string( global.ordine.idOrdine );
+			message.processVariables.ordine.value = string( global.ordini.(ordine.idOrdine).idOrdine );
 			message.processVariables.ordine.type = "String";
 			message@CamundaPort(message)(rit)
         }
@@ -287,16 +285,16 @@ main
 	[
 		getIdOrdine( void )( idOrdine ) {
 
-			idOrdine.idOrdine = string( global.ordine.idOrdine )
+			idOrdine.idOrdine = string( global.ordine.(global.lastIdOrdine).idOrdine )
 	    }
 	] {
 		println@Console("[getIdOrdine] COMPLETED")()
 	}
 
 	[
-		getIdRivenditore( void )( idRivenditore ) {
+		getIdRivenditore( idOrdine )( idRivenditore ) {
 
-			idRivenditore.idRivenditore = string( global.ordine.idRivenditore )
+			idRivenditore.idRivenditore = string( global.ordine.(idOrdine.idOrdine).idRivenditore )
 	    }
 	] {
 		println@Console("[getIdRivenditore] COMPLETED")()

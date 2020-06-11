@@ -48,6 +48,12 @@ type ResponseGenerazioneListaAccessoriPresentiMagazzini: void {
   .message: string
 }
 
+// Get id ordine
+
+type IdOrdineRivenditore: void {
+  .idOrdine: string
+}
+
 // Risposte generiche
 
 type Response: void {
@@ -55,11 +61,10 @@ type Response: void {
 }
 
 type emptyGetIdOrdine: void
-type emptyGetIdRivenditore: void
 
 interface ACMEGestioneOrdiniInterface {
   RequestResponse:  getIdOrdine( emptyGetIdOrdine )( IdOrdine ),
-                    getIdRivenditore( emptyGetIdRivenditore )( IdRivenditore ),
+                    getIdRivenditore( IdOrdineRivenditore )( IdRivenditore ),
                     verificaCustomizzazioni( IdOrdine )( EsitoVerificaCustomizzazioni ),
                     notificaCustomizzazioniNonRealizzabili( NotificaCustomizzazioniNonRealizzabili )( Response ),
                     prenotazioneMaterialiPresentiMP( PrenotazioneMaterialiPresentiMP )( ResponsePrenotazioneMaterialiPresentiMP ),
