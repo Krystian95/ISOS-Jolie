@@ -285,7 +285,7 @@ main
 	[
 		getIdOrdine( void )( idOrdine ) {
 
-			idOrdine.idOrdine = string( global.ordine.(global.lastIdOrdine).idOrdine )
+			idOrdine.idOrdine = string( global.ordini.(global.lastIdOrdine).idOrdine )
 	    }
 	] {
 		println@Console("[getIdOrdine] COMPLETED")()
@@ -294,7 +294,7 @@ main
 	[
 		getIdRivenditore( idOrdine )( idRivenditore ) {
 
-			idRivenditore.idRivenditore = string( global.ordine.(idOrdine.idOrdine).idRivenditore )
+			idRivenditore.idRivenditore = string( global.ordini.(idOrdine.idOrdine).idRivenditore )
 	    }
 	] {
 		println@Console("[getIdRivenditore] COMPLETED")()
