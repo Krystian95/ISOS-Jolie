@@ -67,8 +67,14 @@ main
 
 	// generazioneListaAccessoriPresentiMagazzini
 
-	params.idOrdine = "98";
-	generazioneListaAccessoriPresentiMagazzini@ACMETest(params)()
+	/*params.idOrdine = "98";
+	generazioneListaAccessoriPresentiMagazzini@ACMETest(params)()*/
+
+	// Notifica customizzazioni non realizzabili
+	notificaCustomizzazioniNonRealizzabili.idOrdine = "104";
+	notificaCustomizzazioniNonRealizzabili.idRivenditore = "1";
+	notificaCustomizzazioniNonRealizzabili@ACMETest(notificaCustomizzazioniNonRealizzabili)(response);
+	println@Console("response = " + response.message)()
 }
 
 

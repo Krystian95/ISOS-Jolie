@@ -164,7 +164,7 @@ main
 	        }
 	    }
 	] {
-		println@Console("[richiediListino] COMPLETED")()
+		println@Console("\n[richiediListino] COMPLETED\n")()
 	}
 
 	[
@@ -279,7 +279,7 @@ main
 			message@CamundaPort(message)(rit)
         }
 
-		println@Console("[inviaOrdine] COMPLETED")()
+		println@Console("\n[inviaOrdine] COMPLETED\n")()
 	}
 
 	[
@@ -288,7 +288,7 @@ main
 			idOrdine.idOrdine = string( global.ordini.(global.lastIdOrdine).idOrdine )
 	    }
 	] {
-		println@Console("[getIdOrdine] COMPLETED")()
+		println@Console("\n[getIdOrdine] COMPLETED\n")()
 	}
 
 	[
@@ -297,7 +297,7 @@ main
 			idRivenditore.idRivenditore = string( global.ordini.(idOrdine.idOrdine).idRivenditore )
 	    }
 	] {
-		println@Console("[getIdRivenditore] COMPLETED")()
+		println@Console("\n[getIdRivenditore] COMPLETED\n")()
 	}
 
 	[
@@ -337,7 +337,7 @@ main
 	        esitoVerificaCustomizzazioni.ordineContieneComponentiAccessoriDaAssemblare = true
 	    }
 	] {
-		println@Console("[verificaCustomizzazioni] COMPLETED")()
+		println@Console("\n[verificaCustomizzazioni] COMPLETED\n")()
 	}
 
 	[
@@ -346,18 +346,17 @@ main
 			idRivenditore = notificaCustomizzazioniNonRealizzabili.idRivenditore;
 			idOrdine = notificaCustomizzazioniNonRealizzabili.idOrdine;
 
-			idOrdineMessage.idOrdine = idOrdine;
-
 			if (idRivenditore == 1) {
-				notificaCustomizzazioniNonRealizzabili@Rivenditore1( idOrdineMessage )
+				notificaCustomizzazioniNonRealizzabili@Rivenditore1( idOrdine )
 	        } else if(idRivenditore == 2){
-	            notificaCustomizzazioniNonRealizzabili@Rivenditore2( idOrdineMessage )
+	            notificaCustomizzazioniNonRealizzabili@Rivenditore2( idOrdine )
 	        }
 
-			response.response = "Notifica customizzazioni NON realizzabili inviata al rivenditore #" + idRivenditore + " per l'ordine #" + idOrdine
+			response.message = "Notifica customizzazioni NON realizzabili inviata al rivenditore #" + idRivenditore + " per l'ordine #" + idOrdine;
+			println@Console(response.message)()
 	    }
 	] {
-		println@Console("[notificaCustomizzazioniNonRealizzabili] COMPLETED")()
+		println@Console("\n[notificaCustomizzazioniNonRealizzabili] COMPLETED\n")()
 	}
 
 	[
@@ -365,10 +364,11 @@ main
 
 			verificaDisponibilitaComponentiAccessori@MagazzinoPrincipale( params )( responseMagazzino );
 			response.tuttiMaterialiRichiestiPresentiMP = responseMagazzino.tuttiMaterialiRichiestiPresenti;
-			response.message = responseMagazzino.message
+			response.message = responseMagazzino.message;
+			println@Console(response.message)()
 	    }
 	] {
-		println@Console("[prenotazioneMaterialiPresentiMP] COMPLETED")()
+		println@Console("\n[prenotazioneMaterialiPresentiMP] COMPLETED\n")()
 	}
 
 	[
@@ -394,7 +394,7 @@ main
 	        response.message = "Tutti i magazzini secondari sono stati interrogati"
 	    }
 	] {
-		println@Console("[prenotazioneMaterialiPresentiMS] COMPLETED")()
+		println@Console("\n[prenotazioneMaterialiPresentiMS] COMPLETED\n")()
 	}
 
 	[
@@ -522,9 +522,10 @@ main
 		    	}
 	        }
 
-	        response.message = "Tutti i magazzini sono stati interrogati"
+	        response.message = "Tutti i magazzini sono stati interrogati";
+	        println@Console(esponse.message)()
 	    }
 	] {
-		println@Console("[sceltaMagazzinoPiuVicinoSedeCliente] COMPLETED")()
+		println@Console("\n[sceltaMagazzinoPiuVicinoSedeCliente] COMPLETED\n")()
 	}
 }

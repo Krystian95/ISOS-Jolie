@@ -19,6 +19,8 @@ inputPort Rivenditore1 {
 	Interfaces: RivenditoreInterface
 }
 
+execution { concurrent }
+
 init {
 
 	// Id rivenditore
@@ -131,7 +133,7 @@ init {
 
 	// Invio ordine
 	inviaOrdine@ACMEService( ordine );
-	println@Console( "\nORDINE inviato correttamente ad ACME" )()
+	println@Console( "\nORDINE inviato correttamente ad ACME\n" )()
 }
 
 main
@@ -139,8 +141,8 @@ main
 	[
 		notificaCustomizzazioniNonRealizzabili ( idOrdine )
 	] {
-		println@Console("Le customizzazioni richieste per l'ordine #" + idOrdine.idOrdine + " NON sono realizzabili!")();
-		println@Console("[notificaCustomizzazioniNonRealizzabili] COMPLETED")()
+		println@Console("Le customizzazioni richieste per l'ordine #" + idOrdine + " NON sono realizzabili!")();
+		println@Console("\n[notificaCustomizzazioniNonRealizzabili] COMPLETED\n")()
 	}
 
 }

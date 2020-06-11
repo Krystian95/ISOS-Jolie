@@ -57,7 +57,7 @@ type IdOrdineRivenditore: void {
 // Risposte generiche
 
 type Response: void {
-  .response: string
+  .message: string
 }
 
 type emptyGetIdOrdine: void
