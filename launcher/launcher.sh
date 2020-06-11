@@ -10,5 +10,3 @@ sleep 1
 sh ACME_magazzini_MS_2.sh
 sleep 1
 sh ACME_magazzini_MS_3.sh
-sleep 1
-sh rivenditore1.sh
