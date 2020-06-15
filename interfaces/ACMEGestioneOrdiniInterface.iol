@@ -40,12 +40,25 @@ type ResponsePrenotazioneMaterialiPresentiMS: void {
 }
 
 // GIS
+
 type GenerazioneListaAccessoriPresentiMagazzini: void {
   .idOrdine: string
 }
 
 type ResponseGenerazioneListaAccessoriPresentiMagazzini: void {
   .message: string
+}
+
+// Calcolo preventivo
+
+type CalcoloPreventivo: void {
+  .idOrdine: string
+  .idRivenditore: string
+}
+
+type CalcoloPreventivoResponse: void {
+  .totaleOrdine: double
+  .sogliaSconto: double
 }
 
 // Get id ordine
@@ -69,7 +82,8 @@ interface ACMEGestioneOrdiniInterface {
                     notificaCustomizzazioniNonRealizzabili( NotificaCustomizzazioniNonRealizzabili )( Response ),
                     prenotazioneMaterialiPresentiMP( PrenotazioneMaterialiPresentiMP )( ResponsePrenotazioneMaterialiPresentiMP ),
                     prenotazioneMaterialiPresentiMS( PrenotazioneMaterialiPresentiMS )( ResponsePrenotazioneMaterialiPresentiMS ),
-                    generazioneListaAccessoriPresentiMagazzini( GenerazioneListaAccessoriPresentiMagazzini )( ResponseGenerazioneListaAccessoriPresentiMagazzini )
+                    generazioneListaAccessoriPresentiMagazzini( GenerazioneListaAccessoriPresentiMagazzini )( ResponseGenerazioneListaAccessoriPresentiMagazzini ),
+                    calcoloPreventivo( CalcoloPreventivo )( CalcoloPreventivoResponse)
 }
 
 

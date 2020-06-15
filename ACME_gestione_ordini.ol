@@ -523,9 +523,152 @@ main
 	        }
 
 	        response.message = "Tutti i magazzini sono stati interrogati";
-	        println@Console(esponse.message)()
+	        println@Console("\n" + response.message)()
 	    }
 	] {
 		println@Console("\n[sceltaMagazzinoPiuVicinoSedeCliente] COMPLETED\n")()
+	}
+
+	[
+		calcoloPreventivo ( params )( response ) {
+
+			with( response ){
+	          .totaleOrdine = 0;
+	          .sogliaSconto = 800.00
+	        }
+
+	        with( costi_trasporti ){
+	          .acme = 0.05
+	        }
+
+	        // Magazzino più vicino al rivenditore
+
+	        query = "SELECT idMagazzino
+					FROM temp_distanze_rivenditore_magazzini
+					WHERE idRivenditore = " + params.idRivenditore + "
+					ORDER BY distance ASC
+					LIMIT 1";
+        	query@Database( query )( resultMagazzinoPiuVicinoRivenditore );
+
+        	idMagazzinoPiuVicinoRivenditore = resultMagazzinoPiuVicinoRivenditore.row[0].idMagazzino;
+
+	        // Calcolo prezzo tutti accessori
+	        query = "SELECT SUM(tot_accessorio) AS tot_prezzo_accessori
+					FROM (
+						SELECT  ordine.idOrdine,
+								ordine_has_accessorio.idAccessorio,
+								ordine_has_accessorio.quantitaAccessorio,
+								accessorio.prezzoAccessorio,
+                                (ordine_has_accessorio.quantitaAccessorio * accessorio.prezzoAccessorio) AS tot_accessorio
+						FROM ordine
+						LEFT JOIN ordine_has_accessorio ON ordine.idOrdine = ordine_has_accessorio.idOrdine
+						LEFT JOIN accessorio ON ordine_has_accessorio.idAccessorio = accessorio.idAccessorio
+						WHERE ordine.idOrdine = " + params.idOrdine + "
+					) AS tot";
+        	query@Database( query )( tot_prezzo_accessori );
+
+        	response.totaleOrdine += tot_prezzo_accessori.row[0].tot_prezzo_accessori;
+        	println@Console("\nTotale accessori: " + tot_prezzo_accessori.row[0].tot_prezzo_accessori + " EUR")();
+
+        	// Calcolo prezzo tutti componenti cicli
+        	query = "SELECT SUM(tot_prezzo_cicli) AS tot_prezzo_cicli
+					FROM (
+					SELECT SUM(tot_ciclo) AS tot_prezzo_cicli
+						FROM (
+							SELECT  ordine.idOrdine,
+									ordine_has_ciclo.idCiclo,
+									ordine_has_ciclo.quantitaCiclo,
+									ciclo.prezzoCiclo,
+									(ordine_has_ciclo.quantitaCiclo * ciclo.prezzoCiclo) + (ordine_has_ciclo.quantitaCiclo * customizzazione.prezzoCustomizzazione) AS tot_ciclo
+							FROM ordine
+							LEFT JOIN ordine_has_ciclo ON ordine.idOrdine = ordine_has_ciclo.idOrdine
+							LEFT JOIN ciclo ON ordine_has_ciclo.idCiclo = ciclo.idCiclo
+							LEFT JOIN ordine_has_ciclo_has_customizzazione ON ordine.idOrdine = ordine_has_ciclo_has_customizzazione.idOrdine AND
+																			  ordine_has_ciclo.idCiclo = ordine_has_ciclo_has_customizzazione.idCiclo
+							LEFT JOIN customizzazione ON ordine_has_ciclo_has_customizzazione.idCustomizzazione = customizzazione.idCustomizzazione
+							WHERE ordine.idOrdine = " + params.idOrdine + "
+						) AS tot
+					GROUP BY idOrdine, idCiclo
+				) AS tot_complessivo";
+        	query@Database( query )( tot_prezzo_cicli );
+
+        	response.totaleOrdine += tot_prezzo_cicli.row[0].tot_prezzo_cicli;
+        	println@Console("\nTotale cicli (incluse customizzazioni): " + tot_prezzo_cicli.row[0].tot_prezzo_cicli + " EUR")();
+
+        	// Calcolo spese spedizioni accessori
+			query = "SELECT	ordine_has_accessorio.idOrdine,
+						ordine_has_accessorio.idAccessorio,
+						accessorio.tipologia,
+						ordine_has_accessorio.quantitaAccessorio AS qta_richiesta_iniziale,
+						CASE WHEN magazzino_accessorio_prenotato.quantita IS NULL
+							THEN 0
+							ELSE magazzino_accessorio_prenotato.quantita
+						END AS qta_prenotata,
+						magazzino_accessorio_prenotato.idMagazzino,
+						accessorio.prezzoAccessorio AS prezzo
+					FROM ordine_has_accessorio
+					LEFT JOIN accessorio ON ordine_has_accessorio.idAccessorio = accessorio.idAccessorio
+					LEFT JOIN magazzino_accessorio_prenotato ON ordine_has_accessorio.idAccessorio = magazzino_accessorio_prenotato.idAccessorio
+					WHERE ordine_has_accessorio.idOrdine = " + params.idOrdine + "
+					ORDER BY ordine_has_accessorio.idAccessorio";
+        	query@Database( query )( accessoriPrenotati );
+
+	        for ( i = 0, i < #accessoriPrenotati.row, i++ ) {
+	            idAccessorio = accessoriPrenotati.row[i].idAccessorio;
+	            qta_richiesta_iniziale = accessoriPrenotati.row[i].qta_richiesta_iniziale;
+	            qta_prenotata = accessoriPrenotati.row[i].qta_prenotata;
+	            idMagazzino = accessoriPrenotati.row[i].idMagazzino;
+	            prezzo = accessoriPrenotati.row[i].prezzo;
+	            tipologia = accessoriPrenotati.row[i].tipologia;
+
+	            accessori.(idAccessorio).qta_richiesta_iniziale = qta_richiesta_iniziale;
+	            accessori.(idAccessorio).qta_prenotata += qta_prenotata;
+
+	            // accessorio da assemblare nella Sede Principale
+	            // -> reperimento degli accessori dai magazzini secondari
+	            if(tipologia == "Assemblabile" && idMagazzino != 1) {
+	            	query = "SELECT distanza
+							 FROM temp_distanze_magazzino_magazzino
+							 WHERE idMagazzinoPartenza = " + idMagazzino + " AND idMagazzinoArrivo = " + 1;
+        			query@Database( query )( distance );
+
+        			distanza = distance.row[0].distance;
+        			costo_trasporto = distanza * costi_trasporti.acme;
+        			response.totaleOrdine += costo_trasporto;
+
+        			println@Console("\nL'accessorio #" + idAccessorio + " (" + tipologia + ") deve essere trasferito dal magazzino #"+ idMagazzino + " al magazzino #1.\nTale trasporto costera' " + costo_trasporto + " EUR (" + distanza + "km x " + costi_trasporti.acme + "EUR/km)")()
+
+	            } else if((tipologia == "Non assemblabile" || tipologia == "Assemblabile facilmente") && idMagazzino != idMagazzinoPiuVicinoRivenditore){
+	            	// accessorio da non assemblare o assemblare facilmente
+	            	// -> spedizione da magazzino acme verso il magazzino acme più vicino al rivenditore
+
+	            	query = "SELECT distanza
+							FROM temp_distanze_magazzino_magazzino
+							WHERE idMagazzinoPartenza = " + idMagazzino + " AND idMagazzinoArrivo = " + idMagazzinoPiuVicinoRivenditore;
+        			query@Database( query )( distance );
+        			distanza = distance.row[0].distanza;
+        			costo_trasporto = distanza * costi_trasporti.acme;
+        			response.totaleOrdine += costo_trasporto;
+
+        			println@Console("\nL'accessorio #" + idAccessorio + " (" + tipologia + ") deve essere trasferito dal magazzino #"+ idMagazzino + " al magazzino #" + idMagazzinoPiuVicinoRivenditore + ".\nTale trasporto costera' " + costo_trasporto + " EUR (" + distanza + "km x " + costi_trasporti.acme + "EUR/km)")()
+	            }
+
+	        }
+
+	        // TODO Check se alcuni accessori devono essere acquistati dal fornitore (codice oppure query)
+
+
+
+	        // TODO Calcolo spese spedizioni componenti
+
+	        // TODO Check se alcuni componenti devono essere acquistati dal fornitore (codice oppure query)
+
+
+
+	        // TODO aggiornamento tabella 'ordine' col totale dell'ordine
+
+	    }
+	] {
+		println@Console("\n[calcoloPreventivo] COMPLETED\n")()
 	}
 }
