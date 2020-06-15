@@ -71,10 +71,18 @@ main
 	generazioneListaAccessoriPresentiMagazzini@ACMETest(params)()*/
 
 	// Notifica customizzazioni non realizzabili
-	notificaCustomizzazioniNonRealizzabili.idOrdine = "104";
+	/*notificaCustomizzazioniNonRealizzabili.idOrdine = "104";
 	notificaCustomizzazioniNonRealizzabili.idRivenditore = "1";
 	notificaCustomizzazioniNonRealizzabili@ACMETest(notificaCustomizzazioniNonRealizzabili)(response);
-	println@Console("response = " + response.message)()
+	println@Console("response = " + response.message)()*/
+
+	// calcolo preventivo
+
+	calcoloPreventivo.idOrdine = "112";
+	calcoloPreventivo.idRivenditore = "1";
+	calcoloPreventivo@ACMETest(calcoloPreventivo)(response);
+	println@Console("response.totaleOrdine = " + response.totaleOrdine)();
+	println@Console("response.sogliaSconto = " + response.sogliaSconto)()
 }
 
 
