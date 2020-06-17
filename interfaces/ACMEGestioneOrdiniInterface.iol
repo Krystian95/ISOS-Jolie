@@ -58,6 +58,9 @@ type CalcoloPreventivo: void {
 
 type CalcoloPreventivoResponse: void {
   .totaleOrdine: double
+  .totaleAccessori: double
+  .totaleCicli: double
+  .totaleCustomizzazioni: double
   .sogliaSconto: double
 }
 

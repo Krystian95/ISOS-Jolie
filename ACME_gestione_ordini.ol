@@ -535,6 +535,9 @@ main
 
 			with( response ){
 	          .totaleOrdine = 0;
+	          .totaleAccessori = 0;
+	          .totaleCicli = 0;
+	          .totaleCustomizzazioni = 0;
 	          .sogliaSconto = 800.00
 	        }
 
@@ -555,13 +558,13 @@ main
         	idMagazzinoPiuVicinoRivenditore = resultMagazzinoPiuVicinoRivenditore.row[0].idMagazzino;
 
 	        // Calcolo prezzo tutti accessori
-	        query = "SELECT ROUND(SUM(tot_accessorio), 2) AS tot_prezzo_accessori
+	        query = "SELECT ROUND(SUM(tot), 2) AS tot
 					FROM (
 						SELECT  ordine.idOrdine,
 								ordine_has_accessorio.idAccessorio,
 								ordine_has_accessorio.quantitaAccessorio,
 								accessorio.prezzoAccessorio,
-                                (ordine_has_accessorio.quantitaAccessorio * accessorio.prezzoAccessorio) AS tot_accessorio
+                                (ordine_has_accessorio.quantitaAccessorio * accessorio.prezzoAccessorio) AS tot
 						FROM ordine
 						LEFT JOIN ordine_has_accessorio ON ordine.idOrdine = ordine_has_accessorio.idOrdine
 						LEFT JOIN accessorio ON ordine_has_accessorio.idAccessorio = accessorio.idAccessorio
@@ -569,24 +572,44 @@ main
 					) AS tot";
         	query@Database( query )( result_tot_prezzo_accessori );
 
-        	tot_prezzo_accessori = result_tot_prezzo_accessori.row[0].tot_prezzo_accessori;
+        	response.totaleAccessori += result_tot_prezzo_accessori.row[0].tot;
+        	println@Console("\nTotale accessori (senza spedizioni): " + response.totaleAccessori + " EUR")();
 
-        	response.totaleOrdine += tot_prezzo_accessori;
-        	println@Console("\nTotale accessori: " + tot_prezzo_accessori + " EUR")();
-
-        	// Calcolo prezzo tutti cicli e customizzazioni
-        	query = "SELECT ROUND(SUM(tot_prezzo_cicli), 2) AS tot_prezzo_cicli
+        	// Calcolo prezzo tutti cicli
+        	query = "SELECT ROUND(SUM(tot), 2) AS tot
 					FROM (
-					SELECT SUM(tot_ciclo) AS tot_prezzo_cicli
+					SELECT SUM(tot) AS tot
 						FROM (
 							SELECT  ordine.idOrdine,
 									ordine_has_ciclo.idCiclo,
 									ordine_has_ciclo.quantitaCiclo,
 									ciclo.prezzoCiclo,
-									(ordine_has_ciclo.quantitaCiclo * ciclo.prezzoCiclo) + (ordine_has_ciclo.quantitaCiclo * customizzazione.prezzoCustomizzazione) AS tot_ciclo
+									(ordine_has_ciclo.quantitaCiclo * ciclo.prezzoCiclo) AS tot
 							FROM ordine
 							LEFT JOIN ordine_has_ciclo ON ordine.idOrdine = ordine_has_ciclo.idOrdine
 							LEFT JOIN ciclo ON ordine_has_ciclo.idCiclo = ciclo.idCiclo
+							WHERE ordine.idOrdine = " + params.idOrdine + "
+						) AS tot
+					GROUP BY idOrdine, idCiclo
+				) AS tot_complessivo";
+        	query@Database( query )( result_tot_prezzo_cicli );
+
+        	response.totaleCicli += result_tot_prezzo_cicli.row[0].tot;
+        	println@Console("\nTotale cicli (senza spedizioni): " + response.totaleCicli + " EUR")();
+
+        	// Calcolo prezzo tutte customizzazioni
+        	query = "SELECT ROUND(SUM(tot), 2) AS tot
+					FROM (
+					SELECT SUM(tot) AS tot
+						FROM (
+							SELECT  ordine.idOrdine,
+									ordine_has_ciclo.idCiclo,
+									ordine_has_ciclo.quantitaCiclo,
+                                    ordine_has_ciclo_has_customizzazione.idCustomizzazione,
+                                    customizzazione.prezzoCustomizzazione,
+									(ordine_has_ciclo.quantitaCiclo * customizzazione.prezzoCustomizzazione) AS tot
+							FROM ordine
+							LEFT JOIN ordine_has_ciclo ON ordine.idOrdine = ordine_has_ciclo.idOrdine
 							LEFT JOIN ordine_has_ciclo_has_customizzazione ON ordine.idOrdine = ordine_has_ciclo_has_customizzazione.idOrdine AND
 																			  ordine_has_ciclo.idCiclo = ordine_has_ciclo_has_customizzazione.idCiclo
 							LEFT JOIN customizzazione ON ordine_has_ciclo_has_customizzazione.idCustomizzazione = customizzazione.idCustomizzazione
@@ -594,12 +617,10 @@ main
 						) AS tot
 					GROUP BY idOrdine, idCiclo
 				) AS tot_complessivo";
-        	query@Database( query )( result_tot_prezzo_cicli );
+        	query@Database( query )( result_tot_prezzo_customizzazioni );
 
-        	tot_prezzo_cicli = result_tot_prezzo_cicli.row[0].tot_prezzo_cicli;
-
-        	response.totaleOrdine += tot_prezzo_cicli;
-        	println@Console("\nTotale cicli (incluse customizzazioni): " + tot_prezzo_cicli + " EUR")();
+        	response.totaleCustomizzazioni += result_tot_prezzo_customizzazioni.row[0].tot;
+        	println@Console("\nTotale customizzazioni (senza spedizioni): " + response.totaleCustomizzazioni + " EUR")();
 
         	// Calcolo spese spedizioni accessori
 			query = "SELECT	ordine_has_accessorio.idOrdine,
@@ -614,7 +635,8 @@ main
 						accessorio.prezzoAccessorio AS prezzo
 					FROM ordine_has_accessorio
 					LEFT JOIN accessorio ON ordine_has_accessorio.idAccessorio = accessorio.idAccessorio
-					LEFT JOIN magazzino_accessorio_prenotato ON ordine_has_accessorio.idAccessorio = magazzino_accessorio_prenotato.idAccessorio
+					LEFT JOIN magazzino_accessorio_prenotato ON ordine_has_accessorio.idOrdine = magazzino_accessorio_prenotato.idOrdine AND
+																ordine_has_accessorio.idAccessorio = magazzino_accessorio_prenotato.idAccessorio
 					WHERE ordine_has_accessorio.idOrdine = " + params.idOrdine + "
 					ORDER BY ordine_has_accessorio.idAccessorio";
         	query@Database( query )( accessoriPrenotati );
@@ -637,6 +659,10 @@ main
 	            	response.totaleOrdine += costo_fornitore;
 	            	println@Console("\nL'accessorio #" + idAccessorio + " NON e' stato prenotato e quindi deve essere acquistato dal fornitore. Il costo fisso per la spedizione del fornitore e' di " + costo_fornitore + " EUR")()
 
+	            } else if(tipologia == "Assemblabile" && idMagazzino == 1){
+
+	            	println@Console("\nL'accessorio #" + idAccessorio + " si trova gia' nel magazzino #1. Trasferimento non necessario")()
+
 	            } else if(tipologia == "Assemblabile" && idMagazzino != 1) {
 	            	// accessorio da assemblare nella Sede Principale
 	            	// -> reperimento degli accessori dai magazzini secondari
@@ -646,9 +672,9 @@ main
 							 WHERE idMagazzinoPartenza = " + idMagazzino + " AND idMagazzinoArrivo = " + 1;
         			query@Database( query )( distance );
 
-        			distanza = distance.row[0].distance;
+        			distanza = distance.row[0].distanza;
         			costo_trasporto = distanza * costi_trasporti.acme;
-        			response.totaleOrdine += costo_trasporto;
+        			response.totaleAccessori += costo_trasporto;
 
         			roundRequest = costo_trasporto;
 			        roundRequest.decimals = 2;
@@ -656,6 +682,10 @@ main
 			        costo_trasporto = roundResponse;
 
         			println@Console("\nL'accessorio #" + idAccessorio + " (" + tipologia + ") deve essere trasferito dal magazzino #"+ idMagazzino + " alla Sede Principale (Assemblaggio). Tale trasporto costera' " + costo_trasporto + " EUR (" + distanza + "km x " + costi_trasporti.acme + " EUR/km)")()
+
+	            } else if((tipologia == "Non assemblabile" || tipologia == "Assemblabile facilmente") && idMagazzino == idMagazzinoPiuVicinoRivenditore){
+
+	            	println@Console("\nL'accessorio #" + idAccessorio + " si trova gia' nel magazzino #" + idMagazzinoPiuVicinoRivenditore + " piu' vicino al rivenditore. Trasferimento non necessario")()
 
 	            } else if((tipologia == "Non assemblabile" || tipologia == "Assemblabile facilmente") && idMagazzino != idMagazzinoPiuVicinoRivenditore){
 	            	// accessorio da non assemblare o assemblare facilmente
@@ -668,7 +698,7 @@ main
 
         			distanza = distance.row[0].distanza;
         			costo_trasporto = distanza * costi_trasporti.acme;
-        			response.totaleOrdine += costo_trasporto;
+        			response.totaleAccessori += costo_trasporto;
 
         			roundRequest = costo_trasporto;
 			        roundRequest.decimals = 2;
@@ -678,6 +708,8 @@ main
         			println@Console("\nL'accessorio #" + idAccessorio + " (" + tipologia + ") deve essere trasferito dal magazzino #"+ idMagazzino + " al magazzino #" + idMagazzinoPiuVicinoRivenditore + ". Tale trasporto costera' " + costo_trasporto + " EUR (" + distanza + "km x " + costi_trasporti.acme + " EUR/km)")()
 	            }
 	        }
+
+	        println@Console("\nTotale accessori (incluse spedizioni): " + response.totaleAccessori + " EUR")();
 
 	        // TODO Check se alcuni accessori devono essere acquistati dal fornitore (codice oppure query)
 
@@ -693,13 +725,15 @@ main
 
 	        // TODO aggiornamento tabella 'ordine' col totale dell'ordine
 
+	        response.totaleOrdine = response.totaleAccessori + response.totaleCicli + response.totaleCustomizzazioni;
+
 	        roundRequest = response.totaleOrdine;
 	        roundRequest.decimals = 2;
 	        round@Math(roundRequest)(roundResponse);
 	        response.totaleOrdine = roundResponse;
 
-	        println@Console("\nTotale ordine: " + response.totaleOrdine + " EUR")();
-	        println@Console("Soglia sconto: " + response.sogliaSconto + " EUR")()
+	        println@Console("\nTotale ordine (incluse spedizioni): " + response.totaleOrdine + " EUR")();
+	        println@Console("\nSoglia sconto: " + response.sogliaSconto + " EUR")()
 
 	    }
 	] {

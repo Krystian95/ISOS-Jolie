@@ -78,7 +78,7 @@ main
 
 	// calcolo preventivo
 
-	calcoloPreventivo.idOrdine = "112";
+	calcoloPreventivo.idOrdine = "127";
 	calcoloPreventivo.idRivenditore = "1";
 	calcoloPreventivo@ACMETest(calcoloPreventivo)(response);
 	println@Console("response.totaleOrdine = " + response.totaleOrdine)();
