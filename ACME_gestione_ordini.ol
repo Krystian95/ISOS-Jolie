@@ -649,6 +649,8 @@ main
 	            prezzo = accessoriPrenotati.row[i].prezzo;
 	            tipologia = accessoriPrenotati.row[i].tipologia;
 
+				accessori.(idAccessorio).idAccessorio = idAccessorio;
+
 	            accessori.(idAccessorio).qta_richiesta_iniziale = qta_richiesta_iniziale;
 	            accessori.(idAccessorio).qta_prenotata += qta_prenotata;
 
@@ -656,7 +658,7 @@ main
 	            	// accessorio non prenotato perchè non presente in magazzino
 
 	            	costo_fornitore = costi_trasporti.fornitore_fisso;
-	            	response.totaleOrdine += costo_fornitore;
+	            	response.totaleAccessori += costo_fornitore;
 	            	println@Console("\nL'accessorio #" + idAccessorio + " NON e' stato prenotato e quindi deve essere acquistato dal fornitore. Il costo fisso per la spedizione del fornitore e' di " + costo_fornitore + " EUR")()
 
 	            } else if(tipologia == "Assemblabile" && idMagazzino == 1){
@@ -709,6 +711,13 @@ main
 	            }
 	        }
 
+	        // Alcuni accessori non presenti nei magazzini
+	        /*for ( i = 0, i < #accessori, i++ ) {
+				costo_fornitore = costi_trasporti.fornitore_fisso;
+	            response.totaleOrdine += costo_fornitore;
+	            println@Console("\nL'accessorio #" + idAccessorio + " NON e' presente in tutte le qua e quindi deve essere acquistato dal fornitore. Il costo fisso per la spedizione del fornitore e' di " + costo_fornitore + " EUR")()
+	        }*/
+
 	        println@Console("\nTotale accessori (incluse spedizioni): " + response.totaleAccessori + " EUR")();
 
 	        // TODO Check se alcuni accessori devono essere acquistati dal fornitore (codice oppure query)
@@ -732,7 +741,7 @@ main
 	        round@Math(roundRequest)(roundResponse);
 	        response.totaleOrdine = roundResponse;
 
-	        println@Console("\nTotale ordine (incluse spedizioni): " + response.totaleOrdine + " EUR")();
+	        println@Console("\n\nTotale ordine (incluse spedizioni): " + response.totaleOrdine + " EUR")();
 	        println@Console("\nSoglia sconto: " + response.sogliaSconto + " EUR")()
 
 	    }
