@@ -712,17 +712,33 @@ main
 	        }
 
 	        // Alcuni accessori non presenti nei magazzini
-	        /*for ( i = 0, i < #accessori, i++ ) {
-				costo_fornitore = costi_trasporti.fornitore_fisso;
-	            response.totaleOrdine += costo_fornitore;
-	            println@Console("\nL'accessorio #" + idAccessorio + " NON e' presente in tutte le qua e quindi deve essere acquistato dal fornitore. Il costo fisso per la spedizione del fornitore e' di " + costo_fornitore + " EUR")()
-	        }*/
+	        query = "SELECT	ordine_has_accessorio.idOrdine,
+						ordine_has_accessorio.idAccessorio,
+						accessorio.tipologia,
+						ordine_has_accessorio.quantitaAccessorio AS qta_richiesta_iniziale,
+						SUM(magazzino_accessorio_prenotato.quantita) AS qta_prenotata
+					FROM ordine_has_accessorio
+					LEFT JOIN accessorio ON ordine_has_accessorio.idAccessorio = accessorio.idAccessorio
+					LEFT JOIN magazzino_accessorio_prenotato ON ordine_has_accessorio.idOrdine = magazzino_accessorio_prenotato.idOrdine AND
+																ordine_has_accessorio.idAccessorio = magazzino_accessorio_prenotato.idAccessorio
+					WHERE ordine_has_accessorio.idOrdine = " + params.idOrdine + "
+                    GROUP BY ordine_has_accessorio.idOrdine, ordine_has_accessorio.idAccessorio
+                    HAVING SUM(magazzino_accessorio_prenotato.quantita) < ordine_has_accessorio.quantitaAccessorio OR SUM(magazzino_accessorio_prenotato.quantita) IS NULL
+					ORDER BY ordine_has_accessorio.idAccessorio";
+        	query@Database( query )( accessoriFornitore );
+
+	        for ( i = 0, i < #accessoriFornitore.row, i++ ) {
+	        	qta_richiesta_iniziale = accessoriFornitore.row[i].qta_richiesta_iniziale;
+	        	qta_prenotata = accessoriFornitore.row[i].qta_prenotata;
+
+	        	if(qta_prenotata < qta_richiesta_iniziale){
+	        		costo_fornitore = costi_trasporti.fornitore_fisso;
+	            	response.totaleAccessori += costo_fornitore;
+	    			println@Console("\nL'accessorio #" + idAccessorio + " NON e' stato prenotato in tutte le quantita' necessarie, quindi deve essere acquistato dal fornitore. Il costo fisso per la spedizione del fornitore e' di " + costo_fornitore + " EUR")()
+	        	}
+	        }
 
 	        println@Console("\nTotale accessori (incluse spedizioni): " + response.totaleAccessori + " EUR")();
-
-	        // TODO Check se alcuni accessori devono essere acquistati dal fornitore (codice oppure query)
-
-
 
 	        // TODO Calcolo spese spedizioni componenti
 
@@ -741,7 +757,9 @@ main
 	        round@Math(roundRequest)(roundResponse);
 	        response.totaleOrdine = roundResponse;
 
-	        println@Console("\n\nTotale ordine (incluse spedizioni): " + response.totaleOrdine + " EUR")();
+	        println@Console("\n- - - - - - - - - - - - - - - - - - ")()
+
+	        println@Console("\nTotale ordine (incluse spedizioni): " + response.totaleOrdine + " EUR")();
 	        println@Console("\nSoglia sconto: " + response.sogliaSconto + " EUR")()
 
 	    }
