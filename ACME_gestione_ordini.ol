@@ -730,6 +730,7 @@ main
 	        for ( i = 0, i < #accessoriFornitore.row, i++ ) {
 	        	qta_richiesta_iniziale = accessoriFornitore.row[i].qta_richiesta_iniziale;
 	        	qta_prenotata = accessoriFornitore.row[i].qta_prenotata;
+	        	idAccessorio = accessoriFornitore.row[i].idAccessorio;
 
 	        	if(qta_prenotata < qta_richiesta_iniziale){
 	        		costo_fornitore = costi_trasporti.fornitore_fisso;
