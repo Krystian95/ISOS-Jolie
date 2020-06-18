@@ -723,7 +723,7 @@ main
 																ordine_has_accessorio.idAccessorio = magazzino_accessorio_prenotato.idAccessorio
 					WHERE ordine_has_accessorio.idOrdine = " + params.idOrdine + "
                     GROUP BY ordine_has_accessorio.idOrdine, ordine_has_accessorio.idAccessorio
-                    HAVING SUM(magazzino_accessorio_prenotato.quantita) < ordine_has_accessorio.quantitaAccessorio OR SUM(magazzino_accessorio_prenotato.quantita) IS NULL
+                    HAVING SUM(magazzino_accessorio_prenotato.quantita) < ordine_has_accessorio.quantitaAccessorio
 					ORDER BY ordine_has_accessorio.idAccessorio";
         	query@Database( query )( accessoriFornitore );
 
