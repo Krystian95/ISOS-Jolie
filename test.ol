@@ -75,7 +75,7 @@ main
 	calcoloPreventivo.idOrdine = "134";
 	calcoloPreventivo.idRivenditore = "1";
 	calcoloPreventivo@ACMETest(calcoloPreventivo)(response);
-	println@Console("response.totaleOrdine = " + response.totaleOrdine)();
+	println@Console("response.totalePreventivo = " + response.totalePreventivo)();
 	println@Console("response.sogliaSconto = " + response.sogliaSconto)()
 }
 

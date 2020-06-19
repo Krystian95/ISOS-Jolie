@@ -57,12 +57,13 @@ type CalcoloPreventivo: void {
 }
 
 type CalcoloPreventivoResponse: void {
-  .totaleOrdine: double
   .totaleAccessori: double
   .spedizioniAccessori: double
   .totaleCicli: double
   .spedizioniComponenti: double
   .totaleCustomizzazioni: double
+  .totaleCorriere: double
+  .totalePreventivo: double
   .sogliaSconto: double
 }
 
