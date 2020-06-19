@@ -429,7 +429,7 @@ main
 	        distance = distanceMagazzino1;
 	        println@Console("Il magazzino #" + idMagazzino + " dista " + distance + "km dal rivenditore")();
 			query = "INSERT INTO temp_distanze_rivenditore_magazzini
-					 (idRivenditore, idMagazzino, distance)
+					 (idRivenditore, idMagazzino, distanza)
 					 VALUES
 					 (" + idRivenditore + ", " + idMagazzino + ", " + distance + ")";
 			update@Database( query )( responseNewDistance );
@@ -438,7 +438,7 @@ main
 	        distance = distanceMagazzino2;
 	        println@Console("Il magazzino #" + idMagazzino + " dista " + distance + "km dal rivenditore")();
 			query = "INSERT INTO temp_distanze_rivenditore_magazzini
-					 (idRivenditore, idMagazzino, distance)
+					 (idRivenditore, idMagazzino, distanza)
 					 VALUES
 					 (" + idRivenditore + ", " + idMagazzino + ", " + distance + ")";
 			update@Database( query )( responseNewDistance );
@@ -447,7 +447,7 @@ main
 	        distance = distanceMagazzino3;
 	        println@Console("Il magazzino #" + idMagazzino + " dista " + distance + "km dal rivenditore")();
 			query = "INSERT INTO temp_distanze_rivenditore_magazzini
-					 (idRivenditore, idMagazzino, distance)
+					 (idRivenditore, idMagazzino, distanza)
 					 VALUES
 					 (" + idRivenditore + ", " + idMagazzino + ", " + distance + ")";
 			update@Database( query )( responseNewDistance );
@@ -456,7 +456,7 @@ main
 	        distance = distanceMagazzino4;
 	        println@Console("Il magazzino #" + idMagazzino + " dista " + distance + "km dal rivenditore")();
 			query = "INSERT INTO temp_distanze_rivenditore_magazzini
-					 (idRivenditore, idMagazzino, distance)
+					 (idRivenditore, idMagazzino, distanza)
 					 VALUES
 					 (" + idRivenditore + ", " + idMagazzino + ", " + distance + ")";
 			update@Database( query )( responseNewDistance );
@@ -466,7 +466,7 @@ main
 							Ordine_has_Accessorio.quantitaAccessorio AS qta_richiesta,
                             magazzino_has_accessorio.idMagazzino,
                             magazzino_has_accessorio.quantita AS qta_disponibile,
-                            temp_distanze_rivenditore_magazzini.distance
+                            temp_distanze_rivenditore_magazzini.distanza
 					 FROM Ordine_has_Accessorio
 					 LEFT JOIN Accessorio ON Ordine_has_Accessorio.idAccessorio = Accessorio.idAccessorio
                      LEFT JOIN magazzino_has_accessorio ON Ordine_has_Accessorio.idAccessorio = magazzino_has_accessorio.idAccessorio
@@ -476,7 +476,7 @@ main
 					 WHERE Ordine_has_Accessorio.idOrdine = " + params.idOrdine + " AND
 							tipologia IN ('Non assemblabile', 'Assemblabile facilmente') AND
                             magazzino_has_accessorio.quantita > 0
-					ORDER BY temp_distanze_rivenditore_magazzini.distance ASC";
+					ORDER BY temp_distanze_rivenditore_magazzini.distanza ASC";
         	query@Database( query )( accessoriMagazzini );
 
         	for ( i = 0, i < #accessoriMagazzini.row, i++ ) {
@@ -551,7 +551,7 @@ main
 	        query = "SELECT idMagazzino
 					FROM temp_distanze_rivenditore_magazzini
 					WHERE idRivenditore = " + params.idRivenditore + "
-					ORDER BY distance ASC
+					ORDER BY distanza ASC
 					LIMIT 1";
         	query@Database( query )( resultMagazzinoPiuVicinoRivenditore );
 
