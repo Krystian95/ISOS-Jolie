@@ -536,14 +536,17 @@ main
 			with( response ){
 	          .totaleOrdine = 0;
 	          .totaleAccessori = 0;
+	          .spedizioniAccessori = 0;
 	          .totaleCicli = 0;
+	          .spedizioniComponenti = 0;
 	          .totaleCustomizzazioni = 0;
 	          .sogliaSconto = 800.00
 	        }
 
 	        with( costi_trasporti ){
 	          .acme = 0.05;
-	          .fornitore_fisso = 10
+	          .fornitore_fisso = 10;
+	          .corriere = 0.10
 	        }
 
 	        // Magazzino più vicino al rivenditore
@@ -623,6 +626,9 @@ main
         	println@Console("\nTotale customizzazioni (senza spedizioni): " + response.totaleCustomizzazioni + " EUR")();
 
         	// Calcolo spese spedizioni accessori
+
+			println@Console("\nCalcolo spese spedizioni accessori [prenotati]...")();
+
 			query = "SELECT	ordine_has_accessorio.idOrdine,
 						ordine_has_accessorio.idAccessorio,
 						accessorio.tipologia,
@@ -631,8 +637,7 @@ main
 							THEN 0
 							ELSE magazzino_accessorio_prenotato.quantita
 						END AS qta_prenotata,
-						magazzino_accessorio_prenotato.idMagazzino,
-						accessorio.prezzoAccessorio AS prezzo
+						magazzino_accessorio_prenotato.idMagazzino
 					FROM ordine_has_accessorio
 					LEFT JOIN accessorio ON ordine_has_accessorio.idAccessorio = accessorio.idAccessorio
 					LEFT JOIN magazzino_accessorio_prenotato ON ordine_has_accessorio.idOrdine = magazzino_accessorio_prenotato.idOrdine AND
@@ -646,19 +651,13 @@ main
 	            qta_richiesta_iniziale = accessoriPrenotati.row[i].qta_richiesta_iniziale;
 	            qta_prenotata = accessoriPrenotati.row[i].qta_prenotata;
 	            idMagazzino = accessoriPrenotati.row[i].idMagazzino;
-	            prezzo = accessoriPrenotati.row[i].prezzo;
 	            tipologia = accessoriPrenotati.row[i].tipologia;
-
-				accessori.(idAccessorio).idAccessorio = idAccessorio;
-
-	            accessori.(idAccessorio).qta_richiesta_iniziale = qta_richiesta_iniziale;
-	            accessori.(idAccessorio).qta_prenotata += qta_prenotata;
 
 	            if(idMagazzino == 0) {
 	            	// accessorio non prenotato perchè non presente in magazzino
 
 	            	costo_fornitore = costi_trasporti.fornitore_fisso;
-	            	response.totaleAccessori += costo_fornitore;
+	            	response.spedizioniAccessori += costo_fornitore;
 	            	println@Console("\nL'accessorio #" + idAccessorio + " NON e' stato prenotato e quindi deve essere acquistato dal fornitore. Il costo fisso per la spedizione del fornitore e' di " + costo_fornitore + " EUR")()
 
 	            } else if(tipologia == "Assemblabile" && idMagazzino == 1){
@@ -676,7 +675,7 @@ main
 
         			distanza = distance.row[0].distanza;
         			costo_trasporto = distanza * costi_trasporti.acme;
-        			response.totaleAccessori += costo_trasporto;
+        			response.spedizioniAccessori += costo_trasporto;
 
         			roundRequest = costo_trasporto;
 			        roundRequest.decimals = 2;
@@ -700,7 +699,7 @@ main
 
         			distanza = distance.row[0].distanza;
         			costo_trasporto = distanza * costi_trasporti.acme;
-        			response.totaleAccessori += costo_trasporto;
+        			response.spedizioniAccessori += costo_trasporto;
 
         			roundRequest = costo_trasporto;
 			        roundRequest.decimals = 2;
@@ -712,6 +711,9 @@ main
 	        }
 
 	        // Alcuni accessori non presenti nei magazzini
+
+	        println@Console("\nCalcolo spese spedizioni accessori [NON prenotati]...")();
+
 	        query = "SELECT	ordine_has_accessorio.idOrdine,
 						ordine_has_accessorio.idAccessorio,
 						accessorio.tipologia,
@@ -734,31 +736,131 @@ main
 
 	        	if(qta_prenotata < qta_richiesta_iniziale){
 	        		costo_fornitore = costi_trasporti.fornitore_fisso;
-	            	response.totaleAccessori += costo_fornitore;
+	            	response.spedizioniAccessori += costo_fornitore;
 	    			println@Console("\nL'accessorio #" + idAccessorio + " NON e' stato prenotato in tutte le quantita' necessarie, quindi deve essere acquistato dal fornitore. Il costo fisso per la spedizione del fornitore e' di " + costo_fornitore + " EUR")()
 	        	}
 	        }
 
-	        println@Console("\nTotale accessori (incluse spedizioni): " + response.totaleAccessori + " EUR")();
+	        println@Console("\nTotale spedizioni accessori: " + response.spedizioniAccessori + " EUR")();
 
-	        // TODO Calcolo spese spedizioni componenti
+	        println@Console("\nTotale accessori (incluse spedizioni): " + (response.totaleAccessori + response.spedizioniAccessori) + " EUR")();
 
-	        // TODO Check se alcuni componenti devono essere acquistati dal fornitore (codice oppure query)
+	        // Calcolo spese spedizioni componenti
+
+			println@Console("\nCalcolo spese spedizioni componenti [prenotati]...")();
+
+			query = "SELECT	Ordine_has_Ciclo.idOrdine,
+						Ordine_has_Ciclo.idCiclo,
+						Ciclo_has_Componente.idComponente,
+						(1 * Ordine_has_Ciclo.quantitaCiclo) qta_richiesta_iniziale,
+						CASE WHEN Magazzino_componente_prenotato.quantita IS NULL
+							THEN 0
+							ELSE Magazzino_componente_prenotato.quantita
+						END AS qta_prenotata,
+						Magazzino_componente_prenotato.idMagazzino
+					FROM Ordine_has_Ciclo
+					LEFT JOIN ciclo ON Ordine_has_Ciclo.idCiclo = ciclo.idCiclo
+                    LEFT JOIN Ciclo_has_Componente ON ciclo.idCiclo = Ciclo_has_Componente.idCiclo
+					LEFT JOIN Magazzino_componente_prenotato ON Ordine_has_Ciclo.idOrdine = Magazzino_componente_prenotato.idOrdine AND
+																Ciclo_has_Componente.idComponente = Magazzino_componente_prenotato.idComponente
+					WHERE Ordine_has_Ciclo.idOrdine = " + params.idOrdine + "
+					ORDER BY Ordine_has_Ciclo.idCiclo, Ciclo_has_Componente.idComponente";
+        	query@Database( query )( componentiPrenotati );
+
+	        for ( i = 0, i < #componentiPrenotati.row, i++ ) {
+	            idCiclo = componentiPrenotati.row[i].idCiclo;
+	            idComponente = componentiPrenotati.row[i].idComponente;
+	            qta_richiesta_iniziale = componentiPrenotati.row[i].qta_richiesta_iniziale;
+	            qta_prenotata = componentiPrenotati.row[i].qta_prenotata;
+	            idMagazzino = componentiPrenotati.row[i].idMagazzino;
+
+	            if(idMagazzino == 0) {
+	            	// componente non prenotato perchè non presente in magazzino
+
+	            	costo_fornitore = costi_trasporti.fornitore_fisso;
+	            	response.spedizioniComponenti += costo_fornitore;
+	            	println@Console("\nIl componente #" + idComponente + " del ciclo #" + idCiclo + " NON e' stato prenotato e quindi deve essere acquistato dal fornitore. Il costo fisso per la spedizione del fornitore e' di " + costo_fornitore + " EUR")()
+
+	            } else if(idMagazzino == 1){
+
+	            	println@Console("\nIl componente #" + idComponente + " del ciclo #" + idCiclo + " si trova gia' nel magazzino #1. Trasferimento non necessario")()
+
+	            } else if(idMagazzino != 1) {
+	            	// componente nella Sede Principale
+	            	// -> reperimento componenti dai magazzini secondari
+
+	            	query = "SELECT ROUND(distanza, 2) AS distanza
+							 FROM temp_distanze_magazzino_magazzino
+							 WHERE idMagazzinoPartenza = " + idMagazzino + " AND idMagazzinoArrivo = " + 1;
+        			query@Database( query )( distance );
+
+        			distanza = distance.row[0].distanza;
+        			costo_trasporto = distanza * costi_trasporti.acme;
+        			response.spedizioniComponenti += costo_trasporto;
+
+        			roundRequest = costo_trasporto;
+			        roundRequest.decimals = 2;
+			        round@Math(roundRequest)(roundResponse);
+			        costo_trasporto = roundResponse;
+
+        			println@Console("\nIl componente #" + idComponente + " del ciclo #" + idCiclo + " deve essere trasferito dal magazzino #"+ idMagazzino + " alla Sede Principale (Assemblaggio). Tale trasporto costera' " + costo_trasporto + " EUR (" + distanza + "km x " + costi_trasporti.acme + " EUR/km)")()
+	            }
+	        }
+
+	        // Alcuni componenti non presenti nei magazzini
+
+	        println@Console("\nCalcolo spese spedizioni componenti [NON prenotati]...")();
+
+	        query = "SELECT	Ordine_has_Ciclo.idOrdine,
+						Ordine_has_Ciclo.idCiclo,
+						Ciclo_has_Componente.idComponente,
+						(1 * Ordine_has_Ciclo.quantitaCiclo) AS qta_richiesta_iniziale,
+						SUM(Magazzino_componente_prenotato.quantita) AS qta_prenotata
+					FROM Ordine_has_Ciclo
+					LEFT JOIN ciclo ON Ordine_has_Ciclo.idCiclo = ciclo.idCiclo
+                    LEFT JOIN Ciclo_has_Componente ON ciclo.idCiclo = Ciclo_has_Componente.idCiclo
+					LEFT JOIN Magazzino_componente_prenotato ON Ordine_has_Ciclo.idOrdine = Magazzino_componente_prenotato.idOrdine AND
+																Ordine_has_Ciclo.idCiclo = Magazzino_componente_prenotato.idCiclo AND 
+																Ciclo_has_Componente.idComponente = Magazzino_componente_prenotato.idComponente
+					WHERE Ordine_has_Ciclo.idOrdine = " + params.idOrdine + "
+                    GROUP BY Ordine_has_Ciclo.idOrdine, Ordine_has_Ciclo.idCiclo, Ciclo_has_Componente.idComponente
+                    HAVING SUM(Magazzino_componente_prenotato.quantita) IS NOT NULL
+					ORDER BY Ordine_has_Ciclo.idCiclo, Ciclo_has_Componente.idComponente";
+        	query@Database( query )( componentiFornitore );
+
+	        for ( i = 0, i < #componentiFornitore.row, i++ ) {
+	        	qta_richiesta_iniziale = componentiFornitore.row[i].qta_richiesta_iniziale;
+	        	qta_prenotata = componentiFornitore.row[i].qta_prenotata;
+	        	idCiclo = componentiFornitore.row[i].idCiclo;
+	        	idComponente = componentiFornitore.row[i].idComponente;
+
+	        	if(qta_prenotata < qta_richiesta_iniziale){
+	        		costo_fornitore = costi_trasporti.fornitore_fisso;
+	            	response.spedizioniComponenti += costo_fornitore;
+	    			println@Console("\nIl componente #" + idComponente + " del ciclo #" + idCiclo + " NON e' stato prenotato in tutte le quantita' necessarie, quindi deve essere acquistato dal fornitore. Il costo fisso per la spedizione del fornitore e' di " + costo_fornitore + " EUR")()
+	        	}
+	        }
+
+	        println@Console("\nTotale spedizioni componenti: " + response.spedizioniComponenti + " EUR")();
+
+	        println@Console("\nTotale cicli (incluse spedizioni): " + (response.totaleCicli + response.spedizioniComponenti) + " EUR")();
+
 
 	        // TODO Calcolo costo corriere (dal magazzino di partenza al rivenditore * 0,10 EUR)
 
 
-
-	        // TODO aggiornamento tabella 'ordine' col totale dell'ordine
-
-	        response.totaleOrdine = response.totaleAccessori + response.totaleCicli + response.totaleCustomizzazioni;
+	        response.totaleOrdine = response.totaleAccessori + 
+	        						response.spedizioniAccessori +
+	        						response.totaleCicli + 
+	        						response.spedizioniComponenti +
+	        						response.totaleCustomizzazioni;
 
 	        roundRequest = response.totaleOrdine;
 	        roundRequest.decimals = 2;
 	        round@Math(roundRequest)(roundResponse);
 	        response.totaleOrdine = roundResponse;
 
-	        println@Console("\n- - - - - - - - - - - - - - - - - - ")()
+	        println@Console("\n- - - - - - - - - - - - - - - - - - - - - - ")()
 
 	        println@Console("\nTotale ordine (incluse spedizioni): " + response.totaleOrdine + " EUR")();
 	        println@Console("\nSoglia sconto: " + response.sogliaSconto + " EUR")()

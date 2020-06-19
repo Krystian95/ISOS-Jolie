@@ -34,9 +34,6 @@ main
 	println@Console("\nTEST...\n")();
 
 	// Customizzazioni realizzabili
-
-	// 27 non realizzabili
-	// 62: realizzabili
 	
 	/*idOrdine.idOrdine = "27";
 	verificaCustomizzazioni@ACMEService(idOrdine)(response);
@@ -44,18 +41,14 @@ main
 
 	// Verifica disponibilità accessori e componenti nel MP
 
-	// 27 (1 accessorio sì, 1 no - no tutti componenti)
-	// 63 (1 accessorio sì - no tutti componenti)
-	/*prenotazioneMaterialiPresentiMP.idOrdine = "96";
+	/*prenotazioneMaterialiPresentiMP.idOrdine = "134";
 	prenotazioneMaterialiPresentiMP@ACMETest(prenotazioneMaterialiPresentiMP)(response);
 	println@Console("tuttiMaterialiRichiestiPresentiMP = " + response.tuttiMaterialiRichiestiPresentiMP)();
 	println@Console("response = " + response.message)();*/
 
 	// Verifica disponibilità accessori e componenti nel MS
 
-	// 27 (1 accessorio sì, 1 no - no tutti componenti)
-	// 63 (1 accessorio sì - no tutti componenti)
-	/*prenotazioneMaterialiPresentiMS.idOrdine = "96";
+	/*prenotazioneMaterialiPresentiMS.idOrdine = "134";
 	prenotazioneMaterialiPresentiMS@ACMETest(prenotazioneMaterialiPresentiMS)(response);
 	println@Console("response = " + response.message)()*/
 
@@ -67,10 +60,11 @@ main
 
 	// generazioneListaAccessoriPresentiMagazzini
 
-	/*params.idOrdine = "98";
+	/*params.idOrdine = "134";
 	generazioneListaAccessoriPresentiMagazzini@ACMETest(params)()*/
 
 	// Notifica customizzazioni non realizzabili
+	
 	/*notificaCustomizzazioniNonRealizzabili.idOrdine = "104";
 	notificaCustomizzazioniNonRealizzabili.idRivenditore = "1";
 	notificaCustomizzazioniNonRealizzabili@ACMETest(notificaCustomizzazioniNonRealizzabili)(response);
@@ -78,7 +72,7 @@ main
 
 	// calcolo preventivo
 
-	calcoloPreventivo.idOrdine = "132";
+	calcoloPreventivo.idOrdine = "134";
 	calcoloPreventivo.idRivenditore = "1";
 	calcoloPreventivo@ACMETest(calcoloPreventivo)(response);
 	println@Console("response.totaleOrdine = " + response.totaleOrdine)();
