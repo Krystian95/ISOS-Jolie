@@ -67,6 +67,17 @@ type CalcoloPreventivoResponse: void {
   .sogliaSconto: double
 }
 
+// Applicazione sconto
+
+type ApplicazioneSconto: void {
+  .idOrdine: string
+  .percentualeSconto: string
+}
+
+type ApplicazioneScontoResponse: void {
+  .message: string
+}
+
 // Get id ordine
 
 type IdOrdineRivenditore: void {
@@ -89,7 +100,8 @@ interface ACMEGestioneOrdiniInterface {
                     prenotazioneMaterialiPresentiMP( PrenotazioneMaterialiPresentiMP )( ResponsePrenotazioneMaterialiPresentiMP ),
                     prenotazioneMaterialiPresentiMS( PrenotazioneMaterialiPresentiMS )( ResponsePrenotazioneMaterialiPresentiMS ),
                     generazioneListaAccessoriPresentiMagazzini( GenerazioneListaAccessoriPresentiMagazzini )( ResponseGenerazioneListaAccessoriPresentiMagazzini ),
-                    calcoloPreventivo( CalcoloPreventivo )( CalcoloPreventivoResponse)
+                    calcoloPreventivo( CalcoloPreventivo )( CalcoloPreventivoResponse),
+                    applicazioneSconto( ApplicazioneSconto )( ApplicazioneScontoResponse)
 }
 
 

@@ -944,6 +944,13 @@ main
 	        						response.totaleCustomizzazioni + 
 	        						response.totaleCorriere;
 
+        	// Salvataggio nel db
+
+        	query = "UPDATE Ordine
+					SET totalePreventivo = " + response.totalePreventivo + "
+					WHERE idOrdine = " + params.idOrdine;
+			update@Database( query )( resultUpdatePreventivo );
+
 	        roundRequest = response.totalePreventivo;
 	        roundRequest.decimals = 2;
 	        round@Math(roundRequest)(roundResponse);
@@ -957,5 +964,20 @@ main
 	    }
 	] {
 		println@Console("\n[calcoloPreventivo] COMPLETED\n")()
+	}
+
+	[
+		applicazioneSconto ( params )( response ) {
+
+			query = "UPDATE Ordine
+					SET totalePreventivo = totalePreventivo - (totalePreventivo / 100 * " + params.percentualeSconto + ")
+					WHERE idOrdine = " + params.idOrdine;
+			update@Database( query )( resultUpdatePreventivo );
+
+			response.message = "Sconto del " + params.percentualeSconto + "% applicato correttamente all'ordine #" + params.idOrdine;
+			println@Console(response.message)()
+	    }
+	] {
+		println@Console("\n[applicazioneSconto] COMPLETED\n")()
 	}
 }

@@ -76,7 +76,14 @@ main
 	calcoloPreventivo.idRivenditore = "1";
 	calcoloPreventivo@ACMETest(calcoloPreventivo)(response);
 	println@Console("response.totalePreventivo = " + response.totalePreventivo)();
-	println@Console("response.sogliaSconto = " + response.sogliaSconto)()
+	println@Console("response.sogliaSconto = " + response.sogliaSconto)();
+
+	// Applicazione sconto
+
+	applicazioneSconto.idOrdine = "134";
+	applicazioneSconto.percentualeSconto = "50";
+	applicazioneSconto@ACMETest(applicazioneSconto)(response);
+	println@Console("response.message = " + response.message)()
 }
 
 
