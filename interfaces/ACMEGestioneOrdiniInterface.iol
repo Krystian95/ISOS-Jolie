@@ -78,6 +78,17 @@ type ApplicazioneScontoResponse: void {
   .message: string
 }
 
+// Applicazione sconto
+
+type InvioPreventivo: void {
+  .idOrdine: string
+  .idRivenditore: string
+}
+
+type InvioPreventivoResponse: void {
+  .message: string
+}
+
 // Get id ordine
 
 type IdOrdineRivenditore: void {
@@ -101,7 +112,8 @@ interface ACMEGestioneOrdiniInterface {
                     prenotazioneMaterialiPresentiMS( PrenotazioneMaterialiPresentiMS )( ResponsePrenotazioneMaterialiPresentiMS ),
                     generazioneListaAccessoriPresentiMagazzini( GenerazioneListaAccessoriPresentiMagazzini )( ResponseGenerazioneListaAccessoriPresentiMagazzini ),
                     calcoloPreventivo( CalcoloPreventivo )( CalcoloPreventivoResponse),
-                    applicazioneSconto( ApplicazioneSconto )( ApplicazioneScontoResponse)
+                    applicazioneSconto( ApplicazioneSconto )( ApplicazioneScontoResponse),
+                    invioPreventivo( InvioPreventivo )( InvioPreventivoResponse)
 }
 
 

@@ -81,9 +81,17 @@ main
 	// Applicazione sconto
 
 	applicazioneSconto.idOrdine = "134";
-	applicazioneSconto.percentualeSconto = "50";
+	applicazioneSconto.percentualeSconto = "10";
 	applicazioneSconto@ACMETest(applicazioneSconto)(response);
+	println@Console("response.message = " + response.message)();
+
+	// Invio preventivo
+
+	invioPreventivo.idOrdine = "134";
+	invioPreventivo.idRivenditore = "1";
+	invioPreventivo@ACMETest(invioPreventivo)(response);
 	println@Console("response.message = " + response.message)()
+
 }
 
 

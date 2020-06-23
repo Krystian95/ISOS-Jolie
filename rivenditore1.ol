@@ -19,7 +19,7 @@ inputPort Rivenditore1 {
 	Interfaces: RivenditoreInterface
 }
 
-execution { concurrent }
+execution { sequential }
 
 init {
 
@@ -142,7 +142,28 @@ main
 		notificaCustomizzazioniNonRealizzabili ( idOrdine )
 	] {
 		println@Console("Le customizzazioni richieste per l'ordine #" + idOrdine + " NON sono realizzabili!")();
+
 		println@Console("\n[notificaCustomizzazioniNonRealizzabili] COMPLETED\n")()
 	}
 
+	[
+		ricezionePreventivo ( params )
+	] {
+		println@Console("Il totale del preventivo per l'ordine #" + params.idOrdine + " e' di " + params.totalePreventivo + " EUR")();
+
+		println@Console( "Inserire:" )();
+		println@Console( "\t1: ACCETTARE" )();
+		println@Console( "\t0: RIFIUTARE" )();
+		registerForInput@Console()();
+
+		in(scelta);
+
+		if(scelta == "0"){
+			println@Console( "Preventivo RIFIUTATO" )()
+		}else if(scelta == "1"){
+			println@Console( "Preventivo ACCETTATO" )()
+		}
+
+		println@Console("\n[ricezionePreventivo] COMPLETED\n")()
+	}
 }

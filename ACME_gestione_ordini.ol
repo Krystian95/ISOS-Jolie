@@ -980,4 +980,28 @@ main
 	] {
 		println@Console("\n[applicazioneSconto] COMPLETED\n")()
 	}
+
+	[
+		invioPreventivo ( params )( response ) {
+
+	        query = "SELECT totalePreventivo
+					FROM Ordine
+					WHERE idOrdine = " + params.idOrdine;
+        	query@Database( query )( totalePreventivo );
+
+        	ricezionePreventivo.idOrdine = params.idOrdine;
+        	ricezionePreventivo.totalePreventivo = string(totalePreventivo.row[0].totalePreventivo);
+
+			if (params.idRivenditore == 1) {
+				ricezionePreventivo@Rivenditore1( ricezionePreventivo )
+	        } else if(params.idRivenditore == 2){
+	            ricezionePreventivo@Rivenditore2( ricezionePreventivo )
+	        }
+
+			response.message = "Il preventivo di " + ricezionePreventivo.totalePreventivo + " EUR dell'ordine #" + ricezionePreventivo.idOrdine + " e' stato inviato correttamente al Rivenditore #" + params.idRivenditore;
+			println@Console(response.message)()
+	    }
+	] {
+		println@Console("\n[invioPreventivo] COMPLETED\n")()
+	}
 }
