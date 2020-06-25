@@ -6,11 +6,9 @@ type StartRequest:void {
 }
 
 type varType:void{
-  .conferma?: intStringType
   .ordine?:intStringType
-  .menuModificato?: intStringType
-  .cancellaOrdine?: intStringType 
-  .disponibilitaLocale?: intStringType 
+  .accettazionePreventivo?: intStringType
+  .rifiutoPreventivo?: intStringType
 }
 
 type intStringType:void{

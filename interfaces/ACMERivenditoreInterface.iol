@@ -51,7 +51,17 @@ type CicloOrdine: void {
   .customizzazioni*: CustomizzazioneOrdine
 }
 
+type AccettaPreventivo: void {
+  .idOrdine: string
+}
+
+type RifiutoPreventivo: void {
+  .idOrdine: string
+}
+
 interface ACMERivenditoreInterface {
   RequestResponse:  richiediListino( void )( Listino )
-  OneWay:           inviaOrdine( Ordine )
+  OneWay:           inviaOrdine( Ordine ),
+                    accettaPreventivo( AccettaPreventivo ),
+                    rifiutoPreventivo( RifiutoPreventivo )
 }

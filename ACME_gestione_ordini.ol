@@ -109,7 +109,7 @@ outputPort CamundaPort {
     Interfaces: CamundaInterface
 }
 
-execution { concurrent }
+execution { sequential }
 
 init {
     with(connectionInfo) {
@@ -1003,5 +1003,29 @@ main
 	    }
 	] {
 		println@Console("\n[invioPreventivo] COMPLETED\n")()
+	}
+
+	[
+		accettaPreventivo ( accettaPreventivo )
+	] {
+
+		// Message
+		message.messageName = "AccettazionePreventivo";
+		message.processVariables.accettazionePreventivo.value = accettaPreventivo.idOrdine;
+		message@CamundaPort(message)(rit);
+
+		println@Console("\n[accettaPreventivo] COMPLETED\n")()
+	}
+
+	[
+		rifiutoPreventivo ( rifiutoPreventivo )
+	] {
+
+		// Message
+		message.messageName = "RifiutoPreventivo";
+		message.processVariables.rifiutoPreventivo.value = rifiutoPreventivo.idOrdine;
+		message@CamundaPort(message)(rit);
+
+		println@Console("\n[rifiutoPreventivo] COMPLETED\n")()
 	}
 }

@@ -159,8 +159,12 @@ main
 		in(scelta);
 
 		if(scelta == "0"){
+			rifiutoPreventivo.idOrdine = params.idOrdine;
+			rifiutoPreventivo@ACMEService( rifiutoPreventivo );
 			println@Console( "Preventivo RIFIUTATO" )()
 		}else if(scelta == "1"){
+			accettaPreventivo.idOrdine = params.idOrdine;
+			accettaPreventivo@ACMEService( accettaPreventivo );
 			println@Console( "Preventivo ACCETTATO" )()
 		}
 

@@ -103,6 +103,14 @@ type Response: void {
 
 type emptyGetIdOrdine: void
 
+type AccettaPreventivo: void {
+  .idOrdine: string
+}
+
+type RifiutoPreventivo: void {
+  .idOrdine: string
+}
+
 interface ACMEGestioneOrdiniInterface {
   RequestResponse:  getIdOrdine( emptyGetIdOrdine )( IdOrdine ),
                     getIdRivenditore( IdOrdineRivenditore )( IdRivenditore ),
@@ -114,6 +122,8 @@ interface ACMEGestioneOrdiniInterface {
                     calcoloPreventivo( CalcoloPreventivo )( CalcoloPreventivoResponse),
                     applicazioneSconto( ApplicazioneSconto )( ApplicazioneScontoResponse),
                     invioPreventivo( InvioPreventivo )( InvioPreventivoResponse)
+  OneWay:           accettaPreventivo( AccettaPreventivo ),
+                    rifiutoPreventivo( RifiutoPreventivo )
 }
 
 
