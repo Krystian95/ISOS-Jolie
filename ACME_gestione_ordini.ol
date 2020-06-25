@@ -1008,11 +1008,12 @@ main
 	[
 		accettaPreventivo ( accettaPreventivo )
 	] {
-
 		// Message
 		message.messageName = "AccettazionePreventivo";
 		message.processVariables.accettazionePreventivo.value = accettaPreventivo.idOrdine;
 		message@CamundaPort(message)(rit);
+
+		println@Console("Il preventivo per l'ordine #" + accettaPreventivo.idOrdine + " e' stato Accettato")();
 
 		println@Console("\n[accettaPreventivo] COMPLETED\n")()
 	}
@@ -1020,12 +1021,31 @@ main
 	[
 		rifiutoPreventivo ( rifiutoPreventivo )
 	] {
-
 		// Message
 		message.messageName = "RifiutoPreventivo";
 		message.processVariables.rifiutoPreventivo.value = rifiutoPreventivo.idOrdine;
 		message@CamundaPort(message)(rit);
 
+		println@Console("Il preventivo per l'ordine #" + accettaPreventivo.idOrdine + " e' stato Rifiutato")();
+
 		println@Console("\n[rifiutoPreventivo] COMPLETED\n")()
+	}
+
+	[
+		sbloccoPrenotazioniComponentiAccessoriMagazzini ( params )( response ) {
+
+			query = "DELETE FROM acme.Magazzino_accessorio_prenotato
+					 WHERE idOrdine = " + params.idOrdine;
+			update@Database( query )( responseQuery );
+
+			query = "DELETE FROM acme.Magazzino_componente_prenotato
+					 WHERE idOrdine = " + params.idOrdine;
+			update@Database( query )( responseQuery );
+
+			response.message = "Tutte le prenotazioni dei materiali per l'ordine #" + params.idOrdine + " sono state sbloccate";
+			println@Console(response.message)()
+	    }
+	] {
+		println@Console("\n[sbloccoPrenotazioniComponentiAccessoriMagazzini] COMPLETED\n")()
 	}
 }

@@ -89,6 +89,16 @@ type InvioPreventivoResponse: void {
   .message: string
 }
 
+// Sblocco Prenotazioni Componenti Accessori Magazzini
+
+type SbloccoPrenotazioniComponentiAccessoriMagazzini: void {
+  .idOrdine: string
+}
+
+type SbloccoPrenotazioniComponentiAccessoriMagazziniResponse: void {
+  .message: string
+}
+
 // Get id ordine
 
 type IdOrdineRivenditore: void {
@@ -121,7 +131,8 @@ interface ACMEGestioneOrdiniInterface {
                     generazioneListaAccessoriPresentiMagazzini( GenerazioneListaAccessoriPresentiMagazzini )( ResponseGenerazioneListaAccessoriPresentiMagazzini ),
                     calcoloPreventivo( CalcoloPreventivo )( CalcoloPreventivoResponse),
                     applicazioneSconto( ApplicazioneSconto )( ApplicazioneScontoResponse),
-                    invioPreventivo( InvioPreventivo )( InvioPreventivoResponse)
+                    invioPreventivo( InvioPreventivo )( InvioPreventivoResponse),
+                    sbloccoPrenotazioniComponentiAccessoriMagazzini(SbloccoPrenotazioniComponentiAccessoriMagazzini)(SbloccoPrenotazioniComponentiAccessoriMagazziniResponse) 
   OneWay:           accettaPreventivo( AccettaPreventivo ),
                     rifiutoPreventivo( RifiutoPreventivo )
 }

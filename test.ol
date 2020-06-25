@@ -87,20 +87,26 @@ main
 
 	// Invio preventivo
 
-	invioPreventivo.idOrdine = "134";
+	/*invioPreventivo.idOrdine = "134";
 	invioPreventivo.idRivenditore = "1";
 	invioPreventivo@ACMETest(invioPreventivo)(response);
-	println@Console("response.message = " + response.message)();
+	println@Console("response.message = " + response.message)();*/
 
 	// Accetta preventivo
 
-	accettaPreventivo.idOrdine = "134";
-	accettaPreventivo@ACMEService( accettaPreventivo );
+	/*accettaPreventivo.idOrdine = "134";
+	accettaPreventivo@ACMEService( accettaPreventivo );*/
 
 	// Rifiuto preventivo
 
-	rifiutoPreventivo.idOrdine = "134";
-	rifiutoPreventivo@ACMEService( rifiutoPreventivo )
+	/*rifiutoPreventivo.idOrdine = "134";
+	rifiutoPreventivo@ACMEService( rifiutoPreventivo );*/
+
+	// Sblocco Prenotazioni Componenti Accessori Magazzini
+
+	sbloccoPrenotazioniComponentiAccessoriMagazzini.idOrdine = "134";
+	sbloccoPrenotazioniComponentiAccessoriMagazzini@ACMEService( sbloccoPrenotazioniComponentiAccessoriMagazzini )(response);
+	println@Console("response.message = " + response.message)()
 
 }
 
