@@ -541,7 +541,10 @@ main
 	          .totaleCustomizzazioni = 0.0;
 	          .totaleCorriere = 0.0;
 	          .totalePreventivo = 0.0;
-	          .sogliaSconto = 800.00
+	          .sogliaSconto = 800.00;
+	          .ordineContieneMaterialiPrenotatiMP = false;
+	          .ordineContieneMaterialiPrenotatiMS = false;
+	          .ordineContieneMaterialiDaOrdinareDaFornitore = false
 	        }
 
 	        with( costi_trasporti ){
@@ -654,6 +657,12 @@ main
 	            idMagazzino = accessoriPrenotati.row[i].idMagazzino;
 	            tipologia = accessoriPrenotati.row[i].tipologia;
 
+	            if(idMagazzino == 1){
+	            	response.ordineContieneMaterialiPrenotatiMP = true
+	            } else if(idMagazzino == 2 || idMagazzino == 3 || idMagazzino == 4){
+	            	response.ordineContieneMaterialiPrenotatiMS = true
+	            }
+
 	            if(idMagazzino == 0) {
 	            	// accessorio non prenotato perchè non presente in magazzino
 
@@ -736,6 +745,9 @@ main
 	        	idAccessorio = accessoriFornitore.row[i].idAccessorio;
 
 	        	if(qta_prenotata < qta_richiesta_iniziale){
+
+					response.ordineContieneMaterialiDaOrdinareDaFornitore = true;
+
 	        		costo_fornitore = costi_trasporti.fornitore_fisso;
 	            	response.spedizioniAccessori += costo_fornitore;
 	    			println@Console("\nL'accessorio #" + idAccessorio + " NON e' stato prenotato in tutte le quantita' necessarie, quindi deve essere acquistato dal fornitore. Il costo fisso per la spedizione del fornitore e' di " + costo_fornitore + " EUR")()
@@ -779,6 +791,12 @@ main
 	            qta_richiesta_iniziale = componentiPrenotati.row[i].qta_richiesta_iniziale;
 	            qta_prenotata = componentiPrenotati.row[i].qta_prenotata;
 	            idMagazzino = componentiPrenotati.row[i].idMagazzino;
+
+	            if(idMagazzino == 1){
+	            	response.ordineContieneMaterialiPrenotatiMP = true
+	            } else if(idMagazzino == 2 || idMagazzino == 3 || idMagazzino == 4){
+	            	response.ordineContieneMaterialiPrenotatiMS = true
+	            }
 
 	            if(idMagazzino == 0) {
 	            	// componente non prenotato perchè non presente in magazzino
@@ -841,6 +859,9 @@ main
 	        	idComponente = componentiFornitore.row[i].idComponente;
 
 	        	if(qta_prenotata < qta_richiesta_iniziale){
+
+					response.ordineContieneMaterialiDaOrdinareDaFornitore = true;
+
 	        		costo_fornitore = costi_trasporti.fornitore_fisso;
 	            	response.spedizioniComponenti += costo_fornitore;
 	    			println@Console("\nIl componente #" + idComponente + " del ciclo #" + idCiclo + " NON e' stato prenotato in tutte le quantita' necessarie, quindi deve essere acquistato dal fornitore. Il costo fisso per la spedizione del fornitore e' di " + costo_fornitore + " EUR")()

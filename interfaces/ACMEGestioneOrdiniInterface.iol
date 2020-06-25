@@ -65,6 +65,9 @@ type CalcoloPreventivoResponse: void {
   .totaleCorriere: double
   .totalePreventivo: double
   .sogliaSconto: double
+  .ordineContieneMaterialiPrenotatiMP: bool
+  .ordineContieneMaterialiPrenotatiMS: bool
+  .ordineContieneMaterialiDaOrdinareDaFornitore: bool
 }
 
 // Applicazione sconto

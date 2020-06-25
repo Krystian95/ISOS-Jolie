@@ -75,15 +75,18 @@ main
 	calcoloPreventivo.idOrdine = "134";
 	calcoloPreventivo.idRivenditore = "1";
 	calcoloPreventivo@ACMETest(calcoloPreventivo)(response);
-	println@Console("response.totalePreventivo = " + response.totalePreventivo)();
-	println@Console("response.sogliaSconto = " + response.sogliaSconto)();
+	println@Console("totalePreventivo = " + response.totalePreventivo)();
+	println@Console("sogliaSconto = " + response.sogliaSconto)();
+	println@Console("ordineContieneMaterialiPrenotatiMP = " + response.ordineContieneMaterialiPrenotatiMP)();
+	println@Console("ordineContieneMaterialiPrenotatiMS = " + response.ordineContieneMaterialiPrenotatiMS)();
+	println@Console("ordineContieneMaterialiDaOrdinareDaFornitore = " + response.ordineContieneMaterialiDaOrdinareDaFornitore)();
 
 	// Applicazione sconto
 
-	applicazioneSconto.idOrdine = "134";
+	/*applicazioneSconto.idOrdine = "134";
 	applicazioneSconto.percentualeSconto = "10";
 	applicazioneSconto@ACMETest(applicazioneSconto)(response);
-	println@Console("response.message = " + response.message)();
+	println@Console("response.message = " + response.message)();*/
 
 	// Invio preventivo
 
@@ -94,19 +97,19 @@ main
 
 	// Accetta preventivo
 
-	/*accettaPreventivo.idOrdine = "134";
-	accettaPreventivo@ACMEService( accettaPreventivo );*/
+	accettaPreventivo.idOrdine = "134";
+	accettaPreventivo@ACMEService( accettaPreventivo );
 
 	// Rifiuto preventivo
 
-	/*rifiutoPreventivo.idOrdine = "134";
-	rifiutoPreventivo@ACMEService( rifiutoPreventivo );*/
+	rifiutoPreventivo.idOrdine = "134";
+	rifiutoPreventivo@ACMEService( rifiutoPreventivo );
 
 	// Sblocco Prenotazioni Componenti Accessori Magazzini
 
-	sbloccoPrenotazioniComponentiAccessoriMagazzini.idOrdine = "134";
+	/*sbloccoPrenotazioniComponentiAccessoriMagazzini.idOrdine = "134";
 	sbloccoPrenotazioniComponentiAccessoriMagazzini@ACMEService( sbloccoPrenotazioniComponentiAccessoriMagazzini )(response);
-	println@Console("response.message = " + response.message)()
+	println@Console("response.message = " + response.message)()*/
 
 }
 
