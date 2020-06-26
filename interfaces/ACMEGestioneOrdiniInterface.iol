@@ -103,6 +103,26 @@ type SbloccoPrenotazioniComponentiAccessoriMagazziniResponse: void {
   .message: string
 }
 
+// Richiesta Trasferimento MP
+
+type RichiestaTrasferimentoMP: void {
+  .idOrdine: string
+}
+
+type RichiestaTrasferimentoMPResponse: void {
+  .message: string
+}
+
+// Richiesta Trasferimento MS
+
+type RichiestaTrasferimentoMS: void {
+  .idOrdine: string
+}
+
+type RichiestaTrasferimentoMSResponse: void {
+  .message: string
+}
+
 // Get id ordine
 
 type IdOrdineRivenditore: void {
@@ -136,7 +156,9 @@ interface ACMEGestioneOrdiniInterface {
                     calcoloPreventivo( CalcoloPreventivo )( CalcoloPreventivoResponse),
                     applicazioneSconto( ApplicazioneSconto )( ApplicazioneScontoResponse),
                     invioPreventivo( InvioPreventivo )( InvioPreventivoResponse),
-                    sbloccoPrenotazioniComponentiAccessoriMagazzini(SbloccoPrenotazioniComponentiAccessoriMagazzini)(SbloccoPrenotazioniComponentiAccessoriMagazziniResponse) 
+                    sbloccoPrenotazioniComponentiAccessoriMagazzini(SbloccoPrenotazioniComponentiAccessoriMagazzini)(SbloccoPrenotazioniComponentiAccessoriMagazziniResponse),
+                    richiestaTrasferimentoMP(RichiestaTrasferimentoMP)(RichiestaTrasferimentoMPResponse),
+                    richiestaTrasferimentoMS(RichiestaTrasferimentoMS)(RichiestaTrasferimentoMSResponse)
   OneWay:           accettaPreventivo( AccettaPreventivo ),
                     rifiutoPreventivo( RifiutoPreventivo )
 }

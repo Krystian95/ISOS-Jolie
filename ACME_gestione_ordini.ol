@@ -1073,4 +1073,40 @@ main
 	] {
 		println@Console("\n[sbloccoPrenotazioniComponentiAccessoriMagazzini] COMPLETED\n")()
 	}
+
+	[
+		richiestaTrasferimentoMP ( params )( response ) {
+
+			query = "DELETE FROM acme.Magazzino_accessorio_prenotato
+					 WHERE idOrdine = " + params.idOrdine + " AND idMagazzino = 1 ";
+			update@Database( query )( responseQuery );
+
+			query = "DELETE FROM acme.Magazzino_componente_prenotato
+					 WHERE idOrdine = " + params.idOrdine + " AND idMagazzino = 1 ";
+			update@Database( query )( responseQuery );
+
+			response.message = "Tutte le prenotazioni dei materiali per l'ordine #" + params.idOrdine + " nel Magazzino Principale sono state sbloccate";
+			println@Console(response.message)()
+	    }
+	] {
+		println@Console("\n[richiestaTrasferimentoMP] COMPLETED\n")()
+	}
+
+	[
+		richiestaTrasferimentoMS ( params )( response ) {
+
+			query = "DELETE FROM acme.Magazzino_accessorio_prenotato
+					 WHERE idOrdine = " + params.idOrdine + " AND idMagazzino IN (2, 3, 4) ";
+			update@Database( query )( responseQuery );
+
+			query = "DELETE FROM acme.Magazzino_componente_prenotato
+					 WHERE idOrdine = " + params.idOrdine + " AND idMagazzino IN (2, 3, 4) ";
+			update@Database( query )( responseQuery );
+
+			response.message = "Tutte le prenotazioni dei materiali per l'ordine #" + params.idOrdine + " nei Magazzini Secondari sono state sbloccate";
+			println@Console(response.message)()
+	    }
+	] {
+		println@Console("\n[richiestaTrasferimentoMS] COMPLETED\n")()
+	}
 }

@@ -90,10 +90,10 @@ main
 
 	// Invio preventivo
 
-	invioPreventivo.idOrdine = "134";
+	/*invioPreventivo.idOrdine = "134";
 	invioPreventivo.idRivenditore = "1";
 	invioPreventivo@ACMETest(invioPreventivo)(response);
-	println@Console("response.message = " + response.message)()
+	println@Console("response.message = " + response.message)()*/
 
 	// Accetta preventivo
 
@@ -111,6 +111,17 @@ main
 	sbloccoPrenotazioniComponentiAccessoriMagazzini@ACMEService( sbloccoPrenotazioniComponentiAccessoriMagazzini )(response);
 	println@Console("response.message = " + response.message)()*/
 
+	// Richiesta Trasferimento MP
+
+	richiestaTrasferimentoMP.idOrdine = "131";
+	richiestaTrasferimentoMP@ACMEService( richiestaTrasferimentoMP )(response);
+	println@Console("response.message = " + response.message)();
+
+	// Richiesta Trasferimento MS
+
+	richiestaTrasferimentoMS.idOrdine = "131";
+	richiestaTrasferimentoMS@ACMEService( richiestaTrasferimentoMS )(response);
+	println@Console("response.message = " + response.message)()
 }
 
 
