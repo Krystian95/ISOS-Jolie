@@ -21,6 +21,10 @@ inputPort Rivenditore1 {
 
 execution { sequential }
 
+cset {
+	sessionToken: InRequest.token
+}
+
 init {
 
 	// Id rivenditore
@@ -151,12 +155,24 @@ main
 	] {
 		println@Console("Il totale del preventivo per l'ordine #" + params.idOrdine + " e' di " + params.totalePreventivo + " EUR")();
 
-		println@Console( "Inserire:" )();
-		println@Console( "\t1: ACCETTARE" )();
-		println@Console( "\t0: RIFIUTARE" )();
-		registerForInput@Console()();
-
-		in(scelta);
+		// we registerForInput, enabling sessionListeners
+	    registerForInput@Console( { enableSessionListener = true } )()
+	    // we define this session's token
+	    token = new
+	    // we set the sessionToken for the InRequest
+	    csets.sessionToken = token
+	    // we subscribe our listener with this session's token
+	    subscribeSessionListener@Console( { token = token } )()
+	    // we make sure the print out to the user and the request for input are atomic
+	    synchronized( inputSession ) {
+			println@Console( "Inserire:" )();
+			println@Console( "\t1: ACCETTARE" )();
+			println@Console( "\t0: RIFIUTARE" )();
+	      	// we wait for the data from the prompt
+	      	in(scelta)
+	    }
+	    // we unsubscribe our listener for this session before closing
+	    unsubscribeSessionListener@Console( { token = token } )()
 
 		if(scelta == "0"){
 			rifiutoPreventivo.idOrdine = params.idOrdine;

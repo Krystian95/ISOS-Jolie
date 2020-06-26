@@ -1032,6 +1032,7 @@ main
 		// Message
 		message.messageName = "AccettazionePreventivo";
 		message.processVariables.accettazionePreventivo.value = accettaPreventivo.idOrdine;
+		message.processVariables.accettazionePreventivo.type = "String";
 		message@CamundaPort(message)(rit);
 
 		println@Console("Il preventivo per l'ordine #" + accettaPreventivo.idOrdine + " e' stato Accettato")();
@@ -1045,6 +1046,7 @@ main
 		// Message
 		message.messageName = "RifiutoPreventivo";
 		message.processVariables.rifiutoPreventivo.value = rifiutoPreventivo.idOrdine;
+		message.processVariables.rifiutoPreventivo.type = "String";
 		message@CamundaPort(message)(rit);
 
 		println@Console("Il preventivo per l'ordine #" + accettaPreventivo.idOrdine + " e' stato Rifiutato")();
