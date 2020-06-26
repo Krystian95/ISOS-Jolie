@@ -68,6 +68,7 @@ type CalcoloPreventivoResponse: void {
   .ordineContieneMaterialiPrenotatiMP: bool
   .ordineContieneMaterialiPrenotatiMS: bool
   .ordineContieneMaterialiDaOrdinareDaFornitore: bool
+  .tuttiAccessoriPresentiNeiMagazzini: bool
 }
 
 // Applicazione sconto

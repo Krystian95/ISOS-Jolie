@@ -544,7 +544,8 @@ main
 	          .sogliaSconto = 800.00;
 	          .ordineContieneMaterialiPrenotatiMP = false;
 	          .ordineContieneMaterialiPrenotatiMS = false;
-	          .ordineContieneMaterialiDaOrdinareDaFornitore = false
+	          .ordineContieneMaterialiDaOrdinareDaFornitore = false;
+	          .tuttiAccessoriPresentiNeiMagazzini = true
 	        }
 
 	        with( costi_trasporti ){
@@ -747,6 +748,7 @@ main
 	        	if(qta_prenotata < qta_richiesta_iniziale){
 
 					response.ordineContieneMaterialiDaOrdinareDaFornitore = true;
+					response.tuttiAccessoriPresentiNeiMagazzini = false;
 
 	        		costo_fornitore = costi_trasporti.fornitore_fisso;
 	            	response.spedizioniAccessori += costo_fornitore;
