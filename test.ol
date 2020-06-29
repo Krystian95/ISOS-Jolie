@@ -72,14 +72,14 @@ main
 
 	// calcolo preventivo
 
-	calcoloPreventivo.idOrdine = "134";
+	/*calcoloPreventivo.idOrdine = "178";
 	calcoloPreventivo.idRivenditore = "1";
 	calcoloPreventivo@ACMETest(calcoloPreventivo)(response);
 	println@Console("totalePreventivo = " + response.totalePreventivo)();
 	println@Console("sogliaSconto = " + response.sogliaSconto)();
 	println@Console("ordineContieneMaterialiPrenotatiMP = " + response.ordineContieneMaterialiPrenotatiMP)();
 	println@Console("ordineContieneMaterialiPrenotatiMS = " + response.ordineContieneMaterialiPrenotatiMS)();
-	println@Console("ordineContieneMaterialiDaOrdinareDaFornitore = " + response.ordineContieneMaterialiDaOrdinareDaFornitore)();
+	println@Console("ordineContieneMaterialiDaOrdinareDaFornitore = " + response.ordineContieneMaterialiDaOrdinareDaFornitore)();*/
 
 	// Applicazione sconto
 
@@ -90,14 +90,14 @@ main
 
 	// Invio preventivo
 
-	/*invioPreventivo.idOrdine = "134";
+	invioPreventivo.idOrdine = "185";
 	invioPreventivo.idRivenditore = "1";
 	invioPreventivo@ACMETest(invioPreventivo)(response);
-	println@Console("response.message = " + response.message)()*/
+	println@Console("response.message = " + response.message)()
 
 	// Accetta preventivo
 
-	/*accettaPreventivo.idOrdine = "134";
+	/*accettaPreventivo.idOrdine = "178";
 	accettaPreventivo@ACMEService( accettaPreventivo );*/
 
 	// Rifiuto preventivo
@@ -113,15 +113,15 @@ main
 
 	// Richiesta Trasferimento MP
 
-	richiestaTrasferimentoMP.idOrdine = "131";
+	/*richiestaTrasferimentoMP.idOrdine = "178";
 	richiestaTrasferimentoMP@ACMEService( richiestaTrasferimentoMP )(response);
 	println@Console("response.message = " + response.message)();
 
 	// Richiesta Trasferimento MS
 
-	richiestaTrasferimentoMS.idOrdine = "131";
+	richiestaTrasferimentoMS.idOrdine = "178";
 	richiestaTrasferimentoMS@ACMEService( richiestaTrasferimentoMS )(response);
-	println@Console("response.message = " + response.message)()
+	println@Console("response.message = " + response.message)()*/
 }
 
 
