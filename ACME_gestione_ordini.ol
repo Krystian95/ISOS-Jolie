@@ -109,7 +109,7 @@ outputPort CamundaPort {
     Interfaces: CamundaInterface
 }
 
-execution { sequential }
+execution { concurrent }
 
 init {
     with(connectionInfo) {
