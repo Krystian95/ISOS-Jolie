@@ -33,6 +33,11 @@ main
 {
 	println@Console("\nTEST...\n")();
 
+	// Get ID ordine
+
+	getIdOrdine@ACMEService()(response);
+	println@Console("response = " + response.idOrdine)();
+
 	// Customizzazioni realizzabili
 	
 	/*idOrdine.idOrdine = "27";

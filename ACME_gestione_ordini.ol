@@ -667,6 +667,8 @@ main
 	            if(idMagazzino == 0) {
 	            	// accessorio non prenotato perchè non presente in magazzino
 
+	            	response.ordineContieneMaterialiDaOrdinareDaFornitore = true;
+
 	            	costo_fornitore = costi_trasporti.fornitore_fisso;
 	            	response.spedizioniAccessori += costo_fornitore;
 	            	println@Console("\nL'accessorio #" + idAccessorio + " NON e' stato prenotato e quindi deve essere acquistato dal fornitore. Il costo fisso per la spedizione del fornitore e' di " + costo_fornitore + " EUR")()
@@ -802,6 +804,8 @@ main
 
 	            if(idMagazzino == 0) {
 	            	// componente non prenotato perchè non presente in magazzino
+
+	            	response.ordineContieneMaterialiDaOrdinareDaFornitore = true;
 
 	            	costo_fornitore = costi_trasporti.fornitore_fisso;
 	            	response.spedizioniComponenti += costo_fornitore;
