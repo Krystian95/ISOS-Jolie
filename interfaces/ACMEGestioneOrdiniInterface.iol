@@ -129,6 +129,20 @@ type IdOrdineRivenditore: void {
   .idOrdine: string
 }
 
+// Get Order Variables
+
+type GetOrderVariables: void {
+  .idOrdine: string
+}
+
+type GetOrderVariablesResponse: void {
+  .ordineContieneAccessoriDaNonAssemblare: bool
+  .ordineContieneMaterialiPrenotatiMP: bool
+  .ordineContieneMaterialiPrenotatiMS: bool
+  .ordineContieneMaterialiDaOrdinareDaFornitore: bool
+  .tuttiAccessoriPresentiNeiMagazzini: bool
+}
+
 // Risposte generiche
 
 type Response: void {
@@ -158,7 +172,8 @@ interface ACMEGestioneOrdiniInterface {
                     invioPreventivo( InvioPreventivo )( InvioPreventivoResponse),
                     sbloccoPrenotazioniComponentiAccessoriMagazzini(SbloccoPrenotazioniComponentiAccessoriMagazzini)(SbloccoPrenotazioniComponentiAccessoriMagazziniResponse),
                     richiestaTrasferimentoMP(RichiestaTrasferimentoMP)(RichiestaTrasferimentoMPResponse),
-                    richiestaTrasferimentoMS(RichiestaTrasferimentoMS)(RichiestaTrasferimentoMSResponse)
+                    richiestaTrasferimentoMS(RichiestaTrasferimentoMS)(RichiestaTrasferimentoMSResponse),
+                    getOrderVariables(GetOrderVariables)(GetOrderVariablesResponse)
   OneWay:           accettaPreventivo( AccettaPreventivo ),
                     rifiutoPreventivo( RifiutoPreventivo )
 }

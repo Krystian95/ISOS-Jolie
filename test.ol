@@ -38,11 +38,12 @@ main
 	/*getIdOrdine@ACMEService()(response);
 	println@Console("response = " + response.idOrdine)();*/
 
-	// Customizzazioni realizzabili
+	// Verifica Customizzazioni
 	
-	/*idOrdine.idOrdine = "27";
+	idOrdine.idOrdine = "134";
 	verificaCustomizzazioni@ACMEService(idOrdine)(response);
-	println@Console("response = " + response.customizzazioniPossibili)();*/
+	println@Console("response = " + response.customizzazioniPossibili)();
+	println@Console("\n")();
 
 	// Verifica disponibilità accessori e componenti nel MP
 
@@ -77,14 +78,15 @@ main
 
 	// calcolo preventivo
 
-	/*calcoloPreventivo.idOrdine = "178";
+	calcoloPreventivo.idOrdine = "134";
 	calcoloPreventivo.idRivenditore = "1";
 	calcoloPreventivo@ACMETest(calcoloPreventivo)(response);
 	println@Console("totalePreventivo = " + response.totalePreventivo)();
 	println@Console("sogliaSconto = " + response.sogliaSconto)();
 	println@Console("ordineContieneMaterialiPrenotatiMP = " + response.ordineContieneMaterialiPrenotatiMP)();
 	println@Console("ordineContieneMaterialiPrenotatiMS = " + response.ordineContieneMaterialiPrenotatiMS)();
-	println@Console("ordineContieneMaterialiDaOrdinareDaFornitore = " + response.ordineContieneMaterialiDaOrdinareDaFornitore)();*/
+	println@Console("ordineContieneMaterialiDaOrdinareDaFornitore = " + response.ordineContieneMaterialiDaOrdinareDaFornitore)();
+	println@Console("\n")();
 
 	// Applicazione sconto
 
@@ -95,14 +97,14 @@ main
 
 	// Invio preventivo
 
-	invioPreventivo.idOrdine = "137";
+	/*invioPreventivo.idOrdine = "137";
 	invioPreventivo.idRivenditore = "1";
 	invioPreventivo@ACMETest(invioPreventivo)(response);
-	println@Console("response.message = " + response.message)()
+	println@Console("response.message = " + response.message)()*/
 
 	// Accetta preventivo
 
-	/*accettaPreventivo.idOrdine = "178";
+	/*accettaPreventivo.idOrdine = "134";
 	accettaPreventivo@ACMEService( accettaPreventivo );*/
 
 	// Rifiuto preventivo
@@ -118,15 +120,27 @@ main
 
 	// Richiesta Trasferimento MP
 
-	/*richiestaTrasferimentoMP.idOrdine = "178";
+	/*richiestaTrasferimentoMP.idOrdine = "134";
 	richiestaTrasferimentoMP@ACMEService( richiestaTrasferimentoMP )(response);
 	println@Console("response.message = " + response.message)();
 
 	// Richiesta Trasferimento MS
 
-	richiestaTrasferimentoMS.idOrdine = "178";
+	richiestaTrasferimentoMS.idOrdine = "134";
 	richiestaTrasferimentoMS@ACMEService( richiestaTrasferimentoMS )(response);
 	println@Console("response.message = " + response.message)()*/
+
+	// Get Order Variables
+	
+	getOrderVariables.idOrdine = "134";
+	getOrderVariables@ACMEService( getOrderVariables )(response);
+	println@Console("response.ordineContieneAccessoriDaNonAssemblare = " + response.ordineContieneAccessoriDaNonAssemblare)();
+	println@Console("response.ordineContieneMaterialiPrenotatiMP = " + response.ordineContieneMaterialiPrenotatiMP)();
+	println@Console("response.ordineContieneMaterialiPrenotatiMS = " + response.ordineContieneMaterialiPrenotatiMS)();
+	println@Console("response.ordineContieneMaterialiDaOrdinareDaFornitore = " + response.ordineContieneMaterialiDaOrdinareDaFornitore)();
+	println@Console("response.tuttiAccessoriPresentiNeiMagazzini = " + response.tuttiAccessoriPresentiNeiMagazzini)();
+	println@Console("\n")()
+
 }
 
 

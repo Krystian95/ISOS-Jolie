@@ -111,6 +111,10 @@ outputPort CamundaPort {
 
 execution { concurrent }
 
+constants {
+	DEBUG = true
+}
+
 init {
     with(connectionInfo) {
         .host = "127.0.0.1";
@@ -334,6 +338,12 @@ main
 	        } else {
 				esitoVerificaCustomizzazioni.ordineContieneAccessoriDaNonAssemblare = false
 	        }
+
+	        global.ordini.(idOrdine.idOrdine).ordineContieneAccessoriDaNonAssemblare = esitoVerificaCustomizzazioni.ordineContieneAccessoriDaNonAssemblare;
+
+			if(DEBUG){
+				println@Console("global.ordini.("+idOrdine.idOrdine+").ordineContieneAccessoriDaNonAssemblare = " + global.ordini.(idOrdine.idOrdine).ordineContieneAccessoriDaNonAssemblare)()
+			}
 
 	        esitoVerificaCustomizzazioni.ordineContieneComponentiAccessoriDaAssemblare = true
 	    }
@@ -971,6 +981,18 @@ main
 	        						response.totaleCustomizzazioni + 
 	        						response.totaleCorriere;
 
+	       	global.ordini.(params.idOrdine).ordineContieneMaterialiPrenotatiMP = response.ordineContieneMaterialiPrenotatiMP;
+	       	global.ordini.(params.idOrdine).ordineContieneMaterialiPrenotatiMS = response.ordineContieneMaterialiPrenotatiMS;
+	       	global.ordini.(params.idOrdine).ordineContieneMaterialiDaOrdinareDaFornitore = response.ordineContieneMaterialiDaOrdinareDaFornitore;
+	       	global.ordini.(params.idOrdine).tuttiAccessoriPresentiNeiMagazzini = response.tuttiAccessoriPresentiNeiMagazzini;
+
+	       	if(DEBUG){
+				println@Console("global.ordini.("+params.idOrdine+").ordineContieneMaterialiPrenotatiMP = " + global.ordini.(params.idOrdine).ordineContieneMaterialiPrenotatiMP)();
+				println@Console("global.ordini.("+params.idOrdine+").ordineContieneMaterialiPrenotatiMS = " + global.ordini.(params.idOrdine).ordineContieneMaterialiPrenotatiMS)();
+				println@Console("global.ordini.("+params.idOrdine+").ordineContieneMaterialiDaOrdinareDaFornitore = " + global.ordini.(params.idOrdine).ordineContieneMaterialiDaOrdinareDaFornitore)();
+				println@Console("global.ordini.("+params.idOrdine+").tuttiAccessoriPresentiNeiMagazzini = " + global.ordini.(params.idOrdine).tuttiAccessoriPresentiNeiMagazzini)()
+			}
+
         	// Salvataggio nel db
 
         	query = "UPDATE Ordine
@@ -1112,5 +1134,26 @@ main
 	    }
 	] {
 		println@Console("\n[richiestaTrasferimentoMS] COMPLETED\n")()
+	}
+
+	[
+		getOrderVariables ( params )( response ) {
+
+			response.ordineContieneAccessoriDaNonAssemblare = global.ordini.(params.idOrdine).ordineContieneAccessoriDaNonAssemblare;
+			response.ordineContieneMaterialiPrenotatiMP = global.ordini.(params.idOrdine).ordineContieneMaterialiPrenotatiMP;
+			response.ordineContieneMaterialiPrenotatiMS = global.ordini.(params.idOrdine).ordineContieneMaterialiPrenotatiMS;
+			response.ordineContieneMaterialiDaOrdinareDaFornitore = global.ordini.(params.idOrdine).ordineContieneMaterialiDaOrdinareDaFornitore;
+			response.tuttiAccessoriPresentiNeiMagazzini = global.ordini.(params.idOrdine).tuttiAccessoriPresentiNeiMagazzini;
+
+			if(DEBUG){
+				println@Console("response.ordineContieneAccessoriDaNonAssemblare = " + response.ordineContieneAccessoriDaNonAssemblare)();
+				println@Console("response.ordineContieneMaterialiPrenotatiMP = " + response.ordineContieneMaterialiPrenotatiMP)();
+				println@Console("response.ordineContieneMaterialiPrenotatiMS = " + response.ordineContieneMaterialiPrenotatiMS)();
+				println@Console("response.ordineContieneMaterialiDaOrdinareDaFornitore = " + response.ordineContieneMaterialiDaOrdinareDaFornitore)();
+				println@Console("response.tuttiAccessoriPresentiNeiMagazzini = " + response.tuttiAccessoriPresentiNeiMagazzini)()
+			}
+	    }
+	] {
+		println@Console("\n[getOrderVariables] COMPLETED\n")()
 	}
 }
