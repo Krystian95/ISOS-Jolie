@@ -124,7 +124,7 @@ init {
     connect@Database(connectionInfo)();
     println@Console("\nConnection to database: SUCCESS")();
 
-    println@Console("\nACME GESTIONE ORDINI running...\n")()
+    println@Console("\nACME is running...\n")()
 }
 
 main

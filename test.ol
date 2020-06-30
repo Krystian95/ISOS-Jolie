@@ -35,8 +35,8 @@ main
 
 	// Get ID ordine
 
-	getIdOrdine@ACMEService()(response);
-	println@Console("response = " + response.idOrdine)();
+	/*getIdOrdine@ACMEService()(response);
+	println@Console("response = " + response.idOrdine)();*/
 
 	// Customizzazioni realizzabili
 	
@@ -95,7 +95,7 @@ main
 
 	// Invio preventivo
 
-	invioPreventivo.idOrdine = "185";
+	invioPreventivo.idOrdine = "137";
 	invioPreventivo.idRivenditore = "1";
 	invioPreventivo@ACMETest(invioPreventivo)(response);
 	println@Console("response.message = " + response.message)()

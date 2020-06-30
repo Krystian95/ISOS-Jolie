@@ -22,11 +22,12 @@ outputPort GISService {
 
 execution { concurrent }
 
+constants {
+	ID_MAGAZZINO = 3 // TO CHANGE
+}
+
 init
 {
-	// Id Magazzino
-	global.idMagazzino = 3; // TO CHANGE
-
 	// Database
 	with(connectionInfo) {
         .host = "127.0.0.1";
@@ -40,7 +41,7 @@ init
     connect@Database(connectionInfo)();
     println@Console("\nConnection to database: SUCCESS")();
 
-    println@Console("\nACME MAGAZZINO SECONDARIO #"+global.idMagazzino+" running...\n")() // TO CHANGE
+    println@Console("\nACME MAGAZZINO SECONDARIO #"+ID_MAGAZZINO+" is running...\n")() // TO CHANGE
 }
 
 main
@@ -50,7 +51,7 @@ main
 
 			idOrdine = params.idOrdine;
 
-			println@Console("Verifico disponibilita' componenti e accessori nel magazzino #"+global.idMagazzino+" per l'ordine #" + idOrdine + ":\n")();
+			println@Console("Verifico disponibilita' componenti e accessori nel magazzino #"+ID_MAGAZZINO+" per l'ordine #" + idOrdine + ":\n")();
 
 			tuttiAccessoriOrdinePresenti = true;
 			tuttiComponentiOrdinePresenti = true;
@@ -77,7 +78,7 @@ main
                         											ordine_has_accessorio.idAccessorio = magazzino_accessorio_prenotato.idAccessorio
 						LEFT JOIN magazzino_has_accessorio ON ordine_has_accessorio.idAccessorio = magazzino_has_accessorio.idAccessorio
 						WHERE ordine_has_accessorio.idOrdine = " + idOrdine + " AND 
-						magazzino_has_accessorio.idMagazzino = " + global.idMagazzino + " AND 
+						magazzino_has_accessorio.idMagazzino = " + ID_MAGAZZINO + " AND 
 						accessorio.tipologia = 'Assemblabile' AND 
 						(
 							magazzino_accessorio_prenotato.quantita < ordine_has_accessorio.quantitaAccessorio OR 
@@ -152,7 +153,7 @@ main
 						LEFT JOIN magazzino_componente_prenotato ON ordine_has_ciclo.idOrdine = magazzino_componente_prenotato.idOrdine AND 
 																	ciclo_has_componente.idComponente = magazzino_componente_prenotato.idComponente
 						LEFT JOIN magazzino_has_componente ON ciclo_has_componente.idComponente = magazzino_has_componente.idComponente
-						WHERE ordine_has_ciclo.idOrdine = " + idOrdine + " AND magazzino_has_componente.idMagazzino = " + global.idMagazzino + " AND 
+						WHERE ordine_has_ciclo.idOrdine = " + idOrdine + " AND magazzino_has_componente.idMagazzino = " + ID_MAGAZZINO + " AND 
 						(
 							magazzino_componente_prenotato.quantita < ordine_has_ciclo.quantitaCiclo OR 
 							magazzino_componente_prenotato.quantita IS NULL
@@ -214,10 +215,10 @@ main
 
 	        if ( tuttiAccessoriOrdinePresenti && tuttiComponentiOrdinePresenti ) {
 	        	response.tuttiMaterialiRichiestiPresenti = true;
-	        	response.message = "Nel magazzino #"+global.idMagazzino+" sono presenti tutti i componenti/accessori richiesti dall'ordine #" + idOrdine
+	        	response.message = "Nel magazzino #"+ID_MAGAZZINO+" sono presenti tutti i componenti/accessori richiesti dall'ordine #" + idOrdine
 	        } else {
 				response.tuttiMaterialiRichiestiPresenti = false;
-				response.message = "Nel magazzino #"+global.idMagazzino+" NON sono presenti tutti i componenti/accessori richiesti dall'ordine #" + idOrdine
+				response.message = "Nel magazzino #"+ID_MAGAZZINO+" NON sono presenti tutti i componenti/accessori richiesti dall'ordine #" + idOrdine
 	        }
 
 	        println@Console(response.message + "\n")()
@@ -231,7 +232,7 @@ main
 
 			query = "SELECT indirizzo
 					 FROM Magazzino
-					 WHERE idMagazzino = " + global.idMagazzino;
+					 WHERE idMagazzino = " + ID_MAGAZZINO;
 			query@Database( query )( indirizzoMagazzino );
 			
 			request.from = indirizzoMagazzino.row[0].indirizzo;
@@ -243,7 +244,7 @@ main
 
 			distanceBetween@GISService(request)(response);
 			distance = response.distance;
-			println@Console("Il magazzino #" + global.idMagazzino + " dista " + distance + "km dal rivenditore " + indirizzoRivenditore)()
+			println@Console("Il magazzino #" + ID_MAGAZZINO + " dista " + distance + "km dal rivenditore " + indirizzoRivenditore)()
 	    }
 	] {
 		println@Console("[distanceFromRivenditore] COMPLETED")()

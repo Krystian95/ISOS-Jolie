@@ -4,6 +4,7 @@ include "string_utils.iol"
 
 include "interfaces/ACMERivenditoreInterface.iol"
 include "interfaces/RivenditoreInterface.iol"
+include "interfaces/interfacciaBanca.iol"
 
 // Porta Rivenditore -> ACME Gestione Ordini
 outputPort ACMEService {
@@ -19,16 +20,29 @@ inputPort Rivenditore1 {
 	Interfaces: RivenditoreInterface
 }
 
+// Porta Rivenditore -> Banca
+outputPort Banca {
+	Location: "socket://localhost:8017"
+	Protocol: soap
+	Interfaces: BankInterface
+}
+
 execution { sequential }
 
 cset {
 	sessionToken: InRequest.token
 }
 
+constants {
+	SKIP_ORDER = true
+}
+
 init {
 
 	// Id rivenditore
 	global.idRivenditore = 1;
+
+	println@Console("\nRIVENDITORE #" + global.idRivenditore + " is running...\n")();
 
 	// LISTINO
 	registerForInput@Console()();
@@ -39,105 +53,108 @@ init {
 
 	// CICLI
 
-	println@Console( "\nListino CICLI:" )();
-	for ( i = 0, i < #listino.cicli, i++ ) {
-		println@Console( listino.cicli[i].idCiclo + " - " + listino.cicli[i].modello + " (" + listino.cicli[i].colorazione + ")" )()
-	}
+	if(!SKIP_ORDER) {
 
-	println@Console( "\nInserisci gli id dei Cicli da acquistare separati da virgola (es. 1,2,3):" )();
-	in(idCicli);
-
-	request = idCicli;
-	request.regex = ",";
-
-	split@StringUtils( request )( idCicliOrdine );
-
-	z = 0;
-
-	for ( i = 0, i < #idCicliOrdine.result, i++ ) {
-		ordine.cicli[i].idCiclo = int(idCicliOrdine.result[i]);
-		cicloTiny = "\"" + listino.cicli[int(idCicliOrdine.result[i])-1].modello + " (" + listino.cicli[int(idCicliOrdine.result[i])-1].colorazione + ")\"";
-		println@Console( "\nQuanti cicli #" + ordine.cicli[i].idCiclo + " " + cicloTiny + " vuoi acquistare?" )();
-		in(qta);
-		ordine.cicli[i].cicloNomeTiny = cicloTiny;
-		ordine.cicli[i].qta = int(qta);
-		println@Console( "Aggiunte al carrello " + qta + " quantita' del ciclo #" + ordine.cicli[i].idCiclo + " " + cicloTiny )();
-
-		// CUSTOMIZZAZIONI
-
-		println@Console( "\nListino CUSTOMIZZAZIONI:" )();
-		for ( k = 0, k < #listino.customizzazioni, k++ ) {
-			println@Console( listino.customizzazioni[k].idCustomizzazione + " - " + listino.customizzazioni[k].descrizione + " (" + listino.customizzazioni[k].tipologia + ")" )()
+		println@Console( "\nListino CICLI:" )();
+		for ( i = 0, i < #listino.cicli, i++ ) {
+			println@Console( listino.cicli[i].idCiclo + " - " + listino.cicli[i].modello + " (" + listino.cicli[i].colorazione + ")" )()
 		}
-		println@Console( "\nInserisci gli id delle customizzazioni da acquistare separati da virgola (es. 1,2,3) per il ciclo #" + ordine.cicli[i].idCiclo + " " + cicloTiny )();
-		in(idCustomizzazioni);
 
-		request = idCustomizzazioni;
+		println@Console( "\nInserisci gli id dei Cicli da acquistare separati da virgola (es. 1,2,3):" )();
+		in(idCicli);
+
+		request = idCicli;
 		request.regex = ",";
 
-		split@StringUtils( request )( idCustomizzazioniOrdine );
+		split@StringUtils( request )( idCicliOrdine );
 
-		for ( j = 0, j < #idCustomizzazioniOrdine.result, j++ ) {
-			customizzazioneTiny = "\"" + listino.customizzazioni[int(idCustomizzazioniOrdine.result[j])-1].descrizione + " (" + listino.customizzazioni[int(idCustomizzazioniOrdine.result[j])-1].tipologia + ")\"" ;
-			ordine.cicli[i].customizzazioni[j].idCustomizzazione = int(idCustomizzazioniOrdine.result[j]);
-			ordine.cicli[i].customizzazioni[j].customizzazioneNomeTiny = customizzazioneTiny;
+		z = 0;
 
-			ordine.customizzazioni[z].idCustomizzazione = int(idCustomizzazioniOrdine.result[j]);
-			ordine.customizzazioni[z].idCiclo = ordine.cicli[i].idCiclo;
-			
-			println@Console( "Aggiunta al carrello la customizzazione #" + ordine.customizzazioni[z].idCustomizzazione + " " + customizzazioneTiny + " per il ciclo #" + ordine.customizzazioni[z].idCiclo + " " + cicloTiny )();
-			z++
+		for ( i = 0, i < #idCicliOrdine.result, i++ ) {
+			ordine.cicli[i].idCiclo = int(idCicliOrdine.result[i]);
+			cicloTiny = "\"" + listino.cicli[int(idCicliOrdine.result[i])-1].modello + " (" + listino.cicli[int(idCicliOrdine.result[i])-1].colorazione + ")\"";
+			println@Console( "\nQuanti cicli #" + ordine.cicli[i].idCiclo + " " + cicloTiny + " vuoi acquistare?" )();
+			in(qta);
+			ordine.cicli[i].cicloNomeTiny = cicloTiny;
+			ordine.cicli[i].qta = int(qta);
+			println@Console( "Aggiunte al carrello " + qta + " quantita' del ciclo #" + ordine.cicli[i].idCiclo + " " + cicloTiny )();
+
+			// CUSTOMIZZAZIONI
+
+			println@Console( "\nListino CUSTOMIZZAZIONI:" )();
+			for ( k = 0, k < #listino.customizzazioni, k++ ) {
+				println@Console( listino.customizzazioni[k].idCustomizzazione + " - " + listino.customizzazioni[k].descrizione + " (" + listino.customizzazioni[k].tipologia + ")" )()
+			}
+			println@Console( "\nInserisci gli id delle customizzazioni da acquistare separati da virgola (es. 1,2,3) per il ciclo #" + ordine.cicli[i].idCiclo + " " + cicloTiny )();
+			in(idCustomizzazioni);
+
+			request = idCustomizzazioni;
+			request.regex = ",";
+
+			split@StringUtils( request )( idCustomizzazioniOrdine );
+
+			for ( j = 0, j < #idCustomizzazioniOrdine.result, j++ ) {
+				customizzazioneTiny = "\"" + listino.customizzazioni[int(idCustomizzazioniOrdine.result[j])-1].descrizione + " (" + listino.customizzazioni[int(idCustomizzazioniOrdine.result[j])-1].tipologia + ")\"" ;
+				ordine.cicli[i].customizzazioni[j].idCustomizzazione = int(idCustomizzazioniOrdine.result[j]);
+				ordine.cicli[i].customizzazioni[j].customizzazioneNomeTiny = customizzazioneTiny;
+
+				ordine.customizzazioni[z].idCustomizzazione = int(idCustomizzazioniOrdine.result[j]);
+				ordine.customizzazioni[z].idCiclo = ordine.cicli[i].idCiclo;
+				
+				println@Console( "Aggiunta al carrello la customizzazione #" + ordine.customizzazioni[z].idCustomizzazione + " " + customizzazioneTiny + " per il ciclo #" + ordine.customizzazioni[z].idCiclo + " " + cicloTiny )();
+				z++
+			}
+
 		}
 
-	}
+		// ACCESSORI
 
-	// ACCESSORI
-
-	println@Console( "\nListino ACCESSORI:" )();
-	for ( i = 0, i < #listino.accessori, i++ ) {
-		println@Console( listino.accessori[i].idAccessorio + " - " + listino.accessori[i].nome )()
-	}
-
-	println@Console( "\nInserisci gli id degli Accessori da acquistare separati da virgola (es. 1,2,3):" )();
-	in(idAccessori);
-
-	request = idAccessori;
-	request.regex = ",";
-
-	split@StringUtils( request )( idAccessoriOrdine );
-
-	for ( i = 0, i < #idAccessoriOrdine.result, i++ ) {
-		accesorioTiny = "\"" + listino.accessori[int(idAccessoriOrdine.result[i])-1].nome + "\"";
-		ordine.accessori[i].idAccessorio = int(idAccessoriOrdine.result[i]);
-		println@Console( "Quanti accessori #" + ordine.accessori[i].idAccessorio + " " + accesorioTiny + " vuoi acquistare?" )();
-		in(qta);
-		ordine.accessori[i].accessorioNomeTiny = accesorioTiny;
-		ordine.accessori[i].qta = int(qta);
-		println@Console( "Aggiunte al carrello " + qta + " quantita' dell'accessorio #" + ordine.accessori[i].idAccessorio + " " + accesorioTiny )()
-	}
-
-	// RIEPILOGO ORDINE
-
-	println@Console( "\n\nRiepilogo ORDINE" )();
-
-	println@Console( "\nCICLI:" )();
-	for ( i = 0, i < #ordine.cicli, i++ ) {
-		println@Console( "#" + ordine.cicli[i].idCiclo + " " + ordine.cicli[i].cicloNomeTiny + " (" + ordine.cicli[i].qta + " unita')" )();
-
-		println@Console( "\tCUSTOMIZZAZIONI:" )();
-		for ( k = 0, k < #ordine.cicli[i].customizzazioni, k++ ) {
-			println@Console( "\t" + "#" + ordine.cicli[i].customizzazioni[k].idCustomizzazione + " " + ordine.cicli[i].customizzazioni[k].customizzazioneNomeTiny )()
+		println@Console( "\nListino ACCESSORI:" )();
+		for ( i = 0, i < #listino.accessori, i++ ) {
+			println@Console( listino.accessori[i].idAccessorio + " - " + listino.accessori[i].nome )()
 		}
-	}
 
-	println@Console( "ACCESSORI:" )();
-	for ( i = 0, i < #ordine.accessori, i++ ) {
-		println@Console( "#" + ordine.accessori[i].idAccessorio + " " + ordine.accessori[i].accessorioNomeTiny + " (" + ordine.accessori[i].qta + " unita')" )()
-	}
+		println@Console( "\nInserisci gli id degli Accessori da acquistare separati da virgola (es. 1,2,3):" )();
+		in(idAccessori);
 
-	// Invio ordine
-	inviaOrdine@ACMEService( ordine );
-	println@Console( "\nORDINE inviato correttamente ad ACME\n" )()
+		request = idAccessori;
+		request.regex = ",";
+
+		split@StringUtils( request )( idAccessoriOrdine );
+
+		for ( i = 0, i < #idAccessoriOrdine.result, i++ ) {
+			accesorioTiny = "\"" + listino.accessori[int(idAccessoriOrdine.result[i])-1].nome + "\"";
+			ordine.accessori[i].idAccessorio = int(idAccessoriOrdine.result[i]);
+			println@Console( "Quanti accessori #" + ordine.accessori[i].idAccessorio + " " + accesorioTiny + " vuoi acquistare?" )();
+			in(qta);
+			ordine.accessori[i].accessorioNomeTiny = accesorioTiny;
+			ordine.accessori[i].qta = int(qta);
+			println@Console( "Aggiunte al carrello " + qta + " quantita' dell'accessorio #" + ordine.accessori[i].idAccessorio + " " + accesorioTiny )()
+		}
+
+		// RIEPILOGO ORDINE
+
+		println@Console( "\n\nRiepilogo ORDINE" )();
+
+		println@Console( "\nCICLI:" )();
+		for ( i = 0, i < #ordine.cicli, i++ ) {
+			println@Console( "#" + ordine.cicli[i].idCiclo + " " + ordine.cicli[i].cicloNomeTiny + " (" + ordine.cicli[i].qta + " unita')" )();
+
+			println@Console( "\tCUSTOMIZZAZIONI:" )();
+			for ( k = 0, k < #ordine.cicli[i].customizzazioni, k++ ) {
+				println@Console( "\t" + "#" + ordine.cicli[i].customizzazioni[k].idCustomizzazione + " " + ordine.cicli[i].customizzazioni[k].customizzazioneNomeTiny )()
+			}
+		}
+
+		println@Console( "ACCESSORI:" )();
+		for ( i = 0, i < #ordine.accessori, i++ ) {
+			println@Console( "#" + ordine.accessori[i].idAccessorio + " " + ordine.accessori[i].accessorioNomeTiny + " (" + ordine.accessori[i].qta + " unita')" )()
+		}
+
+		// Invio ordine
+		inviaOrdine@ACMEService( ordine );
+		println@Console( "\nORDINE inviato correttamente ad ACME\n" )()
+	}
 }
 
 main
@@ -156,13 +173,13 @@ main
 		println@Console("Il totale del preventivo per l'ordine #" + params.idOrdine + " e' di " + params.totalePreventivo + " EUR")();
 
 		// we registerForInput, enabling sessionListeners
-	    registerForInput@Console( { enableSessionListener = true } )()
+	    registerForInput@Console( { enableSessionListener = true } )();
 	    // we define this session's token
-	    token = new
+	    token = new;
 	    // we set the sessionToken for the InRequest
-	    csets.sessionToken = token
+	    csets.sessionToken = token;
 	    // we subscribe our listener with this session's token
-	    subscribeSessionListener@Console( { token = token } )()
+	    subscribeSessionListener@Console( { token = token } )();
 	    // we make sure the print out to the user and the request for input are atomic
 	    synchronized( inputSession ) {
 			println@Console( "Inserire:" )();
@@ -171,19 +188,31 @@ main
 	      	// we wait for the data from the prompt
 	      	in(scelta)
 	    }
-	    // we unsubscribe our listener for this session before closing
-	    unsubscribeSessionListener@Console( { token = token } )()
 
 		if(scelta == "0"){
+
 			rifiutoPreventivo.idOrdine = params.idOrdine;
 			rifiutoPreventivo@ACMEService( rifiutoPreventivo );
 			println@Console( "Preventivo RIFIUTATO" )()
+
 		}else if(scelta == "1"){
+
 			accettaPreventivo.idOrdine = params.idOrdine;
 			accettaPreventivo@ACMEService( accettaPreventivo );
-			println@Console( "Preventivo ACCETTATO" )()
+			println@Console( "Preventivo ACCETTATO" )();
+
+			// Pagamento Anticipo
+
+			login.username = "cristian";
+			login.password = "password1";
+			println@Console("Accedo alla Banca con dati [username = \"" + login.username + "\", password = \"" + login.password + "\"]")();
+	    	login@Banca(login)(responseLogin);
+	    	println@Console("Dati ritorno login: " + responseLogin.message)()
 		}
 
-		println@Console("\n[ricezionePreventivo] COMPLETED\n")()
+		println@Console("\n[ricezionePreventivo] COMPLETED\n")();
+
+	    // we unsubscribe our listener for this session before closing
+	    unsubscribeSessionListener@Console( { token = token } )()
 	}
 }
