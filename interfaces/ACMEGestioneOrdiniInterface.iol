@@ -131,11 +131,11 @@ type IdOrdineRivenditore: void {
 
 // Get Order Variables
 
-type GetOrderVariables: void {
+type RecuperoVariabiliSessione: void {
   .idOrdine: string
 }
 
-type GetOrderVariablesResponse: void {
+type RecuperoVariabiliSessioneResponse: void {
   .ordineContieneAccessoriDaNonAssemblare: bool
   .ordineContieneMaterialiPrenotatiMP: bool
   .ordineContieneMaterialiPrenotatiMS: bool
@@ -173,7 +173,7 @@ interface ACMEGestioneOrdiniInterface {
                     sbloccoPrenotazioniComponentiAccessoriMagazzini(SbloccoPrenotazioniComponentiAccessoriMagazzini)(SbloccoPrenotazioniComponentiAccessoriMagazziniResponse),
                     richiestaTrasferimentoMP(RichiestaTrasferimentoMP)(RichiestaTrasferimentoMPResponse),
                     richiestaTrasferimentoMS(RichiestaTrasferimentoMS)(RichiestaTrasferimentoMSResponse),
-                    getOrderVariables(GetOrderVariables)(GetOrderVariablesResponse)
+                    recuperoVariabiliSessione(RecuperoVariabiliSessione)(RecuperoVariabiliSessioneResponse)
   OneWay:           accettaPreventivo( AccettaPreventivo ),
                     rifiutoPreventivo( RifiutoPreventivo )
 }

@@ -34,7 +34,7 @@ cset {
 }
 
 constants {
-	SKIP_ORDER = true
+	SKIP_ORDER = false
 }
 
 init {

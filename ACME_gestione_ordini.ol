@@ -1137,7 +1137,7 @@ main
 	}
 
 	[
-		getOrderVariables ( params )( response ) {
+		recuperoVariabiliSessione ( params )( response ) {
 
 			response.ordineContieneAccessoriDaNonAssemblare = global.ordini.(params.idOrdine).ordineContieneAccessoriDaNonAssemblare;
 			response.ordineContieneMaterialiPrenotatiMP = global.ordini.(params.idOrdine).ordineContieneMaterialiPrenotatiMP;
@@ -1154,6 +1154,6 @@ main
 			}
 	    }
 	] {
-		println@Console("\n[getOrderVariables] COMPLETED\n")()
+		println@Console("\n[recuperoVariabiliSessione] COMPLETED\n")()
 	}
 }
