@@ -13,20 +13,27 @@ inputPort Banca {
 init {
 
 	with( global.users[0] ){
+		.username = "ACME";
+		.password = "5tueh34tw24yrfhswe4";
+		.authKey = "68537ae1-820e-45c7-b2e8-da9f465787dd";
+		.balance = 0
+	}
+
+	with( global.users[1] ){
 		.username = "andrea";
 		.password = "r56uwe457w4grwe4";
 		.authKey = "fed4b15d-4e9b-43e0-ad72-a969232f7d5e";
 		.balance = 10000.0
 	}
 
-	with( global.users[1] ){
+	with( global.users[2] ){
 		.username = "lorenzo";
 		.password = "648the346tsdr4";
 		.authKey = "8375e4a5-5369-462c-ba6d-c97834e60263";
 		.balance = 11100.0
 	}
 
-	with( global.users[2] ){
+	with( global.users[3] ){
 		.username = "cristian";
 		.password = "ku5ierydt0rthde";
 		.authKey = "24bd1e11-0ad5-4293-96bf-ae3c953d824c";
@@ -37,7 +44,7 @@ init {
 	global.idToken = 1 //se è 0 è nullo il pagamento
 }
 
-execution { concurrent }
+execution { sequential }
 
 init{
 	println@Console("\nBANCA is running...\n")()
@@ -71,7 +78,7 @@ main {
 		checkAccount(request)(response){
 
 			response.authenticated = false;
-			response.message = "L'authKey " + request.authKey + " non e' valida. Riesegui il login.";
+			response.message = "L'authKey " + request.authKey + " non e' valida. Riesegui il login per favore.";
 
 			for(i = 0, i < #global.users, i++){
 				if(global.users[i].authKey == request.authKey) {
@@ -85,8 +92,56 @@ main {
 	] {
 		println@Console("\n[checkAccount] COMPLETED\n")()
 	}
+	
+	[
+		payment(request)(response){
 
-	[checkPayment(tok)(resul){
+			response.response = false;
+			response.message = "L'authKey " + request.authKey + " non e' valida. Riesegui il login per favore.";
+
+			for(i = 0, i < #global.users, i++){
+				if(global.users[i].authKey == request.authKey) {
+					if(global.users[i].balance >= request.amount){
+
+						response.message = "L'utente richiesto (" + request.receiverUsername + ") non esiste!";
+
+						for(j = 0, j < #global.users, j++){
+							if(global.users[j].username == request.receiverUsername){
+
+								global.users[i].balance -= request.amount;
+								global.users[j].balance += request.amount;
+								response.response = true;
+								response.message = "Pagamento di EUR " + request.amount + " accettato e correttamente versato sul conto di " + request.receiverUsername;
+
+								global.users[i].payments[#global.users[i].payments].transactionId = new;
+								global.users[i].payments[#global.users[i].payments - 1].amount = request.amount;
+
+								response.transactionToken = global.users[i].payments[#global.users[i].payments - 1].transactionId;
+
+								println@Console("global.users["+i+"].payments.transactionId = " + global.users[i].payments[#global.users[i].payments - 1].transactionId)();
+								println@Console("global.users["+i+"].payments.amount = " + global.users[i].payments[#global.users[i].payments - 1].amount + "\n")()
+							}
+						}
+					} else {
+						response.message = "Saldo non sufficiente! Balance: EUR " + global.users[i].balance + ". Payment request: EUR " + request.amount
+					}
+				}
+			}
+		}
+	] {
+		println@Console("\n[payment] COMPLETED\n")()
+	}
+
+	[
+	checkPayment(tok)(resul){
+
+
+
+								for(k = 0, k < #global.users[i].payments, k++){
+									println@Console("TEST global.users["+i+"].payments["+k+"].transactionId = "+global.users[i].payments[k].transactionId)();
+									println@Console("TEST global.users["+i+"].payments["+k+"].amount = "+global.users[i].payments[k].amount)()
+								}
+		
 		control=false;
 		if (tok.value!=0) {
 			if (tok.value<=global.idToken) {
@@ -99,40 +154,6 @@ main {
 		};
 		println@Console("Controllo di Acme sul token rilasciato numero "+tok.value)()
 	}]
-	
-	[payment(request)(response){
-		if (global.userAuthenticated) {
-			nUsers = #global.users;
-			controllo=false;
-			response.token=0;
-			println@Console("Pagamento richiesto dall'utente con la chiave: " + request.authKey)();
-			for( i = 0, i < nUsers, i++){
-				if( request.authKey == global.users[i].authKey ) {
-					if(global.users[i].balance > request.amount){
-						global.users[i].balance = global.users[i].balance - request.amount;
-						response.response = "Pagamento avvenuto con successo.";
-						response.token=global.idToken;
-						global.idToken=global.idToken+1;
-						println@Console(response.response)()
-					}else{
-						response.response = "Pagamento fallito: deposito non sufficente.";
-						println@Console(response.response)()
-					};
-					println@Console(response.response)();
-					i = nUsers;
-					controllo=true
-				}
-			};
-			if (!controllo) {
-				response.response = "Chiave inserita sbagliata.";
-				println@Console(response.response)()
-			}
-		}else {
-			response.response = "Errore, login non effettuato correttamente.";
-			println@Console(response.response)()
-		}
-
-	}] {nullProcess}
 	
 	[logout(req)] {
 		global.userAuthenticated=false;

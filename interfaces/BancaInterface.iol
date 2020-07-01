@@ -25,16 +25,19 @@ type CheckAccountResponse: void {
 
 // Payment
 
-type bankRequest: void {
+type Payment: void {
 	.authKey: string
 	.amount: double
-	.receiver: string
+	.receiverUsername: string
 }
 
-type bankResponse: void {
-	.response: string
-	.token: int
+type PaymentResponse: void {
+	.response: bool
+	.transactionToken: string
+	.message: string
 }
+
+// Check payment
 
 type LoginResponseL: void {
 	.sid: string
@@ -52,7 +55,7 @@ type resu: void {
 interface BancaInterface {
 	RequestResponse:	login(Login)(LoginResponse),
 						checkAccount(CheckAccount)(CheckAccountResponse),
-						payment(bankRequest)(bankResponse),
+						payment(Payment)(PaymentResponse),
 						checkPayment(tok)(resu)
 	OneWay: 			logout(LoginResponseL)
 }

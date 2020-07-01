@@ -220,7 +220,17 @@ main
 
 	    		if(checkAccountResponse.authenticated){
 	    			println@Console("Procedo ora con il pagamento dell'anticipo...\n")()
+					
+					payment.authKey = loginResponse.authKey;
+					payment.amount = params.totalePreventivo;
+					payment.receiverUsername = "ACME";
+	    			payment@Banca(payment)(paymentResponse);
 
+	    			println@Console(paymentResponse.message + "\n")();
+
+	    			if(paymentResponse.result){
+	    				println@Console("Payment transaction token = " + paymentResponse.transactionToken + "\n")()
+	    			}
 	    		}
 	    	}
 		}

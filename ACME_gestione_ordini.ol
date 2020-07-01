@@ -1039,7 +1039,7 @@ main
         	query@Database( query )( totalePreventivo );
 
         	ricezionePreventivo.idOrdine = params.idOrdine;
-        	ricezionePreventivo.totalePreventivo = string(totalePreventivo.row[0].totalePreventivo);
+        	ricezionePreventivo.totalePreventivo = totalePreventivo.row[0].totalePreventivo;
 
 			if (params.idRivenditore == 1) {
 				ricezionePreventivo@Rivenditore1( ricezionePreventivo )

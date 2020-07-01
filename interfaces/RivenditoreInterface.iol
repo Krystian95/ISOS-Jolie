@@ -3,7 +3,7 @@ type IdOrdineCustomizzazione: string
 
 type RicezionePreventivo: void {
 	.idOrdine: string
-	.totalePreventivo: string
+	.totalePreventivo: double
 }
 
 interface RivenditoreInterface {
