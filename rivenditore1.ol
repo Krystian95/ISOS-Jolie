@@ -182,7 +182,7 @@ main
 	    subscribeSessionListener@Console( { token = token } )();
 	    // we make sure the print out to the user and the request for input are atomic
 	    synchronized( inputSession ) {
-			println@Console( "Inserire: 1 per ACCETTARE oppure 0 per RIFIUTARE" )();
+			println@Console( "Inserire:\n\t1 per ACCETTARE\n\t0 per RIFIUTARE" )();
 	      	// we wait for the data from the prompt
 	      	in(scelta)
 	    }
@@ -203,8 +203,8 @@ main
 
 			// Pagamento Anticipo
 
-			login.username = "cristian";
-			login.password = "password1";
+			login.username = "andrea";
+			login.password = "r56uwe457w4grwe4";
 			println@Console("Accedo alla Banca con dati [username = \"" + login.username + "\", password = \"" + login.password + "\"]\n")();
 	    	login@Banca(login)(loginResponse);
 	    	println@Console(loginResponse.message + "\n")();

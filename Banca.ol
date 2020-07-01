@@ -12,20 +12,26 @@ inputPort BankService {
 
 init {
 
-	global.users[0].username = "cristian";
-	global.users[0].password = "password1";
-	global.users[0].authKey = "b66887e1-a134-4fff-8b64-f7eb375c2474";
-	global.users[0].credit = 15000.0;
+	with( global.users[0] ){
+		.username = "andrea";
+		.password = "r56uwe457w4grwe4";
+		.authKey = "1e76ad52-2e4c-49b0-a5e7-8d4637011ee9";
+		.credit = 10000.0
+	}
 
-	global.users[1].username = "andrea";
-  	global.users[1].password = "password2";
-	global.users[1].authKey = "1e76ad52-2e4c-49b0-a5e7-8d4637011ee9";
-  	global.users[1].credit = 10000.0;
+	with( global.users[1] ){
+		.username = "lorenzo";
+		.password = "648the346tsdr4";
+		.authKey = "48410a17-3dd2-4212-a378-276393fc1ce3";
+		.credit = 11100.0
+	}
 
-	global.users[2].username = "lorenzo";
-  	global.users[2].password = "password3";
-	global.users[2].authKey = "48410a17-3dd2-4212-a378-276393fc1ce3";
-  	global.users[2].credit = 11100.0;
+	with( global.users[2] ){
+		.username = "cristian";
+		.password = "ku5ierydt0rthde";
+		.authKey = "b66887e1-a134-4fff-8b64-f7eb375c2474";
+		.credit = 15000.0
+	}
 
 	global.userAuthenticated = false;
 	global.idToken = 1 //se è 0 è nullo il pagamento
