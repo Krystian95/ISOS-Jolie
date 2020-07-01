@@ -33,6 +33,10 @@ init {
 
 execution { concurrent }
 
+init{
+	println@Console("\nBANCA is running...\n")()
+}
+
 main {
 
 	[
@@ -50,7 +54,7 @@ main {
 				}
 			}
 
-			println@Console(response.message + "\n")()
+			println@Console(response.message)()
 		}
 	] {
 		println@Console("\n[login] COMPLETED\n")()

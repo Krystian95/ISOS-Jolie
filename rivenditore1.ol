@@ -182,9 +182,7 @@ main
 	    subscribeSessionListener@Console( { token = token } )();
 	    // we make sure the print out to the user and the request for input are atomic
 	    synchronized( inputSession ) {
-			println@Console( "Inserire:" )();
-			println@Console( "\t1: ACCETTARE" )();
-			println@Console( "\t0: RIFIUTARE" )();
+			println@Console( "Inserire: 1 per ACCETTARE oppure 0 per RIFIUTARE" )();
 	      	// we wait for the data from the prompt
 	      	in(scelta)
 	    }
