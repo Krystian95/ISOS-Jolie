@@ -40,10 +40,10 @@ main
 
 	// Verifica Customizzazioni
 	
-	idOrdine.idOrdine = "134";
+	/*idOrdine.idOrdine = "134";
 	verificaCustomizzazioni@ACMEService(idOrdine)(response);
 	println@Console("response = " + response.customizzazioniPossibili)();
-	println@Console("\n")();
+	println@Console("\n")();*/
 
 	// Verifica disponibilità accessori e componenti nel MP
 
@@ -78,7 +78,7 @@ main
 
 	// calcolo preventivo
 
-	calcoloPreventivo.idOrdine = "134";
+	/*calcoloPreventivo.idOrdine = "134";
 	calcoloPreventivo.idRivenditore = "1";
 	calcoloPreventivo@ACMETest(calcoloPreventivo)(response);
 	println@Console("totalePreventivo = " + response.totalePreventivo)();
@@ -86,7 +86,7 @@ main
 	println@Console("ordineContieneMaterialiPrenotatiMP = " + response.ordineContieneMaterialiPrenotatiMP)();
 	println@Console("ordineContieneMaterialiPrenotatiMS = " + response.ordineContieneMaterialiPrenotatiMS)();
 	println@Console("ordineContieneMaterialiDaOrdinareDaFornitore = " + response.ordineContieneMaterialiDaOrdinareDaFornitore)();
-	println@Console("\n")();
+	println@Console("\n")();*/
 
 	// Applicazione sconto
 
@@ -97,10 +97,10 @@ main
 
 	// Invio preventivo
 
-	/*invioPreventivo.idOrdine = "137";
+	invioPreventivo.idOrdine = "137";
 	invioPreventivo.idRivenditore = "1";
 	invioPreventivo@ACMETest(invioPreventivo)(response);
-	println@Console("response.message = " + response.message)()*/
+	println@Console("response.message = " + response.message)()
 
 	// Accetta preventivo
 
@@ -132,14 +132,14 @@ main
 
 	// Get Order Variables
 	
-	getOrderVariables.idOrdine = "134";
+	/*getOrderVariables.idOrdine = "134";
 	getOrderVariables@ACMEService( getOrderVariables )(response);
 	println@Console("response.ordineContieneAccessoriDaNonAssemblare = " + response.ordineContieneAccessoriDaNonAssemblare)();
 	println@Console("response.ordineContieneMaterialiPrenotatiMP = " + response.ordineContieneMaterialiPrenotatiMP)();
 	println@Console("response.ordineContieneMaterialiPrenotatiMS = " + response.ordineContieneMaterialiPrenotatiMS)();
 	println@Console("response.ordineContieneMaterialiDaOrdinareDaFornitore = " + response.ordineContieneMaterialiDaOrdinareDaFornitore)();
 	println@Console("response.tuttiAccessoriPresentiNeiMagazzini = " + response.tuttiAccessoriPresentiNeiMagazzini)();
-	println@Console("\n")()
+	println@Console("\n")()*/
 
 }
 

@@ -189,25 +189,30 @@ main
 	      	in(scelta)
 	    }
 
+	    println@Console( "scelta = " + scelta )();
+
 		if(scelta == "0"){
 
 			rifiutoPreventivo.idOrdine = params.idOrdine;
 			rifiutoPreventivo@ACMEService( rifiutoPreventivo );
-			println@Console( "Preventivo RIFIUTATO" )()
+			println@Console( "Preventivo RIFIUTATO\n" )()
 
-		}else if(scelta == "1"){
+		} else if(scelta == "1"){
 
 			accettaPreventivo.idOrdine = params.idOrdine;
 			accettaPreventivo@ACMEService( accettaPreventivo );
-			println@Console( "Preventivo ACCETTATO" )();
+			println@Console( "Preventivo ACCETTATO\n" )();
 
 			// Pagamento Anticipo
 
 			login.username = "cristian";
 			login.password = "password1";
-			println@Console("Accedo alla Banca con dati [username = \"" + login.username + "\", password = \"" + login.password + "\"]")();
-	    	login@Banca(login)(responseLogin);
-	    	println@Console("Dati ritorno login: " + responseLogin.message)()
+			println@Console("Accedo alla Banca con dati [username = \"" + login.username + "\", password = \"" + login.password + "\"]\n")();
+	    	login@Banca(login)(loginResponse);
+	    	println@Console(loginResponse.message + "\n")();
+	    	if(loginResponse.authenticated){
+	    		println@Console("sid: " + loginResponse.sid + "\n")()
+	    	}
 		}
 
 		println@Console("\n[ricezionePreventivo] COMPLETED\n")();

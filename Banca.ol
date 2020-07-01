@@ -12,17 +12,17 @@ inputPort BankService {
 
 init {
 
-	global.users[0].name = "cristian";
+	global.users[0].username = "cristian";
 	global.users[0].password = "password1";
 	global.users[0].authKey = "b66887e1-a134-4fff-8b64-f7eb375c2474";
 	global.users[0].credit = 15000.0;
 
-	global.users[1].name = "andrea";
+	global.users[1].username = "andrea";
   	global.users[1].password = "password2";
 	global.users[1].authKey = "1e76ad52-2e4c-49b0-a5e7-8d4637011ee9";
   	global.users[1].credit = 10000.0;
 
-	global.users[2].name = "lorenzo";
+	global.users[2].username = "lorenzo";
   	global.users[2].password = "password3";
 	global.users[2].authKey = "48410a17-3dd2-4212-a378-276393fc1ce3";
   	global.users[2].credit = 11100.0;
@@ -35,23 +35,26 @@ execution { concurrent }
 
 main {
 
-	[login(loginD)(response) {
-		leng = #global.users;
-		for( i = 0, i < leng, i++){
-			if ( loginD.username ==  global.users[i].name) {
-			 	pass= global.users[i].password
+	[
+		login(loginRequest)(response) {
+
+			response.authenticated = false;
+			response.message = "Login NON autorizzato (userame o password errati) per " + loginRequest.username;
+
+			for(i = 0, i < #global.users, i++){
+				if (global.users[i].username == loginRequest.username && global.users[i].password == loginRequest.password) {
+				 	response.sid = csets.sid = new;
+					global.userAuthenticated = true;
+					response.authenticated = true;
+					response.message = "Login effettuato correttamente da " + loginRequest.username
+				}
 			}
-		};
-		if (loginD.password == pass){
-			response.sid = csets.sid = new;
-			global.userAuthenticated=true;
-			response.message = "Login effettuato";
-			println@Console("Login effettuato")()
-		} else {
-			response.message = "Sbagliato username/password";
-			println@Console("Login non permesso")()
+
+			println@Console(response.message + "\n")()
 		}
-	}]
+	] {
+		println@Console("\n[login] COMPLETED\n")()
+	}
 	
 	[logout(req)] {
 		global.userAuthenticated=false;
@@ -63,7 +66,7 @@ main {
 			nUsers = #global.users;
 			controllo=false;
 			for( i = 0, i < nUsers, i++){
-				println@Console("Username:" + global.users[i].name)();
+				println@Console("Username:" + global.users[i].username)();
 				if( request.authKey == global.users[i].authKey ) {
 					response.response = "Saldo conto corrente: "+global.users[i].credit;
 					controllo=true;

@@ -1,3 +1,19 @@
+
+// Login
+
+type Login: void {
+   .username: string
+   .password: string
+}
+
+type LoginResponse: void {
+	.authenticated: bool
+	.sid?: string
+	.message: string
+}
+
+// Payment
+
 type bankRequest: void {
 	.authKey: string
 	.amount: double
@@ -17,17 +33,7 @@ type accountRequest: void{
 	.authKey: string
 }
 
-type loginData: void {
-   .username: string
-   .password: string
-}
-
-type opMessage: void {
-	.sid?: string
-	.message: string
-}
-
-type opMessageL: void {
+type LoginResponseL: void {
 	.sid: string
 }
 
@@ -41,10 +47,9 @@ type resu: void {
 
 
 interface BankInterface {
-	OneWay: logout(opMessageL)
-	RequestResponse:
-		login(loginData)(opMessage),
-		payment(bankRequest)(bankResponse),
-		checkAccount(accountRequest)(accountResponse),
-		checkPayment(tok)(resu)
+	RequestResponse:	login(Login)(LoginResponse),
+						payment(bankRequest)(bankResponse),
+						checkAccount(accountRequest)(accountResponse),
+						checkPayment(tok)(resu)
+	OneWay: 			logout(LoginResponseL)
 }
