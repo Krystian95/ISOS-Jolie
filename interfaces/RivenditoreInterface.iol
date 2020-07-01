@@ -4,6 +4,8 @@ type IdOrdineCustomizzazione: string
 type RicezionePreventivo: void {
 	.idOrdine: string
 	.totalePreventivo: double
+	.totaleAnticipo: double
+	.totaleSaldo: double
 }
 
 interface RivenditoreInterface {

@@ -112,7 +112,9 @@ outputPort CamundaPort {
 execution { concurrent }
 
 constants {
-	DEBUG = true
+	DEBUG = true,
+	PERCENTAGE_ANTICIPO = 20,
+	PERCENTAGE_SALDO = 80
 }
 
 init {
@@ -995,15 +997,15 @@ main
 
         	// Salvataggio nel db
 
-        	query = "UPDATE Ordine
-					SET totalePreventivo = " + response.totalePreventivo + "
-					WHERE idOrdine = " + params.idOrdine;
-			update@Database( query )( resultUpdatePreventivo );
-
 	        roundRequest = response.totalePreventivo;
 	        roundRequest.decimals = 2;
 	        round@Math(roundRequest)(roundResponse);
 	        response.totalePreventivo = roundResponse;
+
+        	query = "UPDATE Ordine
+					SET totalePreventivo = " + response.totalePreventivo + "
+					WHERE idOrdine = " + params.idOrdine;
+			update@Database( query )( resultUpdatePreventivo );
 
 	        println@Console("\n- - - - - - - - - - - - - - - - - - - - - - ")()
 
@@ -1040,6 +1042,15 @@ main
 
         	ricezionePreventivo.idOrdine = params.idOrdine;
         	ricezionePreventivo.totalePreventivo = totalePreventivo.row[0].totalePreventivo;
+
+        	/*
+
+			TODO: spostare il calcolo delle percentuali sul calcolo preventivo e qui solo ripescarle dal db
+			(senza arrotondare da codice, ma da query)
+
+			*/
+        	ricezionePreventivo.totaleAnticipo = (ricezionePreventivo.totalePreventivo / 100 * PERCENTAGE_ANTICIPO);
+        	ricezionePreventivo.totaleSaldo = (ricezionePreventivo.totalePreventivo / 100 * PERCENTAGE_SALDO);
 
 			if (params.idRivenditore == 1) {
 				ricezionePreventivo@Rivenditore1( ricezionePreventivo )

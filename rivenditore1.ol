@@ -1,6 +1,7 @@
 
 include "console.iol"
 include "string_utils.iol"
+include "time.iol"
 
 include "interfaces/ACMERivenditoreInterface.iol"
 include "interfaces/RivenditoreInterface.iol"
@@ -219,17 +220,23 @@ main
 	    		println@Console(checkAccountResponse.message + "\n")();
 
 	    		if(checkAccountResponse.authenticated){
-	    			println@Console("Procedo ora con il pagamento dell'anticipo...\n")()
+	    			println@Console("Procedo ora con il pagamento dell'anticipo (EUR " + params.totaleAnticipo + ")...\n")();
 					
 					payment.authKey = loginResponse.authKey;
-					payment.amount = params.totalePreventivo;
+					payment.amount = params.totaleAnticipo;
 					payment.receiverUsername = "ACME";
 	    			payment@Banca(payment)(paymentResponse);
 
 	    			println@Console(paymentResponse.message + "\n")();
 
 	    			if(paymentResponse.result){
-	    				println@Console("Payment transaction token = " + paymentResponse.transactionToken + "\n")()
+	    				println@Console("Payment transaction token = " + paymentResponse.transactionToken + "\n")();
+
+	    				sleep@Time(5000)();
+
+	    				// Pagamento Saldo
+
+	    				println@Console("Procedo ora con il pagamento del saldo (EUR " + params.totaleSaldo + ")...\n")()
 	    			}
 	    		}
 	    	}

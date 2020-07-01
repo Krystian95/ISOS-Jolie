@@ -96,21 +96,22 @@ main {
 	[
 		payment(request)(response){
 
-			response.response = false;
+			response.result = false;
 			response.message = "L'authKey " + request.authKey + " non e' valida. Riesegui il login per favore.";
 
 			for(i = 0, i < #global.users, i++){
-				if(global.users[i].authKey == request.authKey) {
+				if(global.users[i].authKey == request.authKey) { // origin
 					if(global.users[i].balance >= request.amount){
 
 						response.message = "L'utente richiesto (" + request.receiverUsername + ") non esiste!";
 
 						for(j = 0, j < #global.users, j++){
-							if(global.users[j].username == request.receiverUsername){
+							if(global.users[j].username == request.receiverUsername){ // destination
 
 								global.users[i].balance -= request.amount;
 								global.users[j].balance += request.amount;
-								response.response = true;
+
+								response.result = true;
 								response.message = "Pagamento di EUR " + request.amount + " accettato e correttamente versato sul conto di " + request.receiverUsername;
 
 								global.users[i].payments[#global.users[i].payments].transactionId = new;
@@ -141,7 +142,7 @@ main {
 									println@Console("TEST global.users["+i+"].payments["+k+"].transactionId = "+global.users[i].payments[k].transactionId)();
 									println@Console("TEST global.users["+i+"].payments["+k+"].amount = "+global.users[i].payments[k].amount)()
 								}
-		
+
 		control=false;
 		if (tok.value!=0) {
 			if (tok.value<=global.idToken) {

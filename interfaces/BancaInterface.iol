@@ -32,7 +32,7 @@ type Payment: void {
 }
 
 type PaymentResponse: void {
-	.response: bool
+	.result: bool
 	.transactionToken: string
 	.message: string
 }
