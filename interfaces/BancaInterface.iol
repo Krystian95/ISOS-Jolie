@@ -8,7 +8,18 @@ type Login: void {
 
 type LoginResponse: void {
 	.authenticated: bool
-	.sid?: string
+	.authKey?: string
+	.message: string
+}
+
+// Check account
+
+type CheckAccount: void{
+	.authKey: string
+}
+
+type CheckAccountResponse: void {
+	.authenticated: bool
 	.message: string
 }
 
@@ -25,14 +36,6 @@ type bankResponse: void {
 	.token: int
 }
 
-type accountResponse: void {
-	.response: string
-}
-
-type accountRequest: void{
-	.authKey: string
-}
-
 type LoginResponseL: void {
 	.sid: string
 }
@@ -46,10 +49,10 @@ type resu: void {
 }
 
 
-interface BankInterface {
+interface BancaInterface {
 	RequestResponse:	login(Login)(LoginResponse),
+						checkAccount(CheckAccount)(CheckAccountResponse),
 						payment(bankRequest)(bankResponse),
-						checkAccount(accountRequest)(accountResponse),
 						checkPayment(tok)(resu)
 	OneWay: 			logout(LoginResponseL)
 }

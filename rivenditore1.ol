@@ -4,7 +4,7 @@ include "string_utils.iol"
 
 include "interfaces/ACMERivenditoreInterface.iol"
 include "interfaces/RivenditoreInterface.iol"
-include "interfaces/interfacciaBanca.iol"
+include "interfaces/BancaInterface.iol"
 
 // Porta Rivenditore -> ACME Gestione Ordini
 outputPort ACMEService {
@@ -24,7 +24,7 @@ inputPort Rivenditore1 {
 outputPort Banca {
 	Location: "socket://localhost:8017"
 	Protocol: soap
-	Interfaces: BankInterface
+	Interfaces: BancaInterface
 }
 
 execution { sequential }
@@ -34,7 +34,7 @@ cset {
 }
 
 constants {
-	SKIP_ORDER = false
+	SKIP_ORDER = true
 }
 
 init {
@@ -205,11 +205,23 @@ main
 
 			login.username = "andrea";
 			login.password = "r56uwe457w4grwe4";
-			println@Console("Accedo alla Banca con dati [username = \"" + login.username + "\", password = \"" + login.password + "\"]\n")();
+			println@Console("Accedo alla Banca con dati [username = \"" + login.username + "\", password = \"" + login.password + "\"]...\n")();
 	    	login@Banca(login)(loginResponse);
+
 	    	println@Console(loginResponse.message + "\n")();
+
 	    	if(loginResponse.authenticated){
-	    		println@Console("sid: " + loginResponse.sid + "\n")()
+	    		println@Console("Effettuo il check account con l'authKey fornita dalla Banca (" + loginResponse.authKey + ")...\n")();
+
+	    		checkAccount.authKey = loginResponse.authKey;
+	    		checkAccount@Banca(checkAccount)(checkAccountResponse);
+
+	    		println@Console(checkAccountResponse.message + "\n")();
+
+	    		if(checkAccountResponse.authenticated){
+	    			println@Console("Procedo ora con il pagamento dell'anticipo...\n")()
+
+	    		}
 	    	}
 		}
 
