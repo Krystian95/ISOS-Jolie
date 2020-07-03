@@ -184,7 +184,6 @@ main
 	    // we make sure the print out to the user and the request for input are atomic
 	    synchronized( inputSession ) {
 			println@Console( "Inserire:\n\t1 per ACCETTARE\n\t0 per RIFIUTARE" )();
-	      	// we wait for the data from the prompt
 	      	in(scelta)
 	    }
 
@@ -209,7 +208,7 @@ main
 			println@Console("Accedo alla Banca con dati [username = \"" + login.username + "\", password = \"" + login.password + "\"]...\n")();
 	    	login@Banca(login)(loginResponse);
 
-	    	println@Console(loginResponse.message + "\n")();
+	    	println@Console(loginResponse.message + "\n\n")();
 
 	    	if(loginResponse.authenticated){
 	    		println@Console("Effettuo il check account con l'authKey fornita dalla Banca (" + loginResponse.authKey + ")...\n")();
@@ -217,7 +216,7 @@ main
 	    		checkAccount.authKey = loginResponse.authKey;
 	    		checkAccount@Banca(checkAccount)(checkAccountResponse);
 
-	    		println@Console(checkAccountResponse.message + "\n")();
+	    		println@Console(checkAccountResponse.message + "\n\n")();
 
 	    		if(checkAccountResponse.authenticated){
 	    			println@Console("Procedo ora con il pagamento dell'anticipo (EUR " + params.totaleAnticipo + ")...\n")();
@@ -227,7 +226,7 @@ main
 					payment.receiverUsername = "ACME";
 	    			payment@Banca(payment)(paymentAnticipoResponse);
 
-	    			println@Console(paymentAnticipoResponse.message + "\n")();
+	    			println@Console(paymentAnticipoResponse.message + "\n\n")();
 
 	    			if(paymentAnticipoResponse.result){
 	    				println@Console("Payment transaction token = " + paymentAnticipoResponse.transactionToken + "\n")();
@@ -235,7 +234,7 @@ main
 	    				checkAccount.authKey = loginResponse.authKey;
 				    	checkAccount@Banca(checkAccount)(checkAccount2Response);
 
-				    	println@Console(checkAccount2Response.message + "\n")();
+				    	println@Console(checkAccount2Response.message + "\n\n")();
 
 	    				sleep@Time(5000)();
 
@@ -248,11 +247,11 @@ main
 						payment.receiverUsername = "ACME";
 		    			payment@Banca(payment)(paymentSaldoResponse);
 
-		    			println@Console(paymentSaldoResponse.message + "\n")();
+		    			println@Console(paymentSaldoResponse.message + "\n\n")();
 
 		    			if(paymentAnticipoResponse.result){
 
-							println@Console("Payment transaction token = " + paymentAnticipoResponse.transactionToken + "\n")();
+							println@Console("Payment transaction token = " + paymentSaldoResponse.transactionToken + "\n")();
 
 			    			checkAccount.authKey = loginResponse.authKey;
 				    		checkAccount@Banca(checkAccount)(checkAccount3Response);

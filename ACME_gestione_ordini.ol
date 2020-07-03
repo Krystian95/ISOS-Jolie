@@ -6,13 +6,11 @@ include "time.iol"
 include "math.iol"
 
 include "interfaces/CamundaInterface.iol"
-
 include "interfaces/ACMEGestioneOrdiniInterface.iol"
-
 include "interfaces/ACMERivenditoreInterface.iol"
 include "interfaces/RivenditoreInterface.iol"
-
 include "interfaces/ACMEMagazzinoInterface.iol"
+include "interfaces/BancaInterface.iol"
 
 // Porta Rivenditore 1 -> ACME Gestione Ordini
 inputPort ACMEGestioneOrdiniRivenditore1 {
@@ -107,6 +105,13 @@ outputPort CamundaPort {
         .format = "json"
     }
     Interfaces: CamundaInterface
+}
+
+// Porta ACME Gestione Ordini -> Banca
+outputPort Banca {
+	Location: "socket://localhost:8017"
+	Protocol: soap
+	Interfaces: BancaInterface
 }
 
 execution { concurrent }
@@ -1159,5 +1164,91 @@ main
 	    }
 	] {
 		println@Console("\n[recuperoVariabiliSessione] COMPLETED\n")()
+	}
+
+	[
+		verificaAnticipoConSistemaBancario ( params )( response ) {
+
+			response.anticipoVerificato = false;
+			response.message = "NON VERIFICATO Anticipo con amount di EUR " + amout + " e transaction token " + transactionToken;
+
+			// Login
+
+			login.username = "ACME";
+			login.password = "5tueh34tw24yrfhswe4";
+			println@Console("Accedo alla Banca con dati [username = \"" + login.username + "\", password = \"" + login.password + "\"]...\n")();
+	    	login@Banca(login)(loginResponse);
+
+	    	println@Console("Effettuo il check payment con l'authKey fornita dalla Banca (" + loginResponse.authKey + ")...\n")();
+
+	    	if(loginResponse.authenticated) {
+
+		    	// Check payment (Anticipo)
+
+		    	query = "SELECT totaleAnticipo
+						FROM Ordine
+						WHERE idOrdine = " + params.idOrdine;
+	        	query@Database( query )( preventivo );
+	        	
+	        	amout = preventivo.row[0].totaleAnticipo;
+
+	        	checkPayment.authKey = loginResponse.authKey;
+	        	checkPayment.transactionToken = params.transactionToken;
+	        	checkPayment.amount = amout;
+	        	checkPayment@Banca(checkPayment)(checkPaymentResponse);
+
+	        	if(checkPaymentResponse.result) {
+	        		response.anticipoVerificato = true;
+	        		response.message = "VERIFICATO pagamento Anticipo con amount di EUR " + amout + " e transaction token " + params.transactionToken
+	        	}
+
+	        	println@Console(response.message)()
+	    	}
+	    }
+	] {
+		println@Console("\n[verificaAnticipoConSistemaBancario] COMPLETED\n")()
+	}
+
+	[
+		verificaSaldoConSistemaBancario ( params )( response ) {
+
+			response.saldoVerificato = false;
+			response.message = "NON VERIFICATO Saldo con amount di EUR " + amout + " e transaction token " + transactionToken;
+
+			// Login
+
+			login.username = "ACME";
+			login.password = "5tueh34tw24yrfhswe4";
+			println@Console("Accedo alla Banca con dati [username = \"" + login.username + "\", password = \"" + login.password + "\"]...\n")();
+	    	login@Banca(login)(loginResponse);
+
+	    	println@Console("Effettuo il check payment con l'authKey fornita dalla Banca (" + loginResponse.authKey + ")...\n")();
+
+	    	if(loginResponse.authenticated) {
+
+		    	// Check payment (Saldo)
+
+		    	query = "SELECT totaleSaldo
+						FROM Ordine
+						WHERE idOrdine = " + params.idOrdine;
+	        	query@Database( query )( preventivo );
+	        	
+	        	amout = preventivo.row[0].totaleSaldo;
+
+	        	checkPayment.authKey = loginResponse.authKey;
+	        	checkPayment.transactionToken = params.transactionToken;
+	        	checkPayment.amount = amout;
+	        	checkPayment@Banca(checkPayment)(checkPaymentResponse);
+
+	        	if(checkPaymentResponse.result) {
+	        		response.saldoVerificato = true;
+	        		response.message = "VERIFICATO pagamento Saldo con amount di EUR " + amout + " e transaction token " + params.transactionToken
+	        	}
+
+	        	println@Console(response.message)()
+	    	}
+	    }
+	] {
+		println@Console("\n[verificaSaldoConSistemaBancario] COMPLETED\n")()
 	}
 }

@@ -129,7 +129,7 @@ type IdOrdineRivenditore: void {
   .idOrdine: string
 }
 
-// Get Order Variables
+// Recupero Variabili Sessione
 
 type RecuperoVariabiliSessione: void {
   .idOrdine: string
@@ -141,6 +141,30 @@ type RecuperoVariabiliSessioneResponse: void {
   .ordineContieneMaterialiPrenotatiMS: bool
   .ordineContieneMaterialiDaOrdinareDaFornitore: bool
   .tuttiAccessoriPresentiNeiMagazzini: bool
+}
+
+// Verifica Anticipo Con Sistema Bancario
+
+type VerificaAnticipoConSistemaBancario: void {
+  .idOrdine: string
+  .transactionToken: string
+}
+
+type VerificaAnticipoConSistemaBancarioResponse: void {
+  .anticipoVerificato: bool
+  .message: string
+}
+
+// Verifica Saldo Con Sistema Bancario
+
+type VerificaSaldoConSistemaBancario: void {
+  .idOrdine: string
+  .transactionToken: string
+}
+
+type VerificaSaldoConSistemaBancarioResponse: void {
+  .saldoVerificato: bool
+  .message: string
 }
 
 // Risposte generiche
@@ -173,7 +197,9 @@ interface ACMEGestioneOrdiniInterface {
                     sbloccoPrenotazioniComponentiAccessoriMagazzini(SbloccoPrenotazioniComponentiAccessoriMagazzini)(SbloccoPrenotazioniComponentiAccessoriMagazziniResponse),
                     richiestaTrasferimentoMP(RichiestaTrasferimentoMP)(RichiestaTrasferimentoMPResponse),
                     richiestaTrasferimentoMS(RichiestaTrasferimentoMS)(RichiestaTrasferimentoMSResponse),
-                    recuperoVariabiliSessione(RecuperoVariabiliSessione)(RecuperoVariabiliSessioneResponse)
+                    recuperoVariabiliSessione(RecuperoVariabiliSessione)(RecuperoVariabiliSessioneResponse),
+                    verificaAnticipoConSistemaBancario(VerificaAnticipoConSistemaBancario)(VerificaAnticipoConSistemaBancarioResponse),
+                    verificaSaldoConSistemaBancario(VerificaSaldoConSistemaBancario)(VerificaSaldoConSistemaBancarioResponse)
   OneWay:           accettaPreventivo( AccettaPreventivo ),
                     rifiutoPreventivo( RifiutoPreventivo )
 }

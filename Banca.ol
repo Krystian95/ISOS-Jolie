@@ -39,9 +39,6 @@ init {
 		.authKey = "24bd1e11-0ad5-4293-96bf-ae3c953d824c";
 		.balance = 15000.0
 	}
-
-	global.userAuthenticated = false;
-	global.idToken = 1 //se è 0 è nullo il pagamento
 }
 
 execution { sequential }
@@ -108,19 +105,27 @@ main {
 						for(j = 0, j < #global.users, j++){
 							if(global.users[j].username == request.receiverUsername){ // destination
 
+								println@Console("Saldo conto di " + global.users[i].username + ": EUR " + global.users[i].balance)();
+								println@Console("Saldo conto di " + global.users[j].username + ": EUR " + global.users[j].balance + "\n")();
+
 								global.users[i].balance -= request.amount;
 								global.users[j].balance += request.amount;
+
+								println@Console("Saldo conto di " + global.users[i].username + ": EUR " + global.users[i].balance)();
+								println@Console("Saldo conto di " + global.users[j].username + ": EUR " + global.users[j].balance)();
 
 								response.result = true;
 								response.message = "Pagamento di EUR " + request.amount + " accettato e correttamente versato sul conto di " + request.receiverUsername;
 
-								global.users[i].payments[#global.users[i].payments].transactionId = new;
+								global.users[i].payments[#global.users[i].payments].transactionToken = new;
 								global.users[i].payments[#global.users[i].payments - 1].amount = request.amount;
 
-								response.transactionToken = global.users[i].payments[#global.users[i].payments - 1].transactionId;
+								response.transactionToken = global.users[i].payments[#global.users[i].payments - 1].transactionToken;
 
-								println@Console("global.users["+i+"].payments.transactionId = " + global.users[i].payments[#global.users[i].payments - 1].transactionId)();
-								println@Console("global.users["+i+"].payments.amount = " + global.users[i].payments[#global.users[i].payments - 1].amount + "\n")()
+								arraySize = #global.users[i].payments - 1;
+
+								println@Console("global.users["+i+"].payments["+arraySize+"].amount = " + global.users[i].payments[arraySize].amount)();
+								println@Console("global.users["+i+"].payments["+arraySize+"].transactionToken = " + global.users[i].payments[arraySize].transactionToken)()
 							}
 						}
 					} else {
@@ -134,30 +139,39 @@ main {
 	}
 
 	[
-	checkPayment(tok)(resul){
+		checkPayment(request)(response){
 
+			response.result = false;
+			response.message = "Il pagamento con token " + request.transactionToken + " NON e' stato verificato correttamente";
 
+			authKeyVerified = false;
 
-								for(k = 0, k < #global.users[i].payments, k++){
-									println@Console("TEST global.users["+i+"].payments["+k+"].transactionId = "+global.users[i].payments[k].transactionId)();
-									println@Console("TEST global.users["+i+"].payments["+k+"].amount = "+global.users[i].payments[k].amount)()
-								}
-
-		control=false;
-		if (tok.value!=0) {
-			if (tok.value<=global.idToken) {
-				resul.val=true;
-				control=true
+			for(i = 0, i < #global.users, i++){
+				if(global.users[i].authKey == request.authKey) {
+					authKeyVerified = true
+				}
 			}
-		};
-		if (!control) {
-			resul.val=false
-		};
-		println@Console("Controllo di Acme sul token rilasciato numero "+tok.value)()
-	}]
-	
-	[logout(req)] {
-		global.userAuthenticated=false;
-		println@Console("Logout effettuato")()
+
+			if(authKeyVerified) {
+				for(i = 0, i < #global.users, i++){
+					for(j = 0, j < #global.users[i].payments, j++){
+						if(global.users[i].payments[j].transactionToken == request.transactionToken){
+							if(global.users[i].payments[j].amount == request.amount){
+								response.result = true;
+								response.message = "Il pagamento con token " + request.transactionToken + " e' stato verificato correttamente"
+							} else {
+								response.message = "Il pagamento con token " + request.transactionToken + " esiste ma NON e' dell'importo richiesto"
+							}
+						}
+					}
+				}
+			} else {
+				response.message = "L'authKey " + request.authKey + " non e' valida. Riesegui il login per favore."
+			}
+
+			println@Console(response.message)()
+		}
+	] {
+		println@Console("\n[checkPayment] COMPLETED\n")()
 	}
 }
