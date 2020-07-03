@@ -59,9 +59,21 @@ type RifiutoPreventivo: void {
   .idOrdine: string
 }
 
+type RicevutaAnticipo: void {
+  .idOrdine: string
+  .transactionToken: string
+}
+
+type RicevutaSaldo: void {
+  .idOrdine: string
+  .transactionToken: string
+}
+
 interface ACMERivenditoreInterface {
   RequestResponse:  richiediListino( void )( Listino )
   OneWay:           inviaOrdine( Ordine ),
                     accettaPreventivo( AccettaPreventivo ),
-                    rifiutoPreventivo( RifiutoPreventivo )
+                    rifiutoPreventivo( RifiutoPreventivo ),
+                    ricevutaAnticipo(RicevutaAnticipo),
+                    ricevutaSaldo(RicevutaSaldo)
 }

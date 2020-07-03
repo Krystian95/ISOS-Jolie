@@ -229,14 +229,19 @@ main
 	    			println@Console(paymentAnticipoResponse.message + "\n\n")();
 
 	    			if(paymentAnticipoResponse.result){
-	    				println@Console("Payment transaction token = " + paymentAnticipoResponse.transactionToken + "\n")();
+	    				println@Console("Payment transaction token = " + paymentAnticipoResponse.transactionToken + "\n\n")();
+
+	    				println@Console("Invio ad ACME il transaction token del pagamento dell'anticipo per l'ordine #" + params.idOrdine + "\n")();
+	    				ricevutaAnticipo.idOrdine = params.idOrdine;
+	    				ricevutaAnticipo.transactionToken = paymentAnticipoResponse.transactionToken;
+						ricevutaAnticipo@ACMEService( ricevutaAnticipo );
 
 	    				checkAccount.authKey = loginResponse.authKey;
 				    	checkAccount@Banca(checkAccount)(checkAccount2Response);
 
 				    	println@Console(checkAccount2Response.message + "\n\n")();
 
-	    				sleep@Time(5000)();
+	    				sleep@Time(3000)();
 
 	    				// Pagamento Saldo
 
@@ -252,6 +257,11 @@ main
 		    			if(paymentAnticipoResponse.result){
 
 							println@Console("Payment transaction token = " + paymentSaldoResponse.transactionToken + "\n")();
+
+							println@Console("Invio ad ACME il transaction token del pagamento del saldo per l'ordine #" + params.idOrdine + "\n")();
+		    				ricevutaSaldo.idOrdine = params.idOrdine;
+		    				ricevutaSaldo.transactionToken = paymentSaldoResponse.transactionToken;
+							ricevutaSaldo@ACMEService( ricevutaSaldo );
 
 			    			checkAccount.authKey = loginResponse.authKey;
 				    		checkAccount@Banca(checkAccount)(checkAccount3Response);

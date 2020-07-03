@@ -9,6 +9,8 @@ type varType:void{
   .ordine?:intStringType
   .accettazionePreventivo?: intStringType
   .rifiutoPreventivo?: intStringType
+  .ricevutaAnticipo?: intStringType
+  .ricevutaSaldo?: intStringType
 }
 
 type intStringType:void{

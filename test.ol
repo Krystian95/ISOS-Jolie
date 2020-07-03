@@ -97,10 +97,10 @@ main
 
 	// Invio preventivo
 
-	/*invioPreventivo.idOrdine = "227";
+	invioPreventivo.idOrdine = "227";
 	invioPreventivo.idRivenditore = "1";
 	invioPreventivo@ACMETest(invioPreventivo)(response);
-	println@Console("response.message = " + response.message)()*/
+	println@Console("response.message = " + response.message)()
 
 	// Accetta preventivo
 
@@ -150,10 +150,10 @@ main
 
 	// Verifica Saldo Con Sistema Bancario
 
-	verificaSaldoConSistemaBancario.idOrdine = "227";
+	/*verificaSaldoConSistemaBancario.idOrdine = "227";
 	verificaSaldoConSistemaBancario.transactionToken = "13612fb8-73d2-4239-87bf-e5ff71d30926";
 	verificaSaldoConSistemaBancario@ACMEService(verificaSaldoConSistemaBancario)(response);
-	println@Console("response.saldoVerificato = " + response.saldoVerificato)()
+	println@Console("response.saldoVerificato = " + response.saldoVerificato)()*/
 }
 
 

@@ -1170,7 +1170,6 @@ main
 		verificaAnticipoConSistemaBancario ( params )( response ) {
 
 			response.anticipoVerificato = false;
-			response.message = "NON VERIFICATO Anticipo con amount di EUR " + amout + " e transaction token " + transactionToken;
 
 			// Login
 
@@ -1200,6 +1199,8 @@ main
 	        	if(checkPaymentResponse.result) {
 	        		response.anticipoVerificato = true;
 	        		response.message = "VERIFICATO pagamento Anticipo con amount di EUR " + amout + " e transaction token " + params.transactionToken
+	        	} else {
+	        		response.message = "NON VERIFICATO pagamento Anticipo con amount di EUR " + amout + " e transaction token " + params.transactionToken
 	        	}
 
 	        	println@Console(response.message)()
@@ -1213,7 +1214,6 @@ main
 		verificaSaldoConSistemaBancario ( params )( response ) {
 
 			response.saldoVerificato = false;
-			response.message = "NON VERIFICATO Saldo con amount di EUR " + amout + " e transaction token " + transactionToken;
 
 			// Login
 
@@ -1243,6 +1243,8 @@ main
 	        	if(checkPaymentResponse.result) {
 	        		response.saldoVerificato = true;
 	        		response.message = "VERIFICATO pagamento Saldo con amount di EUR " + amout + " e transaction token " + params.transactionToken
+	        	} else {
+	        		response.message = "NON VERIFICATO pagamento Saldo con amount di EUR " + amout + " e transaction token " + params.transactionToken
 	        	}
 
 	        	println@Console(response.message)()
@@ -1250,5 +1252,33 @@ main
 	    }
 	] {
 		println@Console("\n[verificaSaldoConSistemaBancario] COMPLETED\n")()
+	}
+
+	[
+		ricevutaAnticipo ( params )
+	] {
+		// Message
+		message.messageName = "RicevutaAnticipo";
+		message.processVariables.ricevutaAnticipo.value = params.transactionToken;
+		message.processVariables.ricevutaAnticipo.type = "String";
+		message@CamundaPort(message)(rit);
+
+		println@Console("Ricevuto il transaction token dell'Anticipo per l'ordine #" + params.idOrdine + " (" + params.transactionToken + ")")();
+
+		println@Console("\n[ricevutaAnticipo] COMPLETED\n")()
+	}
+
+	[
+		ricevutaSaldo ( params )
+	] {
+		// Message
+		message.messageName = "RicevutaSaldo";
+		message.processVariables.ricevutaSaldo.value = params.transactionToken;
+		message.processVariables.ricevutaSaldo.type = "String";
+		message@CamundaPort(message)(rit);
+
+		println@Console("Ricevuto il transaction token del Saldo per l'ordine #" + params.idOrdine + " (" + params.transactionToken + ")")();
+
+		println@Console("\n[ricevutaSaldo] COMPLETED\n")()
 	}
 }

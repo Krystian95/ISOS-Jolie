@@ -167,6 +167,20 @@ type VerificaSaldoConSistemaBancarioResponse: void {
   .message: string
 }
 
+// Ricevuta Anticipo
+
+type RicevutaAnticipo: void {
+  .idOrdine: string
+  .transactionToken: string
+}
+
+// Ricevuta Saldo
+
+type RicevutaSaldo: void {
+  .idOrdine: string
+  .transactionToken: string
+}
+
 // Risposte generiche
 
 type Response: void {
@@ -201,7 +215,9 @@ interface ACMEGestioneOrdiniInterface {
                     verificaAnticipoConSistemaBancario(VerificaAnticipoConSistemaBancario)(VerificaAnticipoConSistemaBancarioResponse),
                     verificaSaldoConSistemaBancario(VerificaSaldoConSistemaBancario)(VerificaSaldoConSistemaBancarioResponse)
   OneWay:           accettaPreventivo( AccettaPreventivo ),
-                    rifiutoPreventivo( RifiutoPreventivo )
+                    rifiutoPreventivo( RifiutoPreventivo ),
+                    ricevutaAnticipo(RicevutaAnticipo),
+                    ricevutaSaldo(RicevutaSaldo)
 }
 
 
