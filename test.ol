@@ -97,7 +97,7 @@ main
 
 	// Invio preventivo
 
-	invioPreventivo.idOrdine = "137";
+	invioPreventivo.idOrdine = "227";
 	invioPreventivo.idRivenditore = "1";
 	invioPreventivo@ACMETest(invioPreventivo)(response);
 	println@Console("response.message = " + response.message)()

@@ -1035,22 +1035,15 @@ main
 	[
 		invioPreventivo ( params )( response ) {
 
-	        query = "SELECT totalePreventivo
+	        query = "SELECT totalePreventivo, totaleAnticipo, totaleSaldo
 					FROM Ordine
 					WHERE idOrdine = " + params.idOrdine;
-        	query@Database( query )( totalePreventivo );
+        	query@Database( query )( preventivo );
 
         	ricezionePreventivo.idOrdine = params.idOrdine;
-        	ricezionePreventivo.totalePreventivo = totalePreventivo.row[0].totalePreventivo;
-
-        	/*
-
-			TODO: spostare il calcolo delle percentuali sul calcolo preventivo e qui solo ripescarle dal db
-			(senza arrotondare da codice, ma da query)
-
-			*/
-        	ricezionePreventivo.totaleAnticipo = (ricezionePreventivo.totalePreventivo / 100 * PERCENTAGE_ANTICIPO);
-        	ricezionePreventivo.totaleSaldo = (ricezionePreventivo.totalePreventivo / 100 * PERCENTAGE_SALDO);
+        	ricezionePreventivo.totalePreventivo = preventivo.row[0].totalePreventivo;
+        	ricezionePreventivo.totaleAnticipo = preventivo.row[0].totaleAnticipo;
+        	ricezionePreventivo.totaleSaldo = preventivo.row[0].totaleSaldo;
 
 			if (params.idRivenditore == 1) {
 				ricezionePreventivo@Rivenditore1( ricezionePreventivo )

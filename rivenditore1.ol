@@ -225,18 +225,40 @@ main
 					payment.authKey = loginResponse.authKey;
 					payment.amount = params.totaleAnticipo;
 					payment.receiverUsername = "ACME";
-	    			payment@Banca(payment)(paymentResponse);
+	    			payment@Banca(payment)(paymentAnticipoResponse);
 
-	    			println@Console(paymentResponse.message + "\n")();
+	    			println@Console(paymentAnticipoResponse.message + "\n")();
 
-	    			if(paymentResponse.result){
-	    				println@Console("Payment transaction token = " + paymentResponse.transactionToken + "\n")();
+	    			if(paymentAnticipoResponse.result){
+	    				println@Console("Payment transaction token = " + paymentAnticipoResponse.transactionToken + "\n")();
+
+	    				checkAccount.authKey = loginResponse.authKey;
+				    	checkAccount@Banca(checkAccount)(checkAccount2Response);
+
+				    	println@Console(checkAccount2Response.message + "\n")();
 
 	    				sleep@Time(5000)();
 
 	    				// Pagamento Saldo
 
-	    				println@Console("Procedo ora con il pagamento del saldo (EUR " + params.totaleSaldo + ")...\n")()
+	    				println@Console("Procedo ora con il pagamento del saldo (EUR " + params.totaleSaldo + ")...\n")();
+
+	    				payment.authKey = loginResponse.authKey;
+						payment.amount = params.totaleSaldo;
+						payment.receiverUsername = "ACME";
+		    			payment@Banca(payment)(paymentSaldoResponse);
+
+		    			println@Console(paymentSaldoResponse.message + "\n")();
+
+		    			if(paymentAnticipoResponse.result){
+
+							println@Console("Payment transaction token = " + paymentAnticipoResponse.transactionToken + "\n")();
+
+			    			checkAccount.authKey = loginResponse.authKey;
+				    		checkAccount@Banca(checkAccount)(checkAccount3Response);
+
+				    		println@Console(checkAccount3Response.message + "\n")()
+		    			}
 	    			}
 	    		}
 	    	}
