@@ -181,11 +181,27 @@ type RicevutaSaldo: void {
   .transactionToken: string
 }
 
-// Risposte generiche
+// Get Transaction Token Ancitipo
 
-type Response: void {
-  .message: string
+type GetTransactionTokenAnticipo: void {
+  .idOrdine: string
 }
+
+type GetTransactionTokenAnticipoResponse: void {
+  .transactionToken: string
+}
+
+// Get Transaction Token Saldo
+
+type GetTransactionTokenSaldo: void {
+  .idOrdine: string
+}
+
+type GetTransactionTokenSaldoResponse: void {
+  .transactionToken: string
+}
+
+// Altro
 
 type emptyGetIdOrdine: void
 
@@ -195,6 +211,12 @@ type AccettaPreventivo: void {
 
 type RifiutoPreventivo: void {
   .idOrdine: string
+}
+
+// Risposte generiche
+
+type Response: void {
+  .message: string
 }
 
 interface ACMEGestioneOrdiniInterface {
@@ -213,7 +235,9 @@ interface ACMEGestioneOrdiniInterface {
                     richiestaTrasferimentoMS(RichiestaTrasferimentoMS)(RichiestaTrasferimentoMSResponse),
                     recuperoVariabiliSessione(RecuperoVariabiliSessione)(RecuperoVariabiliSessioneResponse),
                     verificaAnticipoConSistemaBancario(VerificaAnticipoConSistemaBancario)(VerificaAnticipoConSistemaBancarioResponse),
-                    verificaSaldoConSistemaBancario(VerificaSaldoConSistemaBancario)(VerificaSaldoConSistemaBancarioResponse)
+                    verificaSaldoConSistemaBancario(VerificaSaldoConSistemaBancario)(VerificaSaldoConSistemaBancarioResponse),
+                    getTransactionTokenAnticipo( GetTransactionTokenAnticipo )( GetTransactionTokenAnticipoResponse ),
+                    getTransactionTokenSaldo( GetTransactionTokenSaldo )( GetTransactionTokenSaldoResponse )
   OneWay:           accettaPreventivo( AccettaPreventivo ),
                     rifiutoPreventivo( RifiutoPreventivo ),
                     ricevutaAnticipo(RicevutaAnticipo),

@@ -1257,6 +1257,8 @@ main
 	[
 		ricevutaAnticipo ( params )
 	] {
+		global.ordini.(params.idOrdine).transactionTokenAnticipo = params.transactionToken;
+
 		// Message
 		message.messageName = "RicevutaAnticipo";
 		message.processVariables.ricevutaAnticipo.value = params.transactionToken;
@@ -1271,6 +1273,8 @@ main
 	[
 		ricevutaSaldo ( params )
 	] {
+		global.ordini.(params.idOrdine).transactionTokenSaldo = params.transactionToken;
+
 		// Message
 		message.messageName = "RicevutaSaldo";
 		message.processVariables.ricevutaSaldo.value = params.transactionToken;
@@ -1280,5 +1284,27 @@ main
 		println@Console("Ricevuto il transaction token del Saldo per l'ordine #" + params.idOrdine + " (" + params.transactionToken + ")")();
 
 		println@Console("\n[ricevutaSaldo] COMPLETED\n")()
+	}
+
+	[
+		getTransactionTokenAnticipo ( params )( response ) {
+
+			println@Console("global.ordini.("+params.idOrdine+").transactionTokenAnticipo = " + global.ordini.(params.idOrdine).transactionTokenAnticipo)();
+
+			response.transactionToken = global.ordini.(params.idOrdine).transactionTokenAnticipo
+	    }
+	] {
+		println@Console("\n[getTransactionTokenAnticipo] COMPLETED\n")()
+	}
+
+	[
+		getTransactionTokenSaldo ( params )( response ) {
+
+			println@Console("global.ordini.("+params.idOrdine+").transactionTokenSaldo = " + global.ordini.(params.idOrdine).transactionTokenSaldo)();
+
+			response.transactionToken = global.ordini.(params.idOrdine).transactionTokenSaldo
+	    }
+	] {
+		println@Console("\n[getTransactionTokenSaldo] COMPLETED\n")()
 	}
 }
