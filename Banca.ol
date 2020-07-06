@@ -122,10 +122,7 @@ main {
 
 								response.transactionToken = global.users[i].payments[#global.users[i].payments - 1].transactionToken;
 
-								arraySize = #global.users[i].payments - 1;
-
-								println@Console("global.users["+i+"].payments["+arraySize+"].amount = " + global.users[i].payments[arraySize].amount)();
-								println@Console("global.users["+i+"].payments["+arraySize+"].transactionToken = " + global.users[i].payments[arraySize].transactionToken)()
+								arraySize = #global.users[i].payments - 1
 							}
 						}
 					} else {
