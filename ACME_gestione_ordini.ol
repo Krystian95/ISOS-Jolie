@@ -12,6 +12,7 @@ include "interfaces/RivenditoreInterface.iol"
 include "interfaces/ACMEMagazzinoInterface.iol"
 include "interfaces/BancaInterface.iol"
 include "interfaces/FornitoreInterface.iol"
+include "interfaces/CorriereInterface.iol"
 
 // Porta Rivenditore 1 -> ACME Gestione Ordini
 inputPort ACMEGestioneOrdiniRivenditore1 {
@@ -120,6 +121,13 @@ outputPort Fornitore {
 	Location: "socket://localhost:8018"
 	Protocol: soap
 	Interfaces: FornitoreInterface
+}
+
+// Porta ACME Gestione Ordini -> Corriere
+outputPort Corriere {
+	Location: "socket://localhost:8019"
+	Protocol: soap
+	Interfaces: CorriereInterface
 }
 
 execution { concurrent }
@@ -1309,5 +1317,22 @@ main
 	    }
 	] {
 		println@Console("\n[invioOrdineMaterialiNonPresentiFornitore] COMPLETED\n\n")()
+	}
+
+	[
+		invioOrdineCorriere ( params )( response ) {
+
+			println@Console("Invio ordine al Corriere per l'ordine #" + params.idOrdine + "\n")();
+
+			invioOrdine.idOrdine = params.idOrdine;
+
+			invioOrdine@Corriere(invioOrdine)(responseinvioOrdine);
+
+			response.message = responseinvioOrdine.message;
+
+	        println@Console(response.message)()
+	    }
+	] {
+		println@Console("\n[invioOrdineCorriere] COMPLETED\n\n")()
 	}
 }

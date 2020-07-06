@@ -155,8 +155,14 @@ main
 
 	// Invio Ordine Materiali Non Presenti Fornitore
 
-	invioOrdineMaterialiNonPresentiFornitore.idOrdine = "227";
+	/*invioOrdineMaterialiNonPresentiFornitore.idOrdine = "227";
 	invioOrdineMaterialiNonPresentiFornitore@ACMEService(invioOrdineMaterialiNonPresentiFornitore)(response);
+	println@Console("response.message = " + response.message)()*/
+
+	// Invio Ordine Corriere
+
+	invioOrdineCorriere.idOrdine = "227";
+	invioOrdineCorriere@ACMEService(invioOrdineCorriere)(response);
 	println@Console("response.message = " + response.message)()
 }
 
