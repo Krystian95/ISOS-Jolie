@@ -96,11 +96,11 @@ main
 	println@Console("response.message = " + response.message)();*/
 
 	// Invio preventivo
-
+/*
 	invioPreventivo.idOrdine = "227";
 	invioPreventivo.idRivenditore = "1";
 	invioPreventivo@ACMETest(invioPreventivo)(response);
-	println@Console("response.message = " + response.message)()
+	println@Console("response.message = " + response.message)()*/
 
 	// Accetta preventivo
 
@@ -152,6 +152,12 @@ main
 	/*verificaSaldoConSistemaBancario.idOrdine = "227";
 	verificaSaldoConSistemaBancario@ACMEService(verificaSaldoConSistemaBancario)(response);
 	println@Console("response.saldoVerificato = " + response.saldoVerificato)()*/
+
+	// Invio Ordine Materiali Non Presenti Fornitore
+
+	invioOrdineMaterialiNonPresentiFornitore.idOrdine = "227";
+	invioOrdineMaterialiNonPresentiFornitore@ACMEService(invioOrdineMaterialiNonPresentiFornitore)(response);
+	println@Console("response.message = " + response.message)()
 }
 
 

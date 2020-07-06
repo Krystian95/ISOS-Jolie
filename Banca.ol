@@ -43,7 +43,7 @@ init {
 
 execution { sequential }
 
-init{
+init {
 	println@Console("\nBANCA is running...\n")()
 }
 

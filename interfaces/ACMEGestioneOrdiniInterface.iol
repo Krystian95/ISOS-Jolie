@@ -179,24 +179,14 @@ type RicevutaSaldo: void {
   .transactionToken: string
 }
 
-// Get Transaction Token Ancitipo
+// Invio Ordine Materiali Non Presenti Fornitore
 
-type GetTransactionTokenAnticipo: void {
+type InvioOrdineMaterialiNonPresentiFornitore: void {
   .idOrdine: string
 }
 
-type GetTransactionTokenAnticipoResponse: void {
-  .transactionToken: string
-}
-
-// Get Transaction Token Saldo
-
-type GetTransactionTokenSaldo: void {
-  .idOrdine: string
-}
-
-type GetTransactionTokenSaldoResponse: void {
-  .transactionToken: string
+type InvioOrdineMaterialiNonPresentiFornitoreResponse: void {
+  .message: string
 }
 
 // Altro
@@ -233,7 +223,8 @@ interface ACMEGestioneOrdiniInterface {
                     richiestaTrasferimentoMS(RichiestaTrasferimentoMS)(RichiestaTrasferimentoMSResponse),
                     recuperoVariabiliSessione(RecuperoVariabiliSessione)(RecuperoVariabiliSessioneResponse),
                     verificaAnticipoConSistemaBancario(VerificaAnticipoConSistemaBancario)(VerificaAnticipoConSistemaBancarioResponse),
-                    verificaSaldoConSistemaBancario(VerificaSaldoConSistemaBancario)(VerificaSaldoConSistemaBancarioResponse)
+                    verificaSaldoConSistemaBancario(VerificaSaldoConSistemaBancario)(VerificaSaldoConSistemaBancarioResponse),
+                    invioOrdineMaterialiNonPresentiFornitore(InvioOrdineMaterialiNonPresentiFornitore)(InvioOrdineMaterialiNonPresentiFornitoreResponse)
   OneWay:           accettaPreventivo( AccettaPreventivo ),
                     rifiutoPreventivo( RifiutoPreventivo ),
                     ricevutaAnticipo(RicevutaAnticipo),

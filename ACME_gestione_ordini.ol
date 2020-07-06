@@ -11,6 +11,7 @@ include "interfaces/ACMERivenditoreInterface.iol"
 include "interfaces/RivenditoreInterface.iol"
 include "interfaces/ACMEMagazzinoInterface.iol"
 include "interfaces/BancaInterface.iol"
+include "interfaces/FornitoreInterface.iol"
 
 // Porta Rivenditore 1 -> ACME Gestione Ordini
 inputPort ACMEGestioneOrdiniRivenditore1 {
@@ -112,6 +113,13 @@ outputPort Banca {
 	Location: "socket://localhost:8017"
 	Protocol: soap
 	Interfaces: BancaInterface
+}
+
+// Porta ACME Gestione Ordini -> Fornitore
+outputPort Fornitore {
+	Location: "socket://localhost:8018"
+	Protocol: soap
+	Interfaces: FornitoreInterface
 }
 
 execution { concurrent }
@@ -1284,5 +1292,22 @@ main
 		println@Console("Ricevuto il transaction token del Saldo per l'ordine #" + params.idOrdine + " (" + params.transactionToken + ")")();
 
 		println@Console("\n[ricevutaSaldo] COMPLETED\n")()
+	}
+
+	[
+		invioOrdineMaterialiNonPresentiFornitore ( params )( response ) {
+
+			println@Console("Materiali non presenti per l'ordine #" + params.idOrdine + " richiesti al Fornitore\n")();
+
+			richiestaComponentiAccessori.idOrdine = params.idOrdine;
+
+			richiestaComponentiAccessori@Fornitore(richiestaComponentiAccessori)(responseRichiestaComponentiAccessori);
+
+			response.message = responseRichiestaComponentiAccessori.message;
+
+	        println@Console(response.message)()
+	    }
+	] {
+		println@Console("\n[invioOrdineMaterialiNonPresentiFornitore] COMPLETED\n\n")()
 	}
 }
