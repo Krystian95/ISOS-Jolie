@@ -199,6 +199,16 @@ type InvioOrdineCorriereResponse: void {
   .message: string
 }
 
+// Invio Ordine Accessori Fornitore
+
+type InvioOrdineAccessoriFornitore: void {
+  .idOrdine: string
+}
+
+type InvioOrdineAccessoriFornitoreResponse: void {
+  .message: string
+}
+
 // Altro
 
 type emptyGetIdOrdine: void
@@ -235,7 +245,8 @@ interface ACMEGestioneOrdiniInterface {
                     verificaAnticipoConSistemaBancario(VerificaAnticipoConSistemaBancario)(VerificaAnticipoConSistemaBancarioResponse),
                     verificaSaldoConSistemaBancario(VerificaSaldoConSistemaBancario)(VerificaSaldoConSistemaBancarioResponse),
                     invioOrdineMaterialiNonPresentiFornitore(InvioOrdineMaterialiNonPresentiFornitore)(InvioOrdineMaterialiNonPresentiFornitoreResponse),
-                    invioOrdineCorriere(InvioOrdineCorriere)(InvioOrdineCorriereResponse)
+                    invioOrdineCorriere(InvioOrdineCorriere)(InvioOrdineCorriereResponse),
+                    invioOrdineAccessoriFornitore(InvioOrdineAccessoriFornitore)(InvioOrdineAccessoriFornitoreResponse)
   OneWay:           accettaPreventivo( AccettaPreventivo ),
                     rifiutoPreventivo( RifiutoPreventivo ),
                     ricevutaAnticipo(RicevutaAnticipo),

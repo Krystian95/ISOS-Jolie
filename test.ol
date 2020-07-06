@@ -161,8 +161,14 @@ main
 
 	// Invio Ordine Corriere
 
-	invioOrdineCorriere.idOrdine = "227";
+	/*invioOrdineCorriere.idOrdine = "227";
 	invioOrdineCorriere@ACMEService(invioOrdineCorriere)(response);
+	println@Console("response.message = " + response.message)()*/
+
+	// Richiesta Accessori
+
+	invioOrdineAccessoriFornitore.idOrdine = "227";
+	invioOrdineAccessoriFornitore@ACMEService(invioOrdineAccessoriFornitore)(response);
 	println@Console("response.message = " + response.message)()
 }
 

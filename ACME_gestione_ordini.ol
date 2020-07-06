@@ -1308,7 +1308,6 @@ main
 			println@Console("Materiali non presenti per l'ordine #" + params.idOrdine + " richiesti al Fornitore\n")();
 
 			richiestaComponentiAccessori.idOrdine = params.idOrdine;
-
 			richiestaComponentiAccessori@Fornitore(richiestaComponentiAccessori)(responseRichiestaComponentiAccessori);
 
 			response.message = responseRichiestaComponentiAccessori.message;
@@ -1325,14 +1324,29 @@ main
 			println@Console("Invio ordine al Corriere per l'ordine #" + params.idOrdine + "\n")();
 
 			invioOrdine.idOrdine = params.idOrdine;
+			invioOrdine@Corriere(invioOrdine)(responseInvioOrdine);
 
-			invioOrdine@Corriere(invioOrdine)(responseinvioOrdine);
-
-			response.message = responseinvioOrdine.message;
+			response.message = responseInvioOrdine.message;
 
 	        println@Console(response.message)()
 	    }
 	] {
 		println@Console("\n[invioOrdineCorriere] COMPLETED\n\n")()
+	}
+
+	[
+		invioOrdineAccessoriFornitore ( params )( response ) {
+
+			println@Console("Accessori non presenti per l'ordine #" + params.idOrdine + " richiesti al Fornitore\n")();
+
+			richiestaAccessori.idOrdine = params.idOrdine;
+			richiestaAccessori@Fornitore(richiestaAccessori)(responseRichiestaAccessori);
+
+			response.message = responseRichiestaAccessori.message;
+
+	        println@Console(response.message)()
+	    }
+	] {
+		println@Console("\n[invioOrdineAccessoriFornitore] COMPLETED\n\n")()
 	}
 }

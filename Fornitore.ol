@@ -31,4 +31,16 @@ main
 	] {
 		println@Console("\n[richiestaComponentiAccessori] COMPLETED\n\n")()
 	}
+
+	[
+		richiestaAccessori ( params )( response ) {
+
+			response.result = true;
+			response.message = "Accessori richiesti per l'ordine #" + params.idOrdine + " PRESENTI dal Fornitore e spediti!";
+
+	        println@Console(response.message)()
+	    }
+	] {
+		println@Console("\n[richiestaAccessori] COMPLETED\n\n")()
+	}
 }
