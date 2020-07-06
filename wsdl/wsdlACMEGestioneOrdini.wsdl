@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wsdl:definitions targetNamespace="mytest.test.com.wsdl" xmlns:xsd1="mytest.test.com.xsd" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="mytest.test.com.wsdl" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
   <wsdl:types>
-    <xs:schema targetNamespace="mytest.test.com.xsd" xmlns:sch="mytest.test.com.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema"><xs:element name="notificaCustomizzazioniNonRealizzabili"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idRivenditore" type="xs:string"/><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="notificaCustomizzazioniNonRealizzabiliResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="message" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="sbloccoPrenotazioniComponentiAccessoriMagazzini"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="sbloccoPrenotazioniComponentiAccessoriMagazziniResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="message" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="accettaPreventivo"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="prenotazioneMaterialiPresentiMP"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="prenotazioneMaterialiPresentiMPResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="message" type="xs:string"/><xs:element maxOccurs="1" minOccurs="1" name="tuttiMaterialiRichiestiPresentiMP" type="xs:boolean"/></xs:sequence></xs:complexType></xs:element><xs:element name="verificaAnticipoConSistemaBancario"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="transactionToken" type="xs:string"/><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="verificaAnticipoConSistemaBancarioResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="message" type="xs:string"/><xs:element maxOccurs="1" minOccurs="1" name="anticipoVerificato" type="xs:boolean"/></xs:sequence></xs:complexType></xs:element><xs:element name="richiestaTrasferimentoMS"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="richiestaTrasferimentoMSResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="message" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="ricevutaAnticipo"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="transactionToken" type="xs:string"/><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="rifiutoPreventivo"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="ricevutaSaldo"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="transactionToken" type="xs:string"/><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="richiestaTrasferimentoMP"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="richiestaTrasferimentoMPResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="message" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="verificaCustomizzazioni"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="verificaCustomizzazioniResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="ordineContieneAccessoriDaNonAssemblare" type="xs:boolean"/><xs:element maxOccurs="1" minOccurs="1" name="customizzazioniPossibili" type="xs:boolean"/><xs:element maxOccurs="1" minOccurs="1" name="ordineContieneComponentiAccessoriDaAssemblare" type="xs:boolean"/></xs:sequence></xs:complexType></xs:element><xs:element name="calcoloPreventivo"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/><xs:element maxOccurs="1" minOccurs="1" name="idRivenditore" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="calcoloPreventivoResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="totaleCicli" type="xs:double"/><xs:element maxOccurs="1" minOccurs="1" name="sogliaSconto" type="xs:double"/><xs:element maxOccurs="1" minOccurs="1" name="spedizioniComponenti" type="xs:double"/><xs:element maxOccurs="1" minOccurs="1" name="spedizioniAccessori" type="xs:double"/><xs:element maxOccurs="1" minOccurs="1" name="ordineContieneMaterialiDaOrdinareDaFornitore" type="xs:boolean"/><xs:element maxOccurs="1" minOccurs="1" name="tuttiAccessoriPresentiNeiMagazzini" type="xs:boolean"/><xs:element maxOccurs="1" minOccurs="1" name="totaleCustomizzazioni" type="xs:double"/><xs:element maxOccurs="1" minOccurs="1" name="totalePreventivo" type="xs:double"/><xs:element maxOccurs="1" minOccurs="1" name="totaleAccessori" type="xs:double"/><xs:element maxOccurs="1" minOccurs="1" name="ordineContieneMaterialiPrenotatiMP" type="xs:boolean"/><xs:element maxOccurs="1" minOccurs="1" name="totaleCorriere" type="xs:double"/><xs:element maxOccurs="1" minOccurs="1" name="ordineContieneMaterialiPrenotatiMS" type="xs:boolean"/></xs:sequence></xs:complexType></xs:element><xs:element name="applicazioneSconto"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/><xs:element maxOccurs="1" minOccurs="1" name="percentualeSconto" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="applicazioneScontoResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="message" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="recuperoVariabiliSessione"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="recuperoVariabiliSessioneResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="ordineContieneAccessoriDaNonAssemblare" type="xs:boolean"/><xs:element maxOccurs="1" minOccurs="1" name="ordineContieneMaterialiDaOrdinareDaFornitore" type="xs:boolean"/><xs:element maxOccurs="1" minOccurs="1" name="tuttiAccessoriPresentiNeiMagazzini" type="xs:boolean"/><xs:element maxOccurs="1" minOccurs="1" name="ordineContieneMaterialiPrenotatiMP" type="xs:boolean"/><xs:element maxOccurs="1" minOccurs="1" name="ordineContieneMaterialiPrenotatiMS" type="xs:boolean"/></xs:sequence></xs:complexType></xs:element><xs:element name="getTransactionTokenSaldo"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="getTransactionTokenSaldoResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="transactionToken" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="invioPreventivo"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/><xs:element maxOccurs="1" minOccurs="1" name="idRivenditore" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="invioPreventivoResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="message" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="getIdOrdine"><xs:complexType><xs:sequence/></xs:complexType></xs:element><xs:element name="getIdOrdineResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="verificaSaldoConSistemaBancario"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="transactionToken" type="xs:string"/><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="verificaSaldoConSistemaBancarioResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="saldoVerificato" type="xs:boolean"/><xs:element maxOccurs="1" minOccurs="1" name="message" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="getTransactionTokenAnticipo"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="getTransactionTokenAnticipoResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="transactionToken" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="getIdRivenditore"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="getIdRivenditoreResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idRivenditore" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="generazioneListaAccessoriPresentiMagazzini"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="generazioneListaAccessoriPresentiMagazziniResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="message" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="prenotazioneMaterialiPresentiMS"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="prenotazioneMaterialiPresentiMSResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="message" type="xs:string"/></xs:sequence></xs:complexType></xs:element></xs:schema>
+    <xs:schema targetNamespace="mytest.test.com.xsd" xmlns:sch="mytest.test.com.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema"><xs:element name="notificaCustomizzazioniNonRealizzabili"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idRivenditore" type="xs:string"/><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="notificaCustomizzazioniNonRealizzabiliResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="message" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="sbloccoPrenotazioniComponentiAccessoriMagazzini"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="sbloccoPrenotazioniComponentiAccessoriMagazziniResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="message" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="accettaPreventivo"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="prenotazioneMaterialiPresentiMP"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="prenotazioneMaterialiPresentiMPResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="message" type="xs:string"/><xs:element maxOccurs="1" minOccurs="1" name="tuttiMaterialiRichiestiPresentiMP" type="xs:boolean"/></xs:sequence></xs:complexType></xs:element><xs:element name="verificaAnticipoConSistemaBancario"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="verificaAnticipoConSistemaBancarioResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="message" type="xs:string"/><xs:element maxOccurs="1" minOccurs="1" name="anticipoVerificato" type="xs:boolean"/></xs:sequence></xs:complexType></xs:element><xs:element name="richiestaTrasferimentoMS"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="richiestaTrasferimentoMSResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="message" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="ricevutaAnticipo"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="transactionToken" type="xs:string"/><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="invioOrdineMaterialiNonPresentiFornitore"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="invioOrdineMaterialiNonPresentiFornitoreResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="message" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="rifiutoPreventivo"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="ricevutaSaldo"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="transactionToken" type="xs:string"/><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="richiestaTrasferimentoMP"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="richiestaTrasferimentoMPResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="message" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="verificaCustomizzazioni"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="verificaCustomizzazioniResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="ordineContieneAccessoriDaNonAssemblare" type="xs:boolean"/><xs:element maxOccurs="1" minOccurs="1" name="customizzazioniPossibili" type="xs:boolean"/><xs:element maxOccurs="1" minOccurs="1" name="ordineContieneComponentiAccessoriDaAssemblare" type="xs:boolean"/></xs:sequence></xs:complexType></xs:element><xs:element name="calcoloPreventivo"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/><xs:element maxOccurs="1" minOccurs="1" name="idRivenditore" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="calcoloPreventivoResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="totaleCicli" type="xs:double"/><xs:element maxOccurs="1" minOccurs="1" name="sogliaSconto" type="xs:double"/><xs:element maxOccurs="1" minOccurs="1" name="spedizioniComponenti" type="xs:double"/><xs:element maxOccurs="1" minOccurs="1" name="spedizioniAccessori" type="xs:double"/><xs:element maxOccurs="1" minOccurs="1" name="ordineContieneMaterialiDaOrdinareDaFornitore" type="xs:boolean"/><xs:element maxOccurs="1" minOccurs="1" name="tuttiAccessoriPresentiNeiMagazzini" type="xs:boolean"/><xs:element maxOccurs="1" minOccurs="1" name="totaleCustomizzazioni" type="xs:double"/><xs:element maxOccurs="1" minOccurs="1" name="totalePreventivo" type="xs:double"/><xs:element maxOccurs="1" minOccurs="1" name="totaleAccessori" type="xs:double"/><xs:element maxOccurs="1" minOccurs="1" name="ordineContieneMaterialiPrenotatiMP" type="xs:boolean"/><xs:element maxOccurs="1" minOccurs="1" name="totaleCorriere" type="xs:double"/><xs:element maxOccurs="1" minOccurs="1" name="ordineContieneMaterialiPrenotatiMS" type="xs:boolean"/></xs:sequence></xs:complexType></xs:element><xs:element name="applicazioneSconto"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/><xs:element maxOccurs="1" minOccurs="1" name="percentualeSconto" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="applicazioneScontoResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="message" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="invioOrdineCorriere"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="invioOrdineCorriereResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="message" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="recuperoVariabiliSessione"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="recuperoVariabiliSessioneResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="ordineContieneAccessoriDaNonAssemblare" type="xs:boolean"/><xs:element maxOccurs="1" minOccurs="1" name="ordineContieneMaterialiDaOrdinareDaFornitore" type="xs:boolean"/><xs:element maxOccurs="1" minOccurs="1" name="tuttiAccessoriPresentiNeiMagazzini" type="xs:boolean"/><xs:element maxOccurs="1" minOccurs="1" name="ordineContieneMaterialiPrenotatiMP" type="xs:boolean"/><xs:element maxOccurs="1" minOccurs="1" name="ordineContieneMaterialiPrenotatiMS" type="xs:boolean"/></xs:sequence></xs:complexType></xs:element><xs:element name="invioPreventivo"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/><xs:element maxOccurs="1" minOccurs="1" name="idRivenditore" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="invioPreventivoResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="message" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="getIdOrdine"><xs:complexType><xs:sequence/></xs:complexType></xs:element><xs:element name="getIdOrdineResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="verificaSaldoConSistemaBancario"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="verificaSaldoConSistemaBancarioResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="saldoVerificato" type="xs:boolean"/><xs:element maxOccurs="1" minOccurs="1" name="message" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="getIdRivenditore"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="getIdRivenditoreResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idRivenditore" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="generazioneListaAccessoriPresentiMagazzini"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="generazioneListaAccessoriPresentiMagazziniResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="message" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="invioOrdineAccessoriFornitore"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="invioOrdineAccessoriFornitoreResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="message" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="prenotazioneMaterialiPresentiMS"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="idOrdine" type="xs:string"/></xs:sequence></xs:complexType></xs:element><xs:element name="prenotazioneMaterialiPresentiMSResponse"><xs:complexType><xs:sequence><xs:element maxOccurs="1" minOccurs="1" name="message" type="xs:string"/></xs:sequence></xs:complexType></xs:element></xs:schema>
   </wsdl:types>
   <wsdl:message name="IdRivenditore">
     <wsdl:part name="body" element="xsd1:getIdRivenditoreResponse"/>
@@ -17,6 +17,9 @@
   </wsdl:message>
   <wsdl:message name="IdOrdine">
     <wsdl:part name="body" element="xsd1:getIdOrdineResponse"/>
+  </wsdl:message>
+  <wsdl:message name="InvioOrdineCorriereResponse">
+    <wsdl:part name="body" element="xsd1:invioOrdineCorriereResponse"/>
   </wsdl:message>
   <wsdl:message name="CalcoloPreventivoResponse">
     <wsdl:part name="body" element="xsd1:calcoloPreventivoResponse"/>
@@ -39,8 +42,8 @@
   <wsdl:message name="VerificaAnticipoConSistemaBancario">
     <wsdl:part name="body" element="xsd1:verificaAnticipoConSistemaBancario"/>
   </wsdl:message>
-  <wsdl:message name="GetTransactionTokenAnticipoResponse">
-    <wsdl:part name="body" element="xsd1:getTransactionTokenAnticipoResponse"/>
+  <wsdl:message name="InvioOrdineCorriere">
+    <wsdl:part name="body" element="xsd1:invioOrdineCorriere"/>
   </wsdl:message>
   <wsdl:message name="RicevutaAnticipo">
     <wsdl:part name="body" element="xsd1:ricevutaAnticipo"/>
@@ -87,8 +90,11 @@
   <wsdl:message name="CalcoloPreventivo">
     <wsdl:part name="body" element="xsd1:calcoloPreventivo"/>
   </wsdl:message>
-  <wsdl:message name="GetTransactionTokenAnticipo">
-    <wsdl:part name="body" element="xsd1:getTransactionTokenAnticipo"/>
+  <wsdl:message name="InvioOrdineAccessoriFornitore">
+    <wsdl:part name="body" element="xsd1:invioOrdineAccessoriFornitore"/>
+  </wsdl:message>
+  <wsdl:message name="InvioOrdineMaterialiNonPresentiFornitoreResponse">
+    <wsdl:part name="body" element="xsd1:invioOrdineMaterialiNonPresentiFornitoreResponse"/>
   </wsdl:message>
   <wsdl:message name="PrenotazioneMaterialiPresentiMP">
     <wsdl:part name="body" element="xsd1:prenotazioneMaterialiPresentiMP"/>
@@ -96,17 +102,17 @@
   <wsdl:message name="InvioPreventivoResponse">
     <wsdl:part name="body" element="xsd1:invioPreventivoResponse"/>
   </wsdl:message>
-  <wsdl:message name="GetTransactionTokenSaldo">
-    <wsdl:part name="body" element="xsd1:getTransactionTokenSaldo"/>
+  <wsdl:message name="InvioOrdineMaterialiNonPresentiFornitore">
+    <wsdl:part name="body" element="xsd1:invioOrdineMaterialiNonPresentiFornitore"/>
   </wsdl:message>
   <wsdl:message name="SbloccoPrenotazioniComponentiAccessoriMagazzini">
     <wsdl:part name="body" element="xsd1:sbloccoPrenotazioniComponentiAccessoriMagazzini"/>
   </wsdl:message>
+  <wsdl:message name="InvioOrdineAccessoriFornitoreResponse">
+    <wsdl:part name="body" element="xsd1:invioOrdineAccessoriFornitoreResponse"/>
+  </wsdl:message>
   <wsdl:message name="PrenotazioneMaterialiPresentiMS">
     <wsdl:part name="body" element="xsd1:prenotazioneMaterialiPresentiMS"/>
-  </wsdl:message>
-  <wsdl:message name="GetTransactionTokenSaldoResponse">
-    <wsdl:part name="body" element="xsd1:getTransactionTokenSaldoResponse"/>
   </wsdl:message>
   <wsdl:message name="RifiutoPreventivo">
     <wsdl:part name="body" element="xsd1:rifiutoPreventivo"/>
@@ -147,6 +153,10 @@
     <wsdl:operation name="ricevutaAnticipo">
       <wsdl:input message="tns:RicevutaAnticipo"/>
     </wsdl:operation>
+    <wsdl:operation name="invioOrdineMaterialiNonPresentiFornitore">
+      <wsdl:input message="tns:InvioOrdineMaterialiNonPresentiFornitore"/>
+      <wsdl:output message="tns:InvioOrdineMaterialiNonPresentiFornitoreResponse"/>
+    </wsdl:operation>
     <wsdl:operation name="rifiutoPreventivo">
       <wsdl:input message="tns:RifiutoPreventivo"/>
     </wsdl:operation>
@@ -169,13 +179,13 @@
       <wsdl:input message="tns:ApplicazioneSconto"/>
       <wsdl:output message="tns:ApplicazioneScontoResponse"/>
     </wsdl:operation>
+    <wsdl:operation name="invioOrdineCorriere">
+      <wsdl:input message="tns:InvioOrdineCorriere"/>
+      <wsdl:output message="tns:InvioOrdineCorriereResponse"/>
+    </wsdl:operation>
     <wsdl:operation name="recuperoVariabiliSessione">
       <wsdl:input message="tns:RecuperoVariabiliSessione"/>
       <wsdl:output message="tns:RecuperoVariabiliSessioneResponse"/>
-    </wsdl:operation>
-    <wsdl:operation name="getTransactionTokenSaldo">
-      <wsdl:input message="tns:GetTransactionTokenSaldo"/>
-      <wsdl:output message="tns:GetTransactionTokenSaldoResponse"/>
     </wsdl:operation>
     <wsdl:operation name="invioPreventivo">
       <wsdl:input message="tns:InvioPreventivo"/>
@@ -189,10 +199,6 @@
       <wsdl:input message="tns:VerificaSaldoConSistemaBancario"/>
       <wsdl:output message="tns:VerificaSaldoConSistemaBancarioResponse"/>
     </wsdl:operation>
-    <wsdl:operation name="getTransactionTokenAnticipo">
-      <wsdl:input message="tns:GetTransactionTokenAnticipo"/>
-      <wsdl:output message="tns:GetTransactionTokenAnticipoResponse"/>
-    </wsdl:operation>
     <wsdl:operation name="getIdRivenditore">
       <wsdl:input message="tns:IdOrdineRivenditore"/>
       <wsdl:output message="tns:IdRivenditore"/>
@@ -200,6 +206,10 @@
     <wsdl:operation name="generazioneListaAccessoriPresentiMagazzini">
       <wsdl:input message="tns:GenerazioneListaAccessoriPresentiMagazzini"/>
       <wsdl:output message="tns:ResponseGenerazioneListaAccessoriPresentiMagazzini"/>
+    </wsdl:operation>
+    <wsdl:operation name="invioOrdineAccessoriFornitore">
+      <wsdl:input message="tns:InvioOrdineAccessoriFornitore"/>
+      <wsdl:output message="tns:InvioOrdineAccessoriFornitoreResponse"/>
     </wsdl:operation>
     <wsdl:operation name="prenotazioneMaterialiPresentiMS">
       <wsdl:input message="tns:PrenotazioneMaterialiPresentiMS"/>
@@ -271,6 +281,15 @@
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="invioOrdineMaterialiNonPresentiFornitore">
+      <soap:operation soapAction="invioOrdineMaterialiNonPresentiFornitore" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="rifiutoPreventivo">
       <soap:operation soapAction="rifiutoPreventivo" style="document"/>
       <wsdl:input>
@@ -325,8 +344,8 @@
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="recuperoVariabiliSessione">
-      <soap:operation soapAction="recuperoVariabiliSessione" style="document"/>
+    <wsdl:operation name="invioOrdineCorriere">
+      <soap:operation soapAction="invioOrdineCorriere" style="document"/>
       <wsdl:input>
         <soap:body use="literal"/>
       </wsdl:input>
@@ -334,8 +353,8 @@
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="getTransactionTokenSaldo">
-      <soap:operation soapAction="getTransactionTokenSaldo" style="document"/>
+    <wsdl:operation name="recuperoVariabiliSessione">
+      <soap:operation soapAction="recuperoVariabiliSessione" style="document"/>
       <wsdl:input>
         <soap:body use="literal"/>
       </wsdl:input>
@@ -370,15 +389,6 @@
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="getTransactionTokenAnticipo">
-      <soap:operation soapAction="getTransactionTokenAnticipo" style="document"/>
-      <wsdl:input>
-        <soap:body use="literal"/>
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal"/>
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="getIdRivenditore">
       <soap:operation soapAction="getIdRivenditore" style="document"/>
       <wsdl:input>
@@ -390,6 +400,15 @@
     </wsdl:operation>
     <wsdl:operation name="generazioneListaAccessoriPresentiMagazzini">
       <soap:operation soapAction="generazioneListaAccessoriPresentiMagazzini" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="invioOrdineAccessoriFornitore">
+      <soap:operation soapAction="invioOrdineAccessoriFornitore" style="document"/>
       <wsdl:input>
         <soap:body use="literal"/>
       </wsdl:input>

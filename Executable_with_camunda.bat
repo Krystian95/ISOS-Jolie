@@ -9,4 +9,6 @@ start "ACME_magazzini_MS_2" jolie -C "AUTOMATIC_MODE=true" ACME_magazzini_MS_2.o
 start "ACME_magazzini_MS_3" jolie -C "AUTOMATIC_MODE=true" ACME_magazzini_MS_3.ol
 start "Rivenditore1" jolie -C "AUTOMATIC_MODE=true" rivenditore1.ol
 start "Banca" jolie -C "AUTOMATIC_MODE=true" Banca.ol
+start "Fornitore" jolie -C "AUTOMATIC_MODE=true" Fornitore.ol
+start "Corriere" jolie -C "AUTOMATIC_MODE=true" Corriere.ol
 exit
