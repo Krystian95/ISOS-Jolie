@@ -701,6 +701,7 @@ main
 	            	// accessorio non prenotato perchè non presente in magazzino
 
 	            	response.ordineContieneMaterialiDaOrdinareDaFornitore = true;
+	            	response.tuttiAccessoriPresentiNeiMagazzini = false;
 
 	            	costo_fornitore = costi_trasporti.fornitore_fisso;
 	            	response.spedizioniAccessori += costo_fornitore;

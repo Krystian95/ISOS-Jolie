@@ -78,7 +78,7 @@ main
 
 	// calcolo preventivo
 
-	/*calcoloPreventivo.idOrdine = "134";
+	calcoloPreventivo.idOrdine = "251";
 	calcoloPreventivo.idRivenditore = "1";
 	calcoloPreventivo@ACMETest(calcoloPreventivo)(response);
 	println@Console("totalePreventivo = " + response.totalePreventivo)();
@@ -86,7 +86,7 @@ main
 	println@Console("ordineContieneMaterialiPrenotatiMP = " + response.ordineContieneMaterialiPrenotatiMP)();
 	println@Console("ordineContieneMaterialiPrenotatiMS = " + response.ordineContieneMaterialiPrenotatiMS)();
 	println@Console("ordineContieneMaterialiDaOrdinareDaFornitore = " + response.ordineContieneMaterialiDaOrdinareDaFornitore)();
-	println@Console("\n")();*/
+	println@Console("\n")()
 
 	// Applicazione sconto
 
@@ -96,8 +96,7 @@ main
 	println@Console("response.message = " + response.message)();*/
 
 	// Invio preventivo
-/*
-	invioPreventivo.idOrdine = "227";
+	/*invioPreventivo.idOrdine = "227";
 	invioPreventivo.idRivenditore = "1";
 	invioPreventivo@ACMETest(invioPreventivo)(response);
 	println@Console("response.message = " + response.message)()*/
@@ -167,9 +166,9 @@ main
 
 	// Richiesta Accessori
 
-	invioOrdineAccessoriFornitore.idOrdine = "227";
+	/*invioOrdineAccessoriFornitore.idOrdine = "227";
 	invioOrdineAccessoriFornitore@ACMEService(invioOrdineAccessoriFornitore)(response);
-	println@Console("response.message = " + response.message)()
+	println@Console("response.message = " + response.message)()*/
 }
 
 
