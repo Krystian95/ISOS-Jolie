@@ -195,7 +195,7 @@ main
 			rifiutoPreventivo@ACMEService( rifiutoPreventivo );
 			println@Console( "Preventivo RIFIUTATO\n" )()
 
-		} else if(scelta == "1"){
+		} else if(scelta == "1" || scelta == "11"){
 
 			accettaPreventivo.idOrdine = params.idOrdine;
 			accettaPreventivo@ACMEService( accettaPreventivo );
