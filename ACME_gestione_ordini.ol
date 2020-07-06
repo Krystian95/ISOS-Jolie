@@ -1192,22 +1192,22 @@ main
 	        	amout = preventivo.row[0].totaleAnticipo;
 
 	        	checkPayment.authKey = loginResponse.authKey;
-	        	checkPayment.transactionToken = params.transactionToken;
+	        	checkPayment.transactionToken = global.ordini.(params.idOrdine).transactionTokenAnticipo;
 	        	checkPayment.amount = amout;
 	        	checkPayment@Banca(checkPayment)(checkPaymentResponse);
 
 	        	if(checkPaymentResponse.result) {
 	        		response.anticipoVerificato = true;
-	        		response.message = "VERIFICATO pagamento Anticipo con amount di EUR " + amout + " e transaction token " + params.transactionToken
+	        		response.message = "VERIFICATO pagamento Anticipo con amount di EUR " + checkPayment.amount + " e transaction token " + checkPayment.transactionToken
 	        	} else {
-	        		response.message = "NON VERIFICATO pagamento Anticipo con amount di EUR " + amout + " e transaction token " + params.transactionToken
+	        		response.message = "NON VERIFICATO pagamento Anticipo con amount di EUR " + checkPayment.amount + " e transaction token " + checkPayment.transactionToken
 	        	}
 
 	        	println@Console(response.message)()
 	    	}
 	    }
 	] {
-		println@Console("\n[verificaAnticipoConSistemaBancario] COMPLETED\n")()
+		println@Console("\n[verificaAnticipoConSistemaBancario] COMPLETED\n\n")()
 	}
 
 	[
@@ -1236,22 +1236,22 @@ main
 	        	amout = preventivo.row[0].totaleSaldo;
 
 	        	checkPayment.authKey = loginResponse.authKey;
-	        	checkPayment.transactionToken = params.transactionToken;
+	        	checkPayment.transactionToken = global.ordini.(params.idOrdine).transactionTokenSaldo;
 	        	checkPayment.amount = amout;
 	        	checkPayment@Banca(checkPayment)(checkPaymentResponse);
 
 	        	if(checkPaymentResponse.result) {
 	        		response.saldoVerificato = true;
-	        		response.message = "VERIFICATO pagamento Saldo con amount di EUR " + amout + " e transaction token " + params.transactionToken
+	        		response.message = "VERIFICATO pagamento Saldo con amount di EUR " + checkPayment.amount + " e transaction token " + checkPayment.transactionToken
 	        	} else {
-	        		response.message = "NON VERIFICATO pagamento Saldo con amount di EUR " + amout + " e transaction token " + params.transactionToken
+	        		response.message = "NON VERIFICATO pagamento Saldo con amount di EUR " + checkPayment.amount + " e transaction token " + checkPayment.transactionToken
 	        	}
 
 	        	println@Console(response.message)()
 	    	}
 	    }
 	] {
-		println@Console("\n[verificaSaldoConSistemaBancario] COMPLETED\n")()
+		println@Console("\n[verificaSaldoConSistemaBancario] COMPLETED\n\n")()
 	}
 
 	[
@@ -1284,27 +1284,5 @@ main
 		println@Console("Ricevuto il transaction token del Saldo per l'ordine #" + params.idOrdine + " (" + params.transactionToken + ")")();
 
 		println@Console("\n[ricevutaSaldo] COMPLETED\n")()
-	}
-
-	[
-		getTransactionTokenAnticipo ( params )( response ) {
-
-			println@Console("global.ordini.("+params.idOrdine+").transactionTokenAnticipo = " + global.ordini.(params.idOrdine).transactionTokenAnticipo)();
-
-			response.transactionToken = global.ordini.(params.idOrdine).transactionTokenAnticipo
-	    }
-	] {
-		println@Console("\n[getTransactionTokenAnticipo] COMPLETED\n")()
-	}
-
-	[
-		getTransactionTokenSaldo ( params )( response ) {
-
-			println@Console("global.ordini.("+params.idOrdine+").transactionTokenSaldo = " + global.ordini.(params.idOrdine).transactionTokenSaldo)();
-
-			response.transactionToken = global.ordini.(params.idOrdine).transactionTokenSaldo
-	    }
-	] {
-		println@Console("\n[getTransactionTokenSaldo] COMPLETED\n")()
 	}
 }

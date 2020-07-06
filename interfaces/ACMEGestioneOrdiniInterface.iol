@@ -147,7 +147,6 @@ type RecuperoVariabiliSessioneResponse: void {
 
 type VerificaAnticipoConSistemaBancario: void {
   .idOrdine: string
-  .transactionToken: string
 }
 
 type VerificaAnticipoConSistemaBancarioResponse: void {
@@ -159,7 +158,6 @@ type VerificaAnticipoConSistemaBancarioResponse: void {
 
 type VerificaSaldoConSistemaBancario: void {
   .idOrdine: string
-  .transactionToken: string
 }
 
 type VerificaSaldoConSistemaBancarioResponse: void {
@@ -235,9 +233,7 @@ interface ACMEGestioneOrdiniInterface {
                     richiestaTrasferimentoMS(RichiestaTrasferimentoMS)(RichiestaTrasferimentoMSResponse),
                     recuperoVariabiliSessione(RecuperoVariabiliSessione)(RecuperoVariabiliSessioneResponse),
                     verificaAnticipoConSistemaBancario(VerificaAnticipoConSistemaBancario)(VerificaAnticipoConSistemaBancarioResponse),
-                    verificaSaldoConSistemaBancario(VerificaSaldoConSistemaBancario)(VerificaSaldoConSistemaBancarioResponse),
-                    getTransactionTokenAnticipo( GetTransactionTokenAnticipo )( GetTransactionTokenAnticipoResponse ),
-                    getTransactionTokenSaldo( GetTransactionTokenSaldo )( GetTransactionTokenSaldoResponse )
+                    verificaSaldoConSistemaBancario(VerificaSaldoConSistemaBancario)(VerificaSaldoConSistemaBancarioResponse)
   OneWay:           accettaPreventivo( AccettaPreventivo ),
                     rifiutoPreventivo( RifiutoPreventivo ),
                     ricevutaAnticipo(RicevutaAnticipo),

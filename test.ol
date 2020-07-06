@@ -97,10 +97,10 @@ main
 
 	// Invio preventivo
 
-	/*invioPreventivo.idOrdine = "227";
+	invioPreventivo.idOrdine = "227";
 	invioPreventivo.idRivenditore = "1";
 	invioPreventivo@ACMETest(invioPreventivo)(response);
-	println@Console("response.message = " + response.message)()*/
+	println@Console("response.message = " + response.message)()
 
 	// Accetta preventivo
 
@@ -144,28 +144,14 @@ main
 	// Verifica Anticipo Con Sistema Bancario
 
 	/*verificaAnticipoConSistemaBancario.idOrdine = "227";
-	verificaAnticipoConSistemaBancario.transactionToken = "15c7f60b-ca33-4831-b8c1-f3eaa250b095";
 	verificaAnticipoConSistemaBancario@ACMEService(verificaAnticipoConSistemaBancario)(response);
 	println@Console("response.anticipoVerificato = " + response.anticipoVerificato)()*/
 
 	// Verifica Saldo Con Sistema Bancario
 
 	/*verificaSaldoConSistemaBancario.idOrdine = "227";
-	verificaSaldoConSistemaBancario.transactionToken = "13612fb8-73d2-4239-87bf-e5ff71d30926";
 	verificaSaldoConSistemaBancario@ACMEService(verificaSaldoConSistemaBancario)(response);
 	println@Console("response.saldoVerificato = " + response.saldoVerificato)()*/
-
-	// Get Transaction Token Anticipo
-
-	getTransactionTokenAnticipo.idOrdine = "227";
-	getTransactionTokenAnticipo@ACMEService(getTransactionTokenAnticipo)(response);
-	println@Console("response.transactionToken = " + response.transactionToken)();
-
-	// Get Transaction Token Saldo
-
-	getTransactionTokenSaldo.idOrdine = "227";
-	getTransactionTokenSaldo@ACMEService(getTransactionTokenSaldo)(response);
-	println@Console("response.transactionToken = " + response.transactionToken)()
 }
 
 
