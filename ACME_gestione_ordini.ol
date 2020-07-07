@@ -199,7 +199,6 @@ main
 		inviaOrdine( ordine )
 	] {
 		install (
-			// TODO remove print and leave blank
 			Timeout => println@Console("")(),
 			TypeMismatch => println@Console("")()
 		);
@@ -247,7 +246,7 @@ main
 			        println@Console("Cicli Ordine inseriti")()
 		        }
 
-				    // Inserimento Customizzazioni Cicli Ordine nel db
+				// Inserimento Customizzazioni Cicli Ordine nel db
 				scope ( insertCustomizzazioniCicliOrdine ) {
 					install ( SQLException => println@Console("\n[!] ERRORE nell'inserimento customizzazioni cicli ordine nel db\n")() );
 
@@ -266,8 +265,8 @@ main
 					substring@StringUtils( query_raw )( substringResponse );
 					query = substringResponse + ";";
 
-			           update@Database( query )( responseNewCustomizzazioneCicloOrdine );
-			           println@Console("Customizzazione Ciclo Ordine inserita")()
+			        update@Database( query )( responseNewCustomizzazioneCicloOrdine );
+			        println@Console("Customizzazione Ciclo Ordine inserita")()
 			    }
 	        }
 
@@ -450,7 +449,7 @@ main
         			 FROM temp_distanze_rivenditore_magazzini
         			 WHERE idRivenditore = " + idRivenditore;
         	update@Database( query )( resultClear );
-
+t
         	{
 				distanceFromRivenditore@MagazzinoPrincipale(indirizzoRivenditore)(distanceMagazzino1)  |
 				distanceFromRivenditore@MagazzinoSecondario1(indirizzoRivenditore)(distanceMagazzino2) |
