@@ -1111,11 +1111,47 @@ main
 	[
 		sbloccoPrenotazioniComponentiAccessoriMagazzini ( params )( response ) {
 
-			query = "DELETE FROM acme.Magazzino_accessorio_prenotato
+			// Accessori
+
+			query = "SELECT idMagazzino, idAccessorio, quantita
+						FROM magazzino_accessorio_prenotato
+						WHERE idOrdine = " + params.idOrdine;
+	        query@Database( query )( accessoriPrenotati );
+
+  			for ( i = 0, i < #accessoriPrenotati.row, i++ ) {
+	        	idMagazzino = accessoriPrenotati.row[i].idMagazzino;
+	        	idAccessorio = accessoriPrenotati.row[i].idAccessorio;
+	        	quantita_prenotata = accessoriPrenotati.row[i].quantita;
+
+	        	query = "UPDATE magazzino_has_accessorio
+								 SET quantita = quantita + " + quantita_prenotata + "
+								 WHERE idMagazzino = " + idMagazzino + " AND idAccessorio = " + idAccessorio;
+				update@Database( query )( responseUpdate )
+	        }
+
+			query = "DELETE FROM Magazzino_accessorio_prenotato
 					 WHERE idOrdine = " + params.idOrdine;
 			update@Database( query )( responseQuery );
 
-			query = "DELETE FROM acme.Magazzino_componente_prenotato
+			// Componenti
+
+			query = "SELECT idMagazzino, idComponente, quantita
+						FROM magazzino_componente_prenotato
+						WHERE idOrdine = " + params.idOrdine;
+	        query@Database( query )( componentiPrenotati );
+
+  			for ( i = 0, i < #componentiPrenotati.row, i++ ) {
+	        	idMagazzino = componentiPrenotati.row[i].idMagazzino;
+	        	idComponente = componentiPrenotati.row[i].idComponente;
+	        	quantita_prenotata = componentiPrenotati.row[i].quantita;
+
+	        	query = "UPDATE magazzino_has_componente
+								 SET quantita = quantita + " + quantita_prenotata + "
+								 WHERE idMagazzino = " + idMagazzino + " AND idComponente = " + idComponente;
+				update@Database( query )( responseUpdate )
+	        }
+
+			query = "DELETE FROM Magazzino_componente_prenotato
 					 WHERE idOrdine = " + params.idOrdine;
 			update@Database( query )( responseQuery );
 
@@ -1129,11 +1165,11 @@ main
 	[
 		richiestaTrasferimentoMP ( params )( response ) {
 
-			query = "DELETE FROM acme.Magazzino_accessorio_prenotato
+			query = "DELETE FROM Magazzino_accessorio_prenotato
 					 WHERE idOrdine = " + params.idOrdine + " AND idMagazzino = 1 ";
 			update@Database( query )( responseQuery );
 
-			query = "DELETE FROM acme.Magazzino_componente_prenotato
+			query = "DELETE FROM Magazzino_componente_prenotato
 					 WHERE idOrdine = " + params.idOrdine + " AND idMagazzino = 1 ";
 			update@Database( query )( responseQuery );
 
@@ -1147,11 +1183,11 @@ main
 	[
 		richiestaTrasferimentoMS ( params )( response ) {
 
-			query = "DELETE FROM acme.Magazzino_accessorio_prenotato
+			query = "DELETE FROM Magazzino_accessorio_prenotato
 					 WHERE idOrdine = " + params.idOrdine + " AND idMagazzino IN (2, 3, 4) ";
 			update@Database( query )( responseQuery );
 
-			query = "DELETE FROM acme.Magazzino_componente_prenotato
+			query = "DELETE FROM Magazzino_componente_prenotato
 					 WHERE idOrdine = " + params.idOrdine + " AND idMagazzino IN (2, 3, 4) ";
 			update@Database( query )( responseQuery );
 

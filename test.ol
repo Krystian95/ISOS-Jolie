@@ -40,23 +40,23 @@ main
 
 	// Verifica Customizzazioni
 	
-	/*idOrdine.idOrdine = "134";
+	/*idOrdine.idOrdine = "228";
 	verificaCustomizzazioni@ACMEService(idOrdine)(response);
 	println@Console("response = " + response.customizzazioniPossibili)();
 	println@Console("\n")();*/
 
 	// Verifica disponibilità accessori e componenti nel MP
 
-	/*prenotazioneMaterialiPresentiMP.idOrdine = "134";
+	/*prenotazioneMaterialiPresentiMP.idOrdine = "228";
 	prenotazioneMaterialiPresentiMP@ACMETest(prenotazioneMaterialiPresentiMP)(response);
 	println@Console("tuttiMaterialiRichiestiPresentiMP = " + response.tuttiMaterialiRichiestiPresentiMP)();
 	println@Console("response = " + response.message)();*/
 
 	// Verifica disponibilità accessori e componenti nel MS
 
-	/*prenotazioneMaterialiPresentiMS.idOrdine = "134";
+	/*prenotazioneMaterialiPresentiMS.idOrdine = "228";
 	prenotazioneMaterialiPresentiMS@ACMETest(prenotazioneMaterialiPresentiMS)(response);
-	println@Console("response = " + response.message)()*/
+	println@Console("response = " + response.message)();*/
 
 	// GIS 
 	/*request.from = "Via Vittorio Veneto 12, 40131, Bologna (BO), Italia";
@@ -78,7 +78,7 @@ main
 
 	// calcolo preventivo
 
-	calcoloPreventivo.idOrdine = "251";
+	/*calcoloPreventivo.idOrdine = "228";
 	calcoloPreventivo.idRivenditore = "1";
 	calcoloPreventivo@ACMETest(calcoloPreventivo)(response);
 	println@Console("totalePreventivo = " + response.totalePreventivo)();
@@ -86,7 +86,7 @@ main
 	println@Console("ordineContieneMaterialiPrenotatiMP = " + response.ordineContieneMaterialiPrenotatiMP)();
 	println@Console("ordineContieneMaterialiPrenotatiMS = " + response.ordineContieneMaterialiPrenotatiMS)();
 	println@Console("ordineContieneMaterialiDaOrdinareDaFornitore = " + response.ordineContieneMaterialiDaOrdinareDaFornitore)();
-	println@Console("\n")()
+	println@Console("\n")()*/
 
 	// Applicazione sconto
 
@@ -113,9 +113,9 @@ main
 
 	// Sblocco Prenotazioni Componenti Accessori Magazzini
 
-	/*sbloccoPrenotazioniComponentiAccessoriMagazzini.idOrdine = "134";
+	sbloccoPrenotazioniComponentiAccessoriMagazzini.idOrdine = "256";
 	sbloccoPrenotazioniComponentiAccessoriMagazzini@ACMEService( sbloccoPrenotazioniComponentiAccessoriMagazzini )(response);
-	println@Console("response.message = " + response.message)()*/
+	println@Console("response.message = " + response.message)()
 
 	// Richiesta Trasferimento MP
 
