@@ -133,7 +133,7 @@ outputPort Corriere {
 execution { concurrent }
 
 constants {
-	DEBUG = true,
+	DEBUG = false,
 	PERCENTAGE_ANTICIPO = 20,
 	PERCENTAGE_SALDO = 80
 }

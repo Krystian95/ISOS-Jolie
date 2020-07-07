@@ -35,7 +35,7 @@ cset {
 }
 
 constants {
-	SKIP_ORDER = true
+	SKIP_ORDER = false
 }
 
 init {
@@ -189,7 +189,7 @@ main
 
 	    println@Console( "scelta = " + scelta )();
 
-		if(scelta == "0"){
+		if(scelta == "0" || scelta == "00"){
 
 			rifiutoPreventivo.idOrdine = params.idOrdine;
 			rifiutoPreventivo@ACMEService( rifiutoPreventivo );
