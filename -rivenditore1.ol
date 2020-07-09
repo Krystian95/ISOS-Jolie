@@ -35,22 +35,20 @@ cset {
 }
 
 constants {
-	SKIP_ORDER = false
+	SKIP_ORDER = false,
+	ID_RIVENDITORE = 1 // TO CHANGE
 }
 
 init {
 
-	// Id rivenditore
-	global.idRivenditore = 1;
-
-	println@Console("\nRIVENDITORE #" + global.idRivenditore + " is running...\n")();
+	println@Console("\nRIVENDITORE #" + ID_RIVENDITORE + " is running...\n")();
 
 	// LISTINO
 	registerForInput@Console()();
 
 	richiediListino@ACMEService()( listino );
 
-	ordine.idRivenditore = global.idRivenditore;
+	ordine.idRivenditore = ID_RIVENDITORE;
 
 	// CICLI
 
