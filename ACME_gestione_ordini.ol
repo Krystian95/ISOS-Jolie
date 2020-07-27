@@ -449,7 +449,7 @@ main
         			 FROM temp_distanze_rivenditore_magazzini
         			 WHERE idRivenditore = " + idRivenditore;
         	update@Database( query )( resultClear );
-t
+        	
         	{
 				distanceFromRivenditore@MagazzinoPrincipale(indirizzoRivenditore)(distanceMagazzino1)  |
 				distanceFromRivenditore@MagazzinoSecondario1(indirizzoRivenditore)(distanceMagazzino2) |
